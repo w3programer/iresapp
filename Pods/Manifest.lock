@@ -1,0 +1,42 @@
+PODS:
+  - Alamofire (4.8.0)
+  - ImageSlideshow (1.7.0):
+    - ImageSlideshow/Core (= 1.7.0)
+  - ImageSlideshow/Core (1.7.0)
+  - ImageSlideshow/Kingfisher (1.7.0):
+    - ImageSlideshow/Core
+    - Kingfisher (> 3.0)
+  - IQKeyboardManagerSwift (6.2.0)
+  - Kingfisher (5.0.0)
+  - SVProgressHUD (2.2.5)
+  - SwiftyJSON (4.2.0)
+
+DEPENDENCIES:
+  - Alamofire
+  - ImageSlideshow (~> 1.6)
+  - ImageSlideshow/Kingfisher
+  - IQKeyboardManagerSwift
+  - Kingfisher (~> 5.0)
+  - SVProgressHUD
+  - SwiftyJSON
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - Alamofire
+    - ImageSlideshow
+    - IQKeyboardManagerSwift
+    - Kingfisher
+    - SVProgressHUD
+    - SwiftyJSON
+
+SPEC CHECKSUMS:
+  Alamofire: 3ec537f71edc9804815215393ae2b1a8ea33a844
+  ImageSlideshow: f8eec5e37a980f60923b585ff23b0e140fd24018
+  IQKeyboardManagerSwift: b07ccf9d8cafe993dcd6cb794eb4ba34611a0c4e
+  Kingfisher: 2b0dd651e4fe5a07305b8242fde56f8e2d410f58
+  SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
+  SwiftyJSON: c4bcba26dd9ec7a027fc8eade48e2c911f229e96
+
+PODFILE CHECKSUM: f8e6f7f72f070a1a8c048745466041a64c398ac4
+
+COCOAPODS: 1.5.3
