@@ -29,13 +29,23 @@ class LoginVC: UIViewController {
     
     @IBAction func sginInBtn(_ sender: Any) {
         
+        guard let num = numberTF.text, !num.isEmpty else {
+            return Alert.alertPopUp(title: "field empty", msg: "please put your number", vc: self)
+        }
         
+        
+        
+       
         
     }
     
     
     @IBAction func skipBtn(_ sender: Any) {
         
+        let Sb: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let vc =   Sb.instantiateViewController(withIdentifier: "main")
+       // self.navigationController?.pushViewController(vc, animated: true)
+        self.present(vc, animated: true,completion: nil)
         
         
     }

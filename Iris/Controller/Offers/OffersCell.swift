@@ -10,9 +10,21 @@ import UIKit
 
 class OffersCell: UITableViewCell {
 
+    @IBOutlet weak var img: UIImageView!
+    @IBOutlet weak var title: UILabel!
+    @IBOutlet weak var offerLab: UILabel!
+    @IBOutlet weak var visual: UIVisualEffectView!
+    
+    
+    
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+        
+        self.img.layer.cornerRadius = 10.0
+        self.img.clipsToBounds = true
+        self.visual.alpha = 0.6
+        
+        
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

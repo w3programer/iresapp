@@ -7,6 +7,14 @@
 //
 
 import UIKit
+import Kingfisher
+
+protocol removeBtn {
+    
+    func favTapped(_ sender: FavCell)
+
+    
+}
 
 class FavCell: UITableViewCell {
 
@@ -21,15 +29,24 @@ class FavCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        
+        img.layer.cornerRadius = 10.0
+        img.clipsToBounds = true
         
     }
     
+    //    var pics: Ads? {
+    //        didSet {
+    //            guard let imgs = pics else { return }
+    //            self.img.kf.indicatorType = .activity
+    //            if let url = URL(string: (imgs.mainImg) ) {
+    //                self.img.kf.setImage(with: url, placeholder: nil, options:[.transition(ImageTransition.fade(0.5))])
+    //            }
+    //        }
+    //    }
+
     
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-    }
+    
+    var delegate:removeBtn?
+    
 
 }

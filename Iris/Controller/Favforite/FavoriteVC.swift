@@ -14,13 +14,14 @@ class FavoriteVC: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     
     
-    var myFav = [String]()
+    var myFav = ["77","77","77"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         confirmProtocls()
         
+        tableView.tableFooterView = UIView()
         
         
         
@@ -51,12 +52,19 @@ extension FavoriteVC: UITableViewDelegate , UITableViewDataSource {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! FavCell
         
+        cell.price.text = myFav[indexPath.row]
+        cell.img.image = UIImage(named: "img.png")
+        
         return cell
         
     }
     
     
-    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        
+        
+        return 100.0
+    }
     
     
     

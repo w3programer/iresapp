@@ -7,6 +7,15 @@
 //
 
 import UIKit
+import Kingfisher
+
+
+protocol marketDelegate {
+    
+    func favTapped(_ sender: marketCell)
+    
+    
+}
 
 class marketCell: UICollectionViewCell {
     
@@ -15,7 +24,45 @@ class marketCell: UICollectionViewCell {
     @IBOutlet weak var img: UIImageView!
     @IBOutlet weak var price: UILabel!
     @IBOutlet weak var fav: CornerButtons!
+    @IBOutlet weak var view: UIView!
     
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+        self.img.layer.cornerRadius = 10.0
+        self.view.layer.cornerRadius = 10.0
+        self.view.clipsToBounds = true
+        self.view.layer.borderColor = UIColor.gray.cgColor
+        self.view.layer.borderWidth = 2
+        
+        
+
+        
+    }
+    
+    
+    
+//    var pics: Ads? {
+//        didSet {
+//            guard let imgs = pics else { return }
+//            self.img.kf.indicatorType = .activity
+//            if let url = URL(string: (imgs.mainImg) ) {
+//                self.img.kf.setImage(with: url, placeholder: nil, options:[.transition(ImageTransition.fade(0.5))])
+//            }
+//        }
+//    }
+    
+    
+    
+    var delegate: marketDelegate?
+
+    
+    @IBAction func favBtn(_ sender: UIButton) {
+        delegate?.favTapped(self)
+    
+    }
+    
+
     
     
     
