@@ -15,7 +15,7 @@ class MoreVC: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     
     
-    var titles = ["login","about us","FAQ","ruls"]
+    var titles = ["login","profile","contact us","about us","FAQ","ruls & condtions"]
     
     
     
@@ -72,7 +72,16 @@ extension MoreVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-     
+        if indexPath.row == 0 {
+            
+        } else if indexPath.row == 1 {
+            performSegue(withIdentifier: "ProfileSegue", sender: self)
+        } else if indexPath.row == 2 {
+            
+            performSegue(withIdentifier: "ContactSegue", sender: self)
+            
+            
+        }
         
         
         
