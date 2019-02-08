@@ -42,14 +42,13 @@ class MarketVC: UIViewController {
          confrimProtocls()
           displayElementsDesgin()
         
-        
-        
+    
     }
 
 
     @IBAction func searchBtn(_ sender: Any) {
         
-        
+        performSegue(withIdentifier:"SearchSegue", sender: self)
        }
     
     @IBAction func myProBtn(_ sender: Any) {
@@ -143,16 +142,28 @@ extension MarketVC: UICollectionViewDelegate, UICollectionViewDataSource {
         cell.img.image = UIImage(named: "img.png")
         cell.fav.setImage(UIImage(named: "li.png"), for: .normal)
         cell.fav.setImage(UIImage(named: "lk.png"), for: .selected)
-        
+        cell.fav.addTarget(self, action: #selector(favTapped(sender:)), for: .touchUpInside)
+        cell.fav.isSelected = false
         
         return cell
     }
     
+    
+    @objc func favTapped(sender: UIButton) {
+        
+        if (sender.isSelected) {
+            sender.isSelected = false
+        } else {
+            sender.isSelected = true
+        }
+    
+    }
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
+    
         let screenWidth = UIScreen.main.bounds.width
-        let width = (screenWidth-60)/2
-        
+        let width = (screenWidth-30)/2
+
         return CGSize.init(width: width, height: width)
     }
     
@@ -165,34 +176,14 @@ extension MarketVC: UICollectionViewDelegate, UICollectionViewDataSource {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        
+        if segue.identifier == "ContentSegue" {
+            let conVC = segue.destination as? AdContentVC
+            conVC?.recPage = "market"
+        }
         
     }
     
     
 }
 
-extension MarketVC: marketDelegate {
-    
- func favTapped(_ sender: marketCell) {
-    guard let tappedIndexPath = collectionView.indexPath(for: sender) else {return}
-                         print(tappedIndexPath)
-    
-    let btn = collectionView(collectionView, cellForItemAt: tappedIndexPath) as! marketCell
-        
-    let sndr = (btn.fav)!
-        
-    UIView.animate(withDuration: 0.2, delay: 0.1, options: .curveLinear, animations: {
-        sndr.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
-    }) { (success) in
-        UIView.animate(withDuration: 0.2, delay: 0.1, options: .curveLinear, animations: {
-            sndr.isSelected = sender.isSelected
-            sndr.transform = .identity
-        }, completion: nil)
-    }
 
-    
-    }
-    
-    
-}

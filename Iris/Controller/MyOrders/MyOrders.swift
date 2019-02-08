@@ -97,7 +97,7 @@ class MyOrders: UIViewController {
         refreshContent()
     }
     
-
+    
 }
 extension MyOrders: UITableViewDataSource , UITableViewDelegate {
     
@@ -120,7 +120,11 @@ extension MyOrders: UITableViewDataSource , UITableViewDelegate {
         return cell
     }
     
-    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        
+        
+        return 44.0
+    }
     
     
     

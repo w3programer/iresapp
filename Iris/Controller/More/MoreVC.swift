@@ -73,14 +73,13 @@ extension MoreVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         if indexPath.row == 0 {
-            
+            performSegue(withIdentifier: "LoginSegue", sender: self)
         } else if indexPath.row == 1 {
             performSegue(withIdentifier: "ProfileSegue", sender: self)
         } else if indexPath.row == 2 {
-            
             performSegue(withIdentifier: "ContactSegue", sender: self)
-            
-            
+        } else if indexPath.row == 3 {
+            performSegue(withIdentifier: "AboutSegue", sender: self)
         }
         
         

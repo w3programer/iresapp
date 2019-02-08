@@ -14,6 +14,8 @@
 		8F4C3B29220B7D0E00C74A38 /* UITableView+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F4C3B26220B7D0E00C74A38 /* UITableView+Ext.swift */; };
 		8F4C3B2A220B7D0E00C74A38 /* Animations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F4C3B27220B7D0E00C74A38 /* Animations.swift */; };
 		8F4C3B2B220B7D0E00C74A38 /* Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F4C3B28220B7D0E00C74A38 /* Animator.swift */; };
+		8F4C3B30220C65C200C74A38 /* CircularTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F4C3B2E220C65C000C74A38 /* CircularTransition.swift */; };
+		8F4C3B31220C65C200C74A38 /* TransitionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F4C3B2F220C65C000C74A38 /* TransitionCoordinator.swift */; };
 		8F7C77172206E51A00AA2CB7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F7C77162206E51A00AA2CB7 /* AppDelegate.swift */; };
 		8F7C77192206E51A00AA2CB7 /* MarketVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F7C77182206E51A00AA2CB7 /* MarketVC.swift */; };
 		8F7C771C2206E51A00AA2CB7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8F7C771A2206E51A00AA2CB7 /* Main.storyboard */; };
@@ -26,6 +28,8 @@
 		8F7C773D2206FB3C00AA2CB7 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F7C773C2206FB3C00AA2CB7 /* Helper.swift */; };
 		8F7C773F2206FBB400AA2CB7 /* CornerButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F7C773E2206FBB300AA2CB7 /* CornerButtons.swift */; };
 		8F7C77422206FCD500AA2CB7 /* RoundedUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F7C77412206FCD500AA2CB7 /* RoundedUIView.swift */; };
+		8F826CFE220C7C4F002C762A /* SearchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F826CFD220C7C4F002C762A /* SearchVC.swift */; };
+		8F826D00220C7CA3002C762A /* SearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F826CFF220C7CA3002C762A /* SearchCell.swift */; };
 		8F8C13E72208CF4E00F2A3D1 /* UIButton + extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8C13E62208CF4E00F2A3D1 /* UIButton + extension.swift */; };
 		8F8C13E92208F53300F2A3D1 /* ImageInsideTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8C13E82208F53100F2A3D1 /* ImageInsideTextField.swift */; };
 		8F8C13EB22090A4900F2A3D1 /* UIView + extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8C13EA22090A4900F2A3D1 /* UIView + extension.swift */; };
@@ -58,6 +62,8 @@
 		8F4C3B26220B7D0E00C74A38 /* UITableView+Ext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITableView+Ext.swift"; sourceTree = "<group>"; };
 		8F4C3B27220B7D0E00C74A38 /* Animations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Animations.swift; sourceTree = "<group>"; };
 		8F4C3B28220B7D0E00C74A38 /* Animator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Animator.swift; sourceTree = "<group>"; };
+		8F4C3B2E220C65C000C74A38 /* CircularTransition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircularTransition.swift; sourceTree = "<group>"; };
+		8F4C3B2F220C65C000C74A38 /* TransitionCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransitionCoordinator.swift; sourceTree = "<group>"; };
 		8F7C77132206E51A00AA2CB7 /* Iris.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Iris.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F7C77162206E51A00AA2CB7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8F7C77182206E51A00AA2CB7 /* MarketVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketVC.swift; sourceTree = "<group>"; };
@@ -72,6 +78,8 @@
 		8F7C773C2206FB3C00AA2CB7 /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		8F7C773E2206FBB300AA2CB7 /* CornerButtons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CornerButtons.swift; sourceTree = "<group>"; };
 		8F7C77412206FCD500AA2CB7 /* RoundedUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedUIView.swift; sourceTree = "<group>"; };
+		8F826CFD220C7C4F002C762A /* SearchVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchVC.swift; sourceTree = "<group>"; };
+		8F826CFF220C7CA3002C762A /* SearchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCell.swift; sourceTree = "<group>"; };
 		8F8C13E62208CF4E00F2A3D1 /* UIButton + extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton + extension.swift"; sourceTree = "<group>"; };
 		8F8C13E82208F53100F2A3D1 /* ImageInsideTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageInsideTextField.swift; sourceTree = "<group>"; };
 		8F8C13EA22090A4900F2A3D1 /* UIView + extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView + extension.swift"; sourceTree = "<group>"; };
@@ -158,6 +166,24 @@
 			path = TableViewAnimation;
 			sourceTree = "<group>";
 		};
+		8F4C3B2D220C659900C74A38 /* ViewControllerTransition */ = {
+			isa = PBXGroup;
+			children = (
+				8F4C3B2E220C65C000C74A38 /* CircularTransition.swift */,
+				8F4C3B2F220C65C000C74A38 /* TransitionCoordinator.swift */,
+			);
+			path = ViewControllerTransition;
+			sourceTree = "<group>";
+		};
+		8F4C3B32220C665800C74A38 /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				8F826CFD220C7C4F002C762A /* SearchVC.swift */,
+				8F826CFF220C7CA3002C762A /* SearchCell.swift */,
+			);
+			path = Search;
+			sourceTree = "<group>";
+		};
 		8F7C770A2206E51900AA2CB7 = {
 			isa = PBXGroup;
 			children = (
@@ -196,6 +222,7 @@
 				8F7C772F2206EEE400AA2CB7 /* Auth */,
 				8F2D9622220730270093F46D /* Market */,
 				8F4C3B1F220B725C00C74A38 /* Cart */,
+				8F4C3B32220C665800C74A38 /* Search */,
 				8FE27E0B2207D20100487348 /* Offers */,
 				8F8C13F62209994E00F2A3D1 /* MyOrders */,
 				8FE27E03220741E900487348 /* Favforite */,
@@ -216,6 +243,7 @@
 		8F7C772D2206EE2A00AA2CB7 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				8F4C3B2D220C659900C74A38 /* ViewControllerTransition */,
 				8F4C3B25220B7D0E00C74A38 /* TableViewAnimation */,
 				8F8C13E52208CE2A00F2A3D1 /* Extensions */,
 				8F7C771A2206E51A00AA2CB7 /* Main.storyboard */,
@@ -447,7 +475,9 @@
 				8F8C13F32209900F00F2A3D1 /* ProfileVC.swift in Sources */,
 				8F8C13FA220999E400F2A3D1 /* MyOrderTableViewCell.swift in Sources */,
 				8F7C773B2206FAC500AA2CB7 /* General.swift in Sources */,
+				8F826CFE220C7C4F002C762A /* SearchVC.swift in Sources */,
 				8FE27E082207432F00487348 /* FavCell.swift in Sources */,
+				8F4C3B31220C65C200C74A38 /* TransitionCoordinator.swift in Sources */,
 				8F7C77422206FCD500AA2CB7 /* RoundedUIView.swift in Sources */,
 				8FE95B64220A60420026C97E /* Alert.swift in Sources */,
 				8FE27E062207428E00487348 /* FavoriteVC.swift in Sources */,
@@ -464,6 +494,7 @@
 				8F8C13F8220999A500F2A3D1 /* MyOrders.swift in Sources */,
 				8FE27E0D2207D29D00487348 /* OffersVC.swift in Sources */,
 				8F4C3B2A220B7D0E00C74A38 /* Animations.swift in Sources */,
+				8F826D00220C7CA3002C762A /* SearchCell.swift in Sources */,
 				8F4C3B21220B759800C74A38 /* MoreVC.swift in Sources */,
 				8F8C13ED22090E1A00F2A3D1 /* JSON+Extension.swift in Sources */,
 				8F4C3B24220B77D100C74A38 /* MoreCell.swift in Sources */,
@@ -473,6 +504,7 @@
 				8F8C13E92208F53300F2A3D1 /* ImageInsideTextField.swift in Sources */,
 				8F8C13EF22091D1A00F2A3D1 /* CircleImage.swift in Sources */,
 				8F8C13FC22099A1000F2A3D1 /* MyOrderCollectionViewCell.swift in Sources */,
+				8F4C3B30220C65C200C74A38 /* CircularTransition.swift in Sources */,
 				8F4C3B2B220B7D0E00C74A38 /* Animator.swift in Sources */,
 				8F7C773F2206FBB400AA2CB7 /* CornerButtons.swift in Sources */,
 				8F8C13EB22090A4900F2A3D1 /* UIView + extension.swift in Sources */,

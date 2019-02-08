@@ -19,18 +19,18 @@ class OffersVC: UIViewController {
     var offers = ["vcrvr","cdc"]
     var imgs = [UIImage(named: "do.png")]
     
+    static let shared = OffersVC()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         
-        
-        
+      //  hideNavigation()
         confirmTableViewProtocls()
         
         tableView.tableFooterView = UIView()
         
-        
+//        tableView.topAnchor.constraint(equalTo: topLayoutGuide.bottomAnchor).isActive = true
         
     }
     
@@ -44,7 +44,10 @@ class OffersVC: UIViewController {
         
     }
 
-    
+    func hideNavigation() {
+        navigationController?.hidesBarsOnSwipe = true
+        
+    }
     
 
 }

@@ -20,11 +20,9 @@ class FavoriteVC: UIViewController {
         super.viewDidLoad()
 
         confirmProtocls()
-        
         tableView.tableFooterView = UIView()
-        
-        
-        
+  //      OffersVC.shared.hideNavigation()
+//     tableView.topAnchor.constraint(equalTo: topLayoutGuide.bottomAnchor).isActive = true
     }
     
     
@@ -35,6 +33,8 @@ class FavoriteVC: UIViewController {
         
         
     }
+    
+    
     
 
    
@@ -55,8 +55,30 @@ extension FavoriteVC: UITableViewDelegate , UITableViewDataSource {
         cell.price.text = myFav[indexPath.row]
         cell.img.image = UIImage(named: "img.png")
         
+        cell.favBtn.setImage(UIImage(named: "lk.png"), for: .normal)
+        cell.favBtn.setImage(UIImage(named: "li.png"), for: .selected)
+        cell.favBtn.tag = indexPath.row
+        cell.favBtn.addTarget(self, action: #selector(favTapped(sender:)), for: .touchUpInside)
+        cell.favBtn.isSelected = false
+
         return cell
         
+    }
+    
+    @objc func favTapped(sender: UIButton) {
+        if (sender.isSelected)
+        {
+            sender.isSelected = false
+//        UIView.animate(withDuration: 0.2, delay: 0.1, options: .curveLinear, animations: {
+//        sender.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
+//          })
+        }else {
+            sender.isSelected = true
+//        UIView.animate(withDuration: 0.2, delay: 0.1, options: .curveLinear, animations: {
+//                sender.isSelected = sender.isSelected
+//                sender.transform = .identity
+//           })
+        }
     }
     
     

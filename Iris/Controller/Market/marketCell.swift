@@ -10,12 +10,7 @@ import UIKit
 import Kingfisher
 
 
-protocol marketDelegate {
-    
-    func favTapped(_ sender: marketCell)
-    
-    
-}
+
 
 class marketCell: UICollectionViewCell {
     
@@ -54,15 +49,9 @@ class marketCell: UICollectionViewCell {
     
     
     
-    var delegate: marketDelegate?
 
     
-    @IBAction func favBtn(_ sender: UIButton) {
-        delegate?.favTapped(self)
     
-    }
-    
-
     
     
     

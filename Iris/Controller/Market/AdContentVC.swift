@@ -17,6 +17,7 @@ class AdContentVC: UIViewController {
     @IBOutlet weak var details: UIBarButtonItem!
     
     
+    var recPage = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,8 +34,11 @@ class AdContentVC: UIViewController {
     
     
     @IBAction func backBtn(_ sender: Any) {
-        
-       performSegue(withIdentifier: "UnwindMarket", sender: self)
+        if recPage == "market" {
+            performSegue(withIdentifier: "UnwindMarket", sender: self)
+        } else if recPage == "search" {
+            performSegue(withIdentifier: "UnwindSearch", sender: self)
+        }
     }
     
     
