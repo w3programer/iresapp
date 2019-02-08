@@ -159,13 +159,7 @@ extension MarketVC: UICollectionViewDelegate, UICollectionViewDataSource {
     
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-    
-        let screenWidth = UIScreen.main.bounds.width
-        let width = (screenWidth-30)/2
-
-        return CGSize.init(width: width, height: width)
-    }
+   
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         

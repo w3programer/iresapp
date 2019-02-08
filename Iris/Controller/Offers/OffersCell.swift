@@ -15,11 +15,15 @@ class OffersCell: UITableViewCell {
     @IBOutlet weak var offerLab: UILabel!
     @IBOutlet weak var visual: UIVisualEffectView!
     
+    @IBOutlet weak var view: UIView!
     
     
     override func awakeFromNib() {
         super.awakeFromNib()
         
+        
+        view.layer.borderWidth = 2
+        view.layer.borderColor = UIColor.gray.cgColor
         self.img.layer.cornerRadius = 10.0
         self.img.clipsToBounds = true
         self.visual.alpha = 0.6

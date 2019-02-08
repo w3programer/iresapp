@@ -41,6 +41,7 @@
 		8F8C13F8220999A500F2A3D1 /* MyOrders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8C13F7220999A500F2A3D1 /* MyOrders.swift */; };
 		8F8C13FA220999E400F2A3D1 /* MyOrderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8C13F9220999E400F2A3D1 /* MyOrderTableViewCell.swift */; };
 		8F8C13FC22099A1000F2A3D1 /* MyOrderCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8C13FB22099A1000F2A3D1 /* MyOrderCollectionViewCell.swift */; };
+		8FD8B878220DCD450018645A /* CartCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FD8B877220DCD450018645A /* CartCell.swift */; };
 		8FE27E062207428E00487348 /* FavoriteVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FE27E052207428E00487348 /* FavoriteVC.swift */; };
 		8FE27E082207432F00487348 /* FavCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FE27E072207432F00487348 /* FavCell.swift */; };
 		8FE27E0A220799A400487348 /* Ads.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FE27E09220799A400487348 /* Ads.swift */; };
@@ -91,6 +92,7 @@
 		8F8C13F7220999A500F2A3D1 /* MyOrders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyOrders.swift; sourceTree = "<group>"; };
 		8F8C13F9220999E400F2A3D1 /* MyOrderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyOrderTableViewCell.swift; sourceTree = "<group>"; };
 		8F8C13FB22099A1000F2A3D1 /* MyOrderCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyOrderCollectionViewCell.swift; sourceTree = "<group>"; };
+		8FD8B877220DCD450018645A /* CartCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartCell.swift; sourceTree = "<group>"; };
 		8FE27E052207428E00487348 /* FavoriteVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteVC.swift; sourceTree = "<group>"; };
 		8FE27E072207432F00487348 /* FavCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavCell.swift; sourceTree = "<group>"; };
 		8FE27E09220799A400487348 /* Ads.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ads.swift; sourceTree = "<group>"; };
@@ -143,6 +145,7 @@
 			isa = PBXGroup;
 			children = (
 				8F4C3B1D220B724600C74A38 /* CartVC.swift */,
+				8FD8B877220DCD450018645A /* CartCell.swift */,
 			);
 			path = Cart;
 			sourceTree = "<group>";
@@ -490,6 +493,7 @@
 				8F8C13E72208CF4E00F2A3D1 /* UIButton + extension.swift in Sources */,
 				8F2D9624220733310093F46D /* marketCell.swift in Sources */,
 				8F7C771F2206E51A00AA2CB7 /* Iris.xcdatamodeld in Sources */,
+				8FD8B878220DCD450018645A /* CartCell.swift in Sources */,
 				8F7C77192206E51A00AA2CB7 /* MarketVC.swift in Sources */,
 				8F8C13F8220999A500F2A3D1 /* MyOrders.swift in Sources */,
 				8FE27E0D2207D29D00487348 /* OffersVC.swift in Sources */,

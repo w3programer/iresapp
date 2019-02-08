@@ -23,7 +23,7 @@ class MoreVC: UIViewController {
         super.viewDidLoad()
 
         confirmProtocls()
-         tableViewDesgin()
+        CartVC.shared.desginTableView(tableview: tableView)
         
         
     }
@@ -33,13 +33,11 @@ class MoreVC: UIViewController {
         self.tableView.dataSource = self
     }
 
-    func tableViewDesgin() {
-        
-        self.tableView.separatorColor = UIColor.white
-        tableView.tableFooterView =  UIView()
-
-        
-    }
+//    func tableViewDesgin() {
+//        tableView.tableFooterView =  UIView()
+//        tableView.separatorInset = .zero
+//        tableView.contentInset = .zero
+//    }
 
 }
 extension MoreVC: UITableViewDelegate, UITableViewDataSource {
@@ -50,6 +48,7 @@ extension MoreVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! MoreCell
         
+        cell.selectionStyle = UITableViewCell.SelectionStyle.none
         cell.titleLab.text = titles[indexPath.row]
         
         return cell
