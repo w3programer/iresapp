@@ -14,10 +14,14 @@ class AdContentVC: UIViewController {
     @IBOutlet weak var slider: ImageSlideshow!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var contentTxtView: UITextView!
-    @IBOutlet weak var details: UIBarButtonItem!
+   
     
+    @IBOutlet weak var textViewHeight: NSLayoutConstraint!
     
     var recPage = ""
+    var newHieght:CGFloat = 0.0
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,9 +29,11 @@ class AdContentVC: UIViewController {
           setDesgin()
          //     confgPickerView()
         //   configSliderShow()
-
-          details.isEnabled = false
+              setPrortcols()
+        dynamicViewControllerHieght()
         
+        
+         
         
     
     }
@@ -98,12 +104,41 @@ class AdContentVC: UIViewController {
 //        
 //    }
     
-
+    func dynamicViewControllerHieght() {
+        
+        var hieght = self.view.bounds.height
+            print(hieght)
+        
+        hieght = self.newHieght
+        
+        
+    }
     
 
+    func setPrortcols() {
+        self.contentTxtView.delegate = self
+    }
    
+    
+    
 }
-
+extension AdContentVC: UITextViewDelegate {
+    
+    func textViewDidChange(_ textView: UITextView) {
+      //  let sizeToFitIn = CGSizeMake(self.contentTxtView.bounds.size.width, CGFloat(MAXFLOAT))
+        let wid = CGFloat(self.contentTxtView.bounds.size.width)
+        print("width",wid)
+        let sizeToFitIn = CGSize(width: wid, height: CGFloat(MAXFLOAT))
+        print("size",sizeToFitIn)
+        let newSize = self.contentTxtView.sizeThatFits(sizeToFitIn)
+        self.textViewHeight.constant = newSize.height
+        self.newHieght = newSize.height
+        print("newSize",newSize.height)
+    }
+    
+   
+    
+}
 
 //extension AdContentVC: UIPickerViewDelegate, UIPickerViewDataSource {
 //

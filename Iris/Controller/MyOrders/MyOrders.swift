@@ -15,7 +15,7 @@ class MyOrders: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var colectionView: UICollectionView!
     
-    var data = [["vvvvv","wwww","dddd"],["dwdwd","dwdw","dwd"]]
+    var data = [["vvvvv","wwww","dddd","dddd","dddd","dddd","dddd","dddd"],["dwdwd","dwdw","dwd","dddd","dddd","dddd","dddd","dddd","dddd","dddd"]]
 
     
     fileprivate let menuTitls = ["Ended","Current"]
@@ -96,6 +96,22 @@ class MyOrders: UIViewController {
         colectionView.selectItem(at: selectedIndexPath, animated: true, scrollPosition: .centeredVertically)
         refreshContent()
     }
+    
+    
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView.contentOffset.y >= 100 {
+            UIView.animate(withDuration: 2.5) {
+        self.navigationController?.setNavigationBarHidden(true, animated: true)
+            }
+        } else {
+            UIView.animate(withDuration: 2.5) {
+                self.navigationController?.setNavigationBarHidden(false, animated: true)
+            }
+        }
+    }
+    
+    
     
     
 }

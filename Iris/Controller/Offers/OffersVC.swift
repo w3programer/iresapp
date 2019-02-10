@@ -25,16 +25,26 @@ class OffersVC: UIViewController {
         super.viewDidLoad()
         
         
-      //  hideNavigation()
         confirmTableViewProtocls()
-        
         tableView.tableFooterView = UIView()
         
 //        tableView.topAnchor.constraint(equalTo: topLayoutGuide.bottomAnchor).isActive = true
         
     }
     
-    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+ 
+        if scrollView.contentOffset.y >= 100 {
+        UIView.animate(withDuration: 2.5) {
+            self.navigationController?.setNavigationBarHidden(true, animated: true)
+           }
+        } else {
+            UIView.animate(withDuration: 2.5) {
+                self.navigationController?.setNavigationBarHidden(false, animated: true)
+            }
+        }
+        
+    }
     
     
     func confirmTableViewProtocls() {
@@ -44,10 +54,7 @@ class OffersVC: UIViewController {
         
     }
 
-    func hideNavigation() {
-        navigationController?.hidesBarsOnSwipe = true
-        
-    }
+    
     
 
 }
@@ -58,6 +65,8 @@ extension OffersVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! OffersCell
+        
+        cell.selectionStyle = UITableViewCell.SelectionStyle.none
         
         cell.title.text = offers[indexPath.row]
         cell.img.image = UIImage(named: "img.png")

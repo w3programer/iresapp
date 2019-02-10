@@ -14,11 +14,14 @@ class FavoriteVC: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     
     
-    var myFav = ["77","77","77"]
+    var myFav = ["77","77","77","77","77","77","77","77","77","77"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        
+        
+        
         confirmProtocls()
         tableView.tableFooterView = UIView()
   //      OffersVC.shared.hideNavigation()
@@ -35,6 +38,17 @@ class FavoriteVC: UIViewController {
     }
     
     
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView.contentOffset.y >= 100 {
+            UIView.animate(withDuration: 2.5) {
+                self.navigationController?.setNavigationBarHidden(true, animated: true)
+            }
+        } else {
+                UIView.animate(withDuration: 2.5) {
+                    self.navigationController?.setNavigationBarHidden(false, animated: true)
+                }
+            }
+        }
     
 
    
@@ -51,6 +65,8 @@ extension FavoriteVC: UITableViewDelegate , UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! FavCell
+        
+        cell.selectionStyle = UITableViewCell.SelectionStyle.none
         
         cell.price.text = myFav[indexPath.row]
         cell.img.image = UIImage(named: "img.png")
