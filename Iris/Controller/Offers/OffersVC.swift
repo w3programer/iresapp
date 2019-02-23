@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Alamofire
+import SwiftyJSON
 
 class OffersVC: UIViewController {
     
@@ -17,6 +19,8 @@ class OffersVC: UIViewController {
     fileprivate var rowHeight: CGFloat = 130.0
     
     var offers = [Ads]()
+    var pagi = [pagination]()
+    
     var curentPage = 1
     var totalPages = 1
     
@@ -36,7 +40,8 @@ class OffersVC: UIViewController {
         confirmTableViewProtocls()
         tableView.tableFooterView = UIView()
         callData(pageNo: curentPage)
-        
+        self.tabBarController?.tabBar.items?[1].title = General.stringForKey(key: "offers")
+
         
     }
     
@@ -64,6 +69,7 @@ class OffersVC: UIViewController {
 
     
     func callData(pageNo:Int) {
+        checkPagination()
         API.offers(pageNo: pageNo) { (error:Error?, data:[Ads]?) in
             if data != nil {
                 self.offers.append(contentsOf: data!)
@@ -95,7 +101,27 @@ class OffersVC: UIViewController {
 //
 //        }
     
-
+    func checkPagination(){
+        let url = URLs.offers
+        Alamofire.request( url , method: .get ).responseJSON { (response) in
+            switch response.result {
+            case .failure(let error):
+                print("terms",error)
+                
+            case .success(let value):
+                let jsonData = JSON(value)
+                print(jsonData)
+                let json = jsonData["meta"]
+                print(json)
+                let last = json["last_page"].int
+                print(last!)
+                self.totalPages = last!
+            }
+         }
+       }
+    
+    
+    
     
 }
 extension OffersVC: UITableViewDelegate, UITableViewDataSource {
@@ -129,7 +155,7 @@ extension OffersVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         
         if indexPath.row == offers.count - 1 {
-            totalPages = offers[indexPath.row].lastPage
+            //totalPages = pagi[indexPath.row].lastPage
               if curentPage < totalPages {
                     curentPage += 1
                   print("nuuum",curentPage)

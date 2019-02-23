@@ -26,6 +26,7 @@ class CartVC: UIViewController {
         
           confirmProtocols()
            desginTableView(tableview: tableView)
+        sendOrder.setTitle(General.stringForKey(key: "sendorder"), for: .normal)
     }
     
 

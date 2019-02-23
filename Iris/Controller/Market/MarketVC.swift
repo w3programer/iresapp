@@ -274,7 +274,7 @@ class MarketVC: UIViewController {
         transp.setTitle(General.stringForKey(key: "Pellucid lenses"), for: .normal)
         colorLen.setTitle(General.stringForKey(key: "colorLenses"), for: .normal)
         access.setTitle(General.stringForKey(key: "accessories"), for: .normal)
-
+        self.tabBarController?.tabBar.items?[0].title = General.stringForKey(key: "market")
         
     }
     
@@ -339,7 +339,7 @@ extension MarketVC: UICollectionViewDelegate, UICollectionViewDataSource {
         
 
         if indexPath.row == menuPro.count - 1 { //
-            totalPages = menuPro[indexPath.row].lastPage
+            //totalPages = menuPro[indexPath.row].lastPage
             if  currentPage < totalPages {
                 if colorLoad == false && accessLoad == false {
                     currentPage += 1

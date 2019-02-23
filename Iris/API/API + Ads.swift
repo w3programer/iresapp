@@ -72,11 +72,7 @@ extension API {
                         print("good")
                     }
                 }
-//                if let mta = jsonData["meta"].dictionary , let metaData = Ads.init(dic: mta) {
-//                    print("meeeettaaa", mta)
-//                    cate.append(metaData)
-//
-//                }
+               
                 completion(nil, cate)
             }
         }
@@ -359,6 +355,10 @@ extension API {
         }
         
     }
+    
+ 
+    
+   
     
     
     

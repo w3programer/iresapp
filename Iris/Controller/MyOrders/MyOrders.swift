@@ -41,7 +41,8 @@ class MyOrders: UIViewController {
         //selectedArray[selectedIndex]
         //tableView.tableFooterView = UIView()
         
-        
+        self.tabBarController?.tabBar.items?[2].title = General.stringForKey(key: "myor")
+
         if Helper.checkToken() == true {
             allOrders(type:"old")
         } else {

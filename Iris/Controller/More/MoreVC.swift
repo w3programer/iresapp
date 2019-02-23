@@ -27,9 +27,9 @@ class MoreVC: UIViewController {
         CartVC.shared.desginTableView(tableview: tableView)
         self.navigationController?.navigationBar.setValue(true, forKey: "hidesShadow")
 
-        //lanBtn.setTitle(General.stringForKey(key: "arabic"), for: .normal)
         lanBtn.title = General.stringForKey(key: "arabic")
-        
+        self.tabBarController?.tabBar.items?[4].title = General.stringForKey(key: "more")
+
     }
     
     

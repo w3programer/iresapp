@@ -33,6 +33,9 @@ class FavoriteVC: UIViewController {
         tableView.tableFooterView = UIView()
   //      OffersVC.shared.hideNavigation()
 //     tableView.topAnchor.constraint(equalTo: topLayoutGuide.bottomAnchor).isActive = true
+        self.tabBarController?.tabBar.items?[3].title = General.stringForKey(key: "fav")
+
+        
     }
     
     
@@ -134,7 +137,7 @@ extension FavoriteVC: UITableViewDelegate , UITableViewDataSource {
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         
         if indexPath.row ==  myFav.count - 1 {
-            totalPages = myFav[indexPath.row].lastPage
+            //totalPages = myFav[indexPath.row].lastPage
             currentPage += 1
              getFavotites(token: Helper.getUserToken(), id:currentPage )
             

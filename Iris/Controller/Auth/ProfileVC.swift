@@ -87,7 +87,9 @@ class ProfileVC: UIViewController {
     
    fileprivate func dislayUserInfo() {
         if Helper.checkToken() == true {
-            self.navigationController?.navigationItem.title = "Update profile"
+            //self.navigationController?.navigationItem.title = "Update profile"
+            navigationItem.title = General.stringForKey(key: "profile")
+            update.setTitle(General.stringForKey(key: "update"), for: .normal)
             self.nameTF.text = (UserDefaults.standard.object(forKey: "name") as! String)
             self.numberTF.text = (UserDefaults.standard.object(forKey: "phone") as! String)
             self.emailTF.text = (UserDefaults.standard.object(forKey: "email") as! String)
@@ -97,7 +99,11 @@ class ProfileVC: UIViewController {
             img.kf.indicatorType = .activity
             img.kf.setImage(with: url)
         } else {
-            self.navigationController?.navigationItem.title = "Sgin Up"
+              navigationItem.title = General.stringForKey(key: "sginup")
+            self.nameTF.text = General.stringForKey(key: "name")
+            self.numberTF.text = General.stringForKey(key: "n")
+            self.emailTF.text = General.stringForKey(key: "email")
+            self.update.setTitle(General.stringForKey(key: "sginup"), for: .normal)
             self.img.image = UIImage(named: "profileImage.png")
        }
     }
