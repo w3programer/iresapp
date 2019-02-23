@@ -1,0 +1,207 @@
+
+/* Class = "UILabel"; text = "title"; ObjectID = "0Dt-BF-Awv"; */
+"0Dt-BF-Awv.text" = "title";
+
+/* Class = "UIButton"; normalTitle = "add to cart"; ObjectID = "0tJ-gC-DtR"; */
+"0tJ-gC-DtR.normalTitle" = "add to cart";
+
+/* Class = "UINavigationItem"; title = "favorite"; ObjectID = "1AK-Xj-zot"; */
+"1AK-Xj-zot.title" = "favorite";
+
+/* Class = "UILabel"; text = "Right eye"; ObjectID = "3fN-1I-Mhs"; */
+"3fN-1I-Mhs.text" = "Right eye";
+
+/* Class = "UILabel"; text = "price"; ObjectID = "3mf-OC-qzV"; */
+"3mf-OC-qzV.text" = "price";
+
+/* Class = "UILabel"; text = "title"; ObjectID = "4jd-f8-U0n"; */
+"4jd-f8-U0n.text" = "title";
+
+/* Class = "UIButton"; normalTitle = "Pellucid lenses"; ObjectID = "5vd-3e-2mL"; */
+"5vd-3e-2mL.normalTitle" = "Pellucid lenses";
+
+/* Class = "UILabel"; text = "1"; ObjectID = "622-KM-BLF"; */
+"622-KM-BLF.text" = "1";
+
+/* Class = "UILabel"; text = "number of items"; ObjectID = "76j-QD-8JS"; */
+"76j-QD-8JS.text" = "number of items";
+
+/* Class = "UILabel"; text = "page Name"; ObjectID = "7Mt-26-FM9"; */
+"7Mt-26-FM9.text" = "page Name";
+
+/* Class = "UILabel"; text = "package size"; ObjectID = "7SF-F4-AiB"; */
+"7SF-F4-AiB.text" = "package size";
+
+/* Class = "UILabel"; text = "1"; ObjectID = "7ye-tc-T1P"; */
+"7ye-tc-T1P.text" = "1";
+
+/* Class = "UIButton"; normalTitle = "recently added"; ObjectID = "81x-Jw-4uv"; */
+"81x-Jw-4uv.normalTitle" = "recently added";
+
+/* Class = "UITextField"; placeholder = "Choose"; ObjectID = "86k-oP-TSX"; */
+"86k-oP-TSX.placeholder" = "Choose";
+
+/* Class = "UILabel"; text = "price"; ObjectID = "8jT-Sf-LW0"; */
+"8jT-Sf-LW0.text" = "price";
+
+/* Class = "UITextField"; placeholder = "Mobile number"; ObjectID = "98e-vo-9TQ"; */
+"98e-vo-9TQ.placeholder" = "Mobile number";
+
+/* Class = "UILabel"; text = "price"; ObjectID = "AIH-2R-0JJ"; */
+"AIH-2R-0JJ.text" = "price";
+
+/* Class = "UIButton"; normalTitle = "add to cart"; ObjectID = "BhR-NC-dcl"; */
+"BhR-NC-dcl.normalTitle" = "add to cart";
+
+/* Class = "UILabel"; text = "title"; ObjectID = "Drd-vF-IjD"; */
+"Drd-vF-IjD.text" = "title";
+
+/* Class = "UINavigationItem"; title = "my orders"; ObjectID = "EdH-gf-bVR"; */
+"EdH-gf-bVR.title" = "my orders";
+
+/* Class = "UITextField"; placeholder = "email"; ObjectID = "EeK-hn-2zC"; */
+"EeK-hn-2zC.placeholder" = "email";
+
+/* Class = "UILabel"; text = "SAR"; ObjectID = "F1m-mx-p6z"; */
+"F1m-mx-p6z.text" = "SAR";
+
+/* Class = "UILabel"; text = "time"; ObjectID = "GRK-NJ-uaI"; */
+"GRK-NJ-uaI.text" = "time";
+
+/* Class = "UIButton"; normalTitle = "Accessories"; ObjectID = "Hi3-VP-pjP"; */
+"Hi3-VP-pjP.normalTitle" = "Accessories";
+
+/* Class = "UIButton"; normalTitle = "best seller"; ObjectID = "I2y-Ju-Ehj"; */
+"I2y-Ju-Ehj.normalTitle" = "best seller";
+
+/* Class = "UITextField"; placeholder = "mobile number"; ObjectID = "IS5-JA-bcd"; */
+"IS5-JA-bcd.placeholder" = "mobile number";
+
+/* Class = "UITabBarItem"; title = "more"; ObjectID = "IyE-qr-yCF"; */
+"IyE-qr-yCF.title" = "more";
+
+/* Class = "UITabBarItem"; title = "favorite"; ObjectID = "KET-i9-khJ"; */
+"KET-i9-khJ.title" = "favorite";
+
+/* Class = "UILabel"; text = "price"; ObjectID = "KQX-c1-w9Y"; */
+"KQX-c1-w9Y.text" = "price";
+
+/* Class = "UILabel"; text = "1"; ObjectID = "L0r-Ap-p4N"; */
+"L0r-Ap-p4N.text" = "1";
+
+/* Class = "UILabel"; text = "A number of box for each eye"; ObjectID = "L4i-oD-Imz"; */
+"L4i-oD-Imz.text" = "A number of box for each eye";
+
+/* Class = "UINavigationItem"; title = "menu"; ObjectID = "Lec-Ll-cnR"; */
+"Lec-Ll-cnR.title" = "menu";
+
+/* Class = "UILabel"; text = "title"; ObjectID = "NbG-7H-sRJ"; */
+"NbG-7H-sRJ.text" = "title";
+
+/* Class = "UITextField"; placeholder = "Choose"; ObjectID = "OVL-9E-ftE"; */
+"OVL-9E-ftE.placeholder" = "Choose";
+
+/* Class = "UILabel"; text = "SAR"; ObjectID = "PrZ-pv-i0h"; */
+"PrZ-pv-i0h.text" = "SAR";
+
+/* Class = "UILabel"; text = "SAR"; ObjectID = "Qul-VI-1Pl"; */
+"Qul-VI-1Pl.text" = "SAR";
+
+/* Class = "UITextField"; placeholder = "Choose"; ObjectID = "RWI-0b-7ou"; */
+"RWI-0b-7ou.placeholder" = "Choose";
+
+/* Class = "UIButton"; normalTitle = "Send"; ObjectID = "Vt9-GT-gX8"; */
+"Vt9-GT-gX8.normalTitle" = "Send";
+
+/* Class = "UILabel"; text = "Rs"; ObjectID = "WPW-05-tgq"; */
+"WPW-05-tgq.text" = "Rs";
+
+/* Class = "UINavigationItem"; title = "Details"; ObjectID = "Wv2-Uo-Pse"; */
+"Wv2-Uo-Pse.title" = "Details";
+
+/* Class = "UITextField"; placeholder = "full name"; ObjectID = "Y5k-je-NhL"; */
+"Y5k-je-NhL.placeholder" = "full name";
+
+/* Class = "UILabel"; text = "price"; ObjectID = "YK6-6j-Rcd"; */
+"YK6-6j-Rcd.text" = "price";
+
+/* Class = "UITextField"; placeholder = "mobile number"; ObjectID = "aoA-Sz-8Qj"; */
+"aoA-Sz-8Qj.placeholder" = "mobile number";
+
+/* Class = "UILabel"; text = "price"; ObjectID = "axK-G7-m4S"; */
+"axK-G7-m4S.text" = "price";
+
+/* Class = "UIButton"; normalTitle = "add to cart"; ObjectID = "cN3-EN-T5C"; */
+"cN3-EN-T5C.normalTitle" = "add to cart";
+
+/* Class = "UITextField"; placeholder = "full name"; ObjectID = "cwZ-4U-Gmz"; */
+"cwZ-4U-Gmz.placeholder" = "full name";
+
+/* Class = "UILabel"; text = "offer"; ObjectID = "dIh-4n-mbq"; */
+"dIh-4n-mbq.text" = "offer";
+
+/* Class = "UILabel"; text = "A prescription for each eye"; ObjectID = "e2u-Rs-bHC"; */
+"e2u-Rs-bHC.text" = "A prescription for each eye";
+
+/* Class = "UIButton"; normalTitle = "Send order"; ObjectID = "ebN-iJ-6Fc"; */
+"ebN-iJ-6Fc.normalTitle" = "Send order";
+
+/* Class = "UILabel"; text = "title"; ObjectID = "ed0-UP-szf"; */
+"ed0-UP-szf.text" = "title";
+
+/* Class = "UINavigationItem"; title = "Iris"; ObjectID = "fEW-Ta-z2y"; */
+"fEW-Ta-z2y.title" = "Iris";
+
+/* Class = "UITabBarItem"; title = "Market"; ObjectID = "glj-Sy-B0i"; */
+"glj-Sy-B0i.title" = "Market";
+
+/* Class = "UILabel"; text = "title"; ObjectID = "hz8-ht-aSf"; */
+"hz8-ht-aSf.text" = "title";
+
+/* Class = "UIButton"; normalTitle = "color lenses"; ObjectID = "jGk-kC-oQs"; */
+"jGk-kC-oQs.normalTitle" = "color lenses";
+
+/* Class = "UINavigationItem"; title = "offers"; ObjectID = "lyK-1k-H9w"; */
+"lyK-1k-H9w.title" = "offers";
+
+/* Class = "UILabel"; text = "Left eye"; ObjectID = "mdS-BQ-6bV"; */
+"mdS-BQ-6bV.text" = "Left eye";
+
+/* Class = "UITabBarItem"; title = "orders"; ObjectID = "mhv-P4-HcG"; */
+"mhv-P4-HcG.title" = "orders";
+
+/* Class = "UITextView"; text = "content"; ObjectID = "nnF-r0-cPk"; */
+"nnF-r0-cPk.text" = "content";
+
+/* Class = "UIButton"; normalTitle = "Sign in"; ObjectID = "oRP-Xa-k6j"; */
+"oRP-Xa-k6j.normalTitle" = "Sign in";
+
+/* Class = "UITextField"; placeholder = "Choose"; ObjectID = "owG-wR-xB0"; */
+"owG-wR-xB0.placeholder" = "Choose";
+
+/* Class = "UILabel"; text = "title"; ObjectID = "qhp-BC-jP6"; */
+"qhp-BC-jP6.text" = "title";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "rus-tY-y3E"; */
+"rus-tY-y3E.normalTitle" = "Button";
+
+/* Class = "UIButton"; normalTitle = "Send"; ObjectID = "sS0-Zy-dIv"; */
+"sS0-Zy-dIv.normalTitle" = "Send";
+
+/* Class = "UILabel"; text = "1"; ObjectID = "uz7-C1-1Oy"; */
+"uz7-C1-1Oy.text" = "1";
+
+/* Class = "UILabel"; text = "degree of length or myopia"; ObjectID = "vMc-1x-AF6"; */
+"vMc-1x-AF6.text" = "degree of length or myopia";
+
+/* Class = "UITextField"; placeholder = "Type here what you are looking for.........."; ObjectID = "vbZ-kf-DF2"; */
+"vbZ-kf-DF2.placeholder" = "Type here what you are looking for..........";
+
+/* Class = "UITabBarItem"; title = "offers"; ObjectID = "xHL-vW-SQx"; */
+"xHL-vW-SQx.title" = "offers";
+
+/* Class = "UIButton"; normalTitle = "Skip"; ObjectID = "yyO-SU-8Cw"; */
+"yyO-SU-8Cw.normalTitle" = "Skip";
+
+/* Class = "UIButton"; normalTitle = "add to cart"; ObjectID = "zuT-D5-eiL"; */
+"zuT-D5-eiL.normalTitle" = "add to cart";

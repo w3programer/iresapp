@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 class SearchCell: UICollectionViewCell {
     
@@ -23,6 +24,23 @@ class SearchCell: UICollectionViewCell {
         self.view.layer.borderColor = UIColor.gray.cgColor
         self.view.layer.borderWidth = 2
     }
+    
+    
+    
+    var pics: Ads? {
+        didSet {
+            guard let imgs = pics else { return }
+            self.img.kf.indicatorType = .activity
+            for phots in imgs.images {
+                if let url = URL(string:(phots)) {
+                    self.img.kf.setImage(with: url, placeholder: nil, options:[.transition(ImageTransition.fade(0.5))])
+                }
+            }
+            
+        }
+    }
+    
+    
     
     
 }

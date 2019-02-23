@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import SVProgressHUD
+
 
 class LoginVC: UIViewController {
 
@@ -24,16 +26,26 @@ class LoginVC: UIViewController {
         
         numberTF.attributedPlaceholder = NSAttributedString(string: "Mobile Number", attributes: [NSAttributedString.Key.foregroundColor: #colorLiteral(red: 0.115710564, green: 0.5438727736, blue: 0.5560589433, alpha: 1) ])
 
-
+        setLoca()
+        
+        
     }
     
     @IBAction func sginInBtn(_ sender: Any) {
-        
+          Helper.hudStart()
         guard let num = numberTF.text, !num.isEmpty else {
-            return Alert.alertPopUp(title: "field empty", msg: "please put your number", vc: self)
+            SVProgressHUD.dismiss()
+            Alert.alertPopUp(title: "field empty", msg: "please put your number", vc: self)
+            return
         }
         
-        
+        API.login(num: num) { (error: Error?, success:Bool?) in
+            if success == true {
+                
+            } else {
+             SVProgressHUD.dismiss()
+            }
+        }
         
        
         
@@ -50,6 +62,15 @@ class LoginVC: UIViewController {
         
     }
     
+    
+    func setLoca() {
+        
+        numberTF.placeholder = General.stringForKey(key: "n")
+        signinBtn.setTitle(General.stringForKey(key: "sginin"), for: .normal)
+        skip.setTitle(General.stringForKey(key: "skip"), for: .normal)
+        
+        
+    }
 
  
 }

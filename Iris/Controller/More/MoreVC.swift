@@ -13,9 +13,10 @@ class MoreVC: UIViewController {
     
     
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var lanBtn: UIBarButtonItem!
     
     
-    var titles = ["login","profile","contact us","about us","FAQ","ruls & condtions"]
+    var titles = ["login","profile","contact us","ruls & condtions","logout"]
     
     
     
@@ -24,20 +25,38 @@ class MoreVC: UIViewController {
 
         confirmProtocls()
         CartVC.shared.desginTableView(tableview: tableView)
-        
+        self.navigationController?.navigationBar.setValue(true, forKey: "hidesShadow")
+
+        //lanBtn.setTitle(General.stringForKey(key: "arabic"), for: .normal)
+        lanBtn.title = General.stringForKey(key: "arabic")
         
     }
+    
+    
+    @IBAction func languageBtn(_ sender: Any) {
+        
+        print("language Pressed")
+        
+        if General.CurrentLanguage() == "ar"
+        {
+            CheckLanguage.ChangeLanguage(NewLang: "en")
+        }else
+        {
+            CheckLanguage.ChangeLanguage(NewLang: "ar")
+        }
+        Helper.restartApp()
+        
+    }
+    
+    
+    
     
     func confirmProtocls() {
         self.tableView.delegate = self
         self.tableView.dataSource = self
     }
 
-//    func tableViewDesgin() {
-//        tableView.tableFooterView =  UIView()
-//        tableView.separatorInset = .zero
-//        tableView.contentInset = .zero
-//    }
+
 
 }
 extension MoreVC: UITableViewDelegate, UITableViewDataSource {
@@ -64,7 +83,11 @@ extension MoreVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        
+        if Helper.checkToken() == true {
+            if indexPath.row == 0 {
+                return 0
+            }
+        }
         
         return 44.0
     }
@@ -78,13 +101,21 @@ extension MoreVC: UITableViewDelegate, UITableViewDataSource {
         } else if indexPath.row == 2 {
             performSegue(withIdentifier: "ContactSegue", sender: self)
         } else if indexPath.row == 3 {
-            performSegue(withIdentifier: "AboutSegue", sender: self)
-        }
+            performSegue(withIdentifier: "TermsSegue", sender: self)
+        } else if indexPath.row == 4 {
+            API.logOut(token: Helper.getUserToken()) { (error:Error?, success:Bool?) in
+                if success == true {
+                    
+                } else {
+                    Alert.alertPopUp(title: "connection faild", msg: "please check your internet connection and try again", vc: self)
+                  }
+                }
+               }
+              }
         
         
         
         
-    }
     
     
     
@@ -92,6 +123,6 @@ extension MoreVC: UITableViewDelegate, UITableViewDataSource {
     
     
     
-    
+
     
 }

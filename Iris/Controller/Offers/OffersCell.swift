@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 class OffersCell: UITableViewCell {
 
@@ -14,6 +15,7 @@ class OffersCell: UITableViewCell {
     @IBOutlet weak var title: UILabel!
     @IBOutlet weak var offerLab: UILabel!
     @IBOutlet weak var visual: UIVisualEffectView!
+    @IBOutlet weak var price: UILabel!
     
     @IBOutlet weak var view: UIView!
     
@@ -26,15 +28,25 @@ class OffersCell: UITableViewCell {
         view.layer.borderColor = UIColor.gray.cgColor
         self.img.layer.cornerRadius = 10.0
         self.img.clipsToBounds = true
-        self.visual.alpha = 0.6
         
         
     }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+    
+    
+    
+    var pics: Ads? {
+        didSet {
+            guard let imgs = pics else { return }
+            self.img.kf.indicatorType = .activity
+            for phots in imgs.images {
+                if let url = URL(string:(phots)) {
+                    self.img.kf.setImage(with: url, placeholder: nil, options:[.transition(ImageTransition.fade(0.5))])
+                }
+            }
+            
+        }
     }
+
+   
 
 }

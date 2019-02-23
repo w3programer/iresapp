@@ -22,6 +22,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         IQKeyboardManager.shared.enable = true
         
         
+        if Helper.checkToken() == true {
+            let sb = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "main")
+            window?.rootViewController = sb
+        }
+        
+        if UserDefaults.standard.object(forKey: "keyLanguage")  == nil{
+            CheckLanguage.ChangeLanguage(NewLang: "en")// default language is english
+        }
         
         return true
     }

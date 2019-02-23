@@ -9,12 +9,6 @@
 import UIKit
 import Kingfisher
 
-protocol removeBtn {
-    
-    func favTapped(_ sender: FavCell)
-
-    
-}
 
 class FavCell: UITableViewCell {
 
@@ -34,19 +28,22 @@ class FavCell: UITableViewCell {
         
     }
     
-    //    var pics: Ads? {
-    //        didSet {
-    //            guard let imgs = pics else { return }
-    //            self.img.kf.indicatorType = .activity
-    //            if let url = URL(string: (imgs.mainImg) ) {
-    //                self.img.kf.setImage(with: url, placeholder: nil, options:[.transition(ImageTransition.fade(0.5))])
-    //            }
-    //        }
-    //    }
+    var pics: Ads? {
+        didSet {
+            guard let imgs = pics else { return }
+            self.img.kf.indicatorType = .activity
+            for phots in imgs.images {
+                if let url = URL(string:(phots)) {
+                    self.img.kf.setImage(with: url, placeholder: nil, options:[.transition(ImageTransition.fade(0.5))])
+                }
+            }
+            
+        }
+    }
 
     
     
-    var delegate:removeBtn?
+    
     
 
 }

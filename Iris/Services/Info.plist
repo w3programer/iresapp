@@ -20,6 +20,19 @@
 	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>Please allow iris to access to your libirary so you can upload image you want</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Please allow iris to access to your camera so you can upload image you want</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Please allow iris to access to your libirary so you can upload image you want</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Please allow iris to access to your libirary so you can upload image you want</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -33,8 +46,6 @@
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>

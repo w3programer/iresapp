@@ -16,10 +16,18 @@ class OffersVC: UIViewController {
     
     fileprivate var rowHeight: CGFloat = 130.0
     
-    var offers = ["vcrvr","cdc"]
-    var imgs = [UIImage(named: "do.png")]
+    var offers = [Ads]()
+    var curentPage = 1
+    var totalPages = 1
     
-    static let shared = OffersVC()
+    
+    // sendData
+    var selectedImgs = [String]()
+    var selectedTitle = ""
+    var selectedContent = ""
+    
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,24 +35,24 @@ class OffersVC: UIViewController {
         
         confirmTableViewProtocls()
         tableView.tableFooterView = UIView()
+        callData(pageNo: curentPage)
         
-//        tableView.topAnchor.constraint(equalTo: topLayoutGuide.bottomAnchor).isActive = true
         
     }
     
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
- 
-        if scrollView.contentOffset.y >= 100 {
-        UIView.animate(withDuration: 2.5) {
-            self.navigationController?.setNavigationBarHidden(true, animated: true)
-           }
-        } else {
-            UIView.animate(withDuration: 2.5) {
-                self.navigationController?.setNavigationBarHidden(false, animated: true)
-            }
-        }
-        
-    }
+//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//
+//        if scrollView.contentOffset.y >= 100 {
+//        UIView.animate(withDuration: 2.5) {
+//            self.navigationController?.setNavigationBarHidden(true, animated: true)
+//           }
+//        } else {
+//            UIView.animate(withDuration: 2.5) {
+//                self.navigationController?.setNavigationBarHidden(false, animated: true)
+//            }
+//        }
+//
+//    }
     
     
     func confirmTableViewProtocls() {
@@ -55,8 +63,40 @@ class OffersVC: UIViewController {
     }
 
     
+    func callData(pageNo:Int) {
+        API.offers(pageNo: pageNo) { (error:Error?, data:[Ads]?) in
+            if data != nil {
+                self.offers.append(contentsOf: data!)
+                self.tableView.reloadData()
+            } else {
+                print("no offers found")
+             }
+           }
+        }
+    
+    @IBAction func unwindToFav(segue: UIStoryboardSegue) {}
+
+
+//    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+//
+//    print("scrollViewWillBeginDragging")
+//    //isDataLoading = false
+//    }
+//
+//
+//
+//    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+//        print("scrollViewDidEndDecelerating")
+//    }
+//
+//    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+//
+//        print("scrollViewDidEndDragging")
+//
+//        }
     
 
+    
 }
 extension OffersVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -68,8 +108,14 @@ extension OffersVC: UITableViewDelegate, UITableViewDataSource {
         
         cell.selectionStyle = UITableViewCell.SelectionStyle.none
         
-        cell.title.text = offers[indexPath.row]
-        cell.img.image = UIImage(named: "img.png")
+        
+            cell.title.text = offers[indexPath.row].name_ar
+            cell.pics = offers[IndexPath(item: 0, section: 0).item]
+            cell.price.text = "\(offers[indexPath.row].price)"
+            cell.offerLab.text = "\(offers[indexPath.row].price_after_discount)"
+            
+        
+       
         
         return cell
     }
@@ -78,6 +124,42 @@ extension OffersVC: UITableViewDelegate, UITableViewDataSource {
         
         
         return rowHeight
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        
+        if indexPath.row == offers.count - 1 {
+            totalPages = offers[indexPath.row].lastPage
+              if curentPage < totalPages {
+                    curentPage += 1
+                  print("nuuum",curentPage)
+                self.callData(pageNo: curentPage)
+              }
+           }
+        
+        
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        selectedImgs = offers[indexPath.row].images
+        selectedTitle = offers[indexPath.row].name_ar
+        selectedContent = offers[indexPath.row].description_ar
+        
+        performSegue(withIdentifier: "OfferContent", sender: self)
+
+        print(offers[indexPath.row].lastPage)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "OfferContent" {
+            let seg = segue.destination as? AdContentVC
+            seg?.recPage = "offer"
+            seg?.recImgs = selectedImgs
+            seg?.recTitle = selectedTitle
+            seg?.recContent = selectedContent
+            
+        }
     }
     
 }

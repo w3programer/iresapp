@@ -11,12 +11,12 @@ import SwiftyJSON
 
 extension JSON {
     
-//    var imagePath: String? {
-//
-//        guard let string = self.string, !string.isEmpty else {return nil}
-//
-//        return URLs.image + string
-//    }
+    var imagePath: String? {
+
+        guard let string = self.string, !string.isEmpty else {return nil}
+
+        return URLs.image + string
+    }
 }
 
 

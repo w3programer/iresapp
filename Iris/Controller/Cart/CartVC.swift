@@ -90,7 +90,7 @@ extension  CartVC: UITableViewDelegate, UITableViewDataSource {
         let selectedIndex = IndexPath(row: sender.tag, section: 0)
          let selectedRow = tableView.cellForRow(at: selectedIndex) as! CartCell 
             print(selectedRow)
-            selectedRow.numLab.text = "\(numberOfItems+=1)"
+            selectedRow.numLab.text = "\(numberOfItems += 1)"
             print("numberOfItems",numberOfItems)
         
        

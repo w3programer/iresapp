@@ -1,0 +1,37 @@
+/* 
+  Localization.strings
+  Iris
+
+  Created by mahmoudhajar on 2/22/19.
+  Copyright © 2019 CreativeShare. All rights reserved.
+*/
+"LanguageID" = "1";
+
+"arabic"="English";
+
+"n"="رقم الجوال";
+"sginin"="تسجيل الدخول";
+"skip"="تخطي";
+"Pellucid lenses"="عدسات شفافة";
+"colorLenses"="عدسات ملونة";
+"accessories"="ملحقات";
+"rec"="اضيف مؤخرا";
+"best"="الأكثر مبيعا";
+"market"="المتجر";
+"offers"="العروض";
+"orders"="طلباتي";
+"fav"="المفضلة";
+"more"="المزيد";
+"type"="اتب هنا ماتود البحث عنه";
+"profile"="الصفحة الشخصية";
+"contactus"="تواصل معانا";
+"rules"="الشروط والأحكام";
+"logout"="تسجيل الخروج";
+"myor"="طلباتي";
+"current"="الحالية";
+"old"="السابقة";
+"new"="جديد";
+"name"="الاسم";
+"email"="البريد الالكتروني";
+"update"="تحديث";
+"send"="إرسال";

@@ -15,15 +15,16 @@ class MyOrders: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var colectionView: UICollectionView!
     
-    var data = [["vvvvv","wwww","dddd","dddd","dddd","dddd","dddd","dddd"],["dwdwd","dwdw","dwd","dddd","dddd","dddd","dddd","dddd","dddd","dddd"]]
+   // var data = [["vvvvv","wwww","dddd","dddd","dddd","dddd","dddd","dddd"],["dwdwd","dwdw","dwd","dddd","dddd","dddd","dddd","dddd","dddd","dddd"],["dwdwd","dwdw","dwd","dddd","dddd","dddd","dddd","dddd","dddd","dddd"]]
 
-    
-    fileprivate let menuTitls = ["Ended","Current"]
-    var selectedArray = [String]()
+    var data = [[MyOrder](),[MyOrder](),[MyOrder]()]
+    fileprivate let menuTitls = [ "old" ,"Current","New"]
+    var selectedArray = [MyOrder]()
     var selectedIndex = 0
-    var selectedIndexPath =  IndexPath(item: 0, section: 0)
+    var selectedIndexPath = IndexPath(item: 0, section: 0)
+    var indicatorView = UIView()
+    let indicatorHeight : CGFloat = 3
     
-    let indicatorView = UIView()
     
     
     override func viewDidLoad() {
@@ -33,11 +34,19 @@ class MyOrders: UIViewController {
          indicatorUIView()
           createSwipGestures()
         
+        self.navigationController?.navigationBar.setValue(true, forKey: "hidesShadow")
+
         colectionView.selectItem(at: selectedIndexPath, animated: false, scrollPosition: .centeredVertically)
         selectedArray = data[selectedIndex]
+        //selectedArray[selectedIndex]
+        //tableView.tableFooterView = UIView()
         
-        tableView.tableFooterView = UIView()
         
+        if Helper.checkToken() == true {
+            allOrders(type:"old")
+        } else {
+            
+        }
     }
     
 
@@ -54,20 +63,26 @@ class MyOrders: UIViewController {
     func indicatorUIView() {
         
         indicatorView.backgroundColor = .white
-        indicatorView.frame = CGRect(x: colectionView.bounds.minX, y: colectionView.bounds.minY, width: colectionView.bounds.width / CGFloat(menuTitls.count), height: 3 )
+        indicatorView.frame = CGRect(x: colectionView.bounds.minX, y: colectionView.bounds.maxY - indicatorHeight, width: colectionView.bounds.width / CGFloat(menuTitls.count), height: indicatorHeight)
         colectionView.addSubview(indicatorView)
         
     }
     
     func refreshContent() {
-        
-        selectedArray = data[selectedIndex]
-        let x = colectionView.bounds.width / CGFloat(menuTitls.count) * CGFloat(selectedIndex)
+        if selectedIndex == 0 {
+            allOrders(type: "old")
+        } else if selectedIndex == 1 {
+            allOrders(type: "current")
+        } else {
+            allOrders(type: "new")
+        }
+//        selectedArray = data[selectedIndex]
+//        tableView.reloadData()
+        let x = (colectionView.bounds.width / CGFloat(menuTitls.count)) * CGFloat(selectedIndex)
         UIView.animate(withDuration: 0.3) {
-            self.indicatorView.frame = CGRect(x: x, y: self.colectionView.bounds.minY, width: self.colectionView.bounds.width / CGFloat(self.menuTitls.count), height: 3 )
+            self.indicatorView.frame = CGRect(x: x, y: self.colectionView.bounds.maxY - self.indicatorHeight, width: self.colectionView.bounds.width / CGFloat(self.menuTitls.count), height: self.indicatorHeight)
         }
         
-        tableView.reloadData()
 
     }
     
@@ -114,6 +129,17 @@ class MyOrders: UIViewController {
     
     
     
+    func allOrders(type:String) {
+        API.getMyOrders(type:type) { (error:Error?, data:[MyOrder]?) in
+            if data != nil {
+                print("my order data",data!)
+            } else {
+                print("empty data")
+            }
+        }
+    }
+    
+    
 }
 extension MyOrders: UITableViewDataSource , UITableViewDelegate {
     
@@ -131,7 +157,7 @@ extension MyOrders: UITableViewDataSource , UITableViewDelegate {
             cell.img.image = UIImage(named: "do.png")
         }
         
-        cell.title.text = selectedArray[indexPath.row]
+        //cell.title.text = "\(selectedArray[indexPath.row].total)"
         
         return cell
     }
@@ -142,6 +168,9 @@ extension MyOrders: UITableViewDataSource , UITableViewDelegate {
         return 44.0
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
     
     
 }
@@ -163,8 +192,7 @@ extension MyOrders: UICollectionViewDelegate , UICollectionViewDataSource , UICo
     
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
-        return CGSize(width: colectionView.bounds.width / CGFloat(menuTitls.count), height: colectionView.bounds.height)
+        return CGSize(width: self.view.frame.width / 3 , height: colectionView.bounds.height)
     }
     
     
@@ -174,5 +202,9 @@ extension MyOrders: UICollectionViewDelegate , UICollectionViewDataSource , UICo
         refreshContent()
     }
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        
+        return 0
+    }
     
 }

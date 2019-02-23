@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SVProgressHUD
 
 class FavoriteVC: UIViewController {
 
@@ -14,20 +15,29 @@ class FavoriteVC: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     
     
-    var myFav = ["77","77","77","77","77","77","77","77","77","77"]
+    var myFav = [Ads]()
+    
+    var currentPage = 1
+    var totalPages = 1
+    
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        Helper.hudStart()
         
-        
-        
+        getFavotites(token:Helper.getUserToken(),id:currentPage)
         confirmProtocls()
         tableView.tableFooterView = UIView()
   //      OffersVC.shared.hideNavigation()
 //     tableView.topAnchor.constraint(equalTo: topLayoutGuide.bottomAnchor).isActive = true
     }
     
+    
+    
+
     
     func confirmProtocls() {
         
@@ -50,7 +60,18 @@ class FavoriteVC: UIViewController {
             }
         }
     
-
+    func getFavotites(token:String,id: Int) {
+        API.getFavourites(token: token, pageNo: id) { (error:Error?, data:[Ads]?) in
+            if data != nil {
+                self.myFav.append(contentsOf: data!)
+                SVProgressHUD.dismiss()
+                self.tableView.reloadData()
+            } else {
+                Helper.showError(title: "No products found")
+            }
+        }
+        
+    }
    
 
 }
@@ -68,15 +89,17 @@ extension FavoriteVC: UITableViewDelegate , UITableViewDataSource {
         
         cell.selectionStyle = UITableViewCell.SelectionStyle.none
         
-        cell.price.text = myFav[indexPath.row]
-        cell.img.image = UIImage(named: "img.png")
+        cell.price.text = "\(myFav[indexPath.row].price)"
+        cell.pics = myFav[IndexPath(item: 0, section: 0).item]
+        cell.title.text = myFav[indexPath.row].name_ar
         
         cell.favBtn.setImage(UIImage(named: "lk.png"), for: .normal)
         cell.favBtn.setImage(UIImage(named: "li.png"), for: .selected)
         cell.favBtn.tag = indexPath.row
         cell.favBtn.addTarget(self, action: #selector(favTapped(sender:)), for: .touchUpInside)
         cell.favBtn.isSelected = false
-
+      
+        
         return cell
         
     }
@@ -84,16 +107,20 @@ extension FavoriteVC: UITableViewDelegate , UITableViewDataSource {
     @objc func favTapped(sender: UIButton) {
         if (sender.isSelected)
         {
+//            let No = myFav[sender.tag].id
+//            sender.isSelected = true
+//            API.selectFav(token: Helper.getUserToken(), proId: No) { (error:Error?, success:Bool?) in
+//                if success! {
+//                }
+//            }
+       // }else {
+            let ID = myFav[sender.tag].favorite_id
             sender.isSelected = false
-//        UIView.animate(withDuration: 0.2, delay: 0.1, options: .curveLinear, animations: {
-//        sender.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
-//          })
-        }else {
-            sender.isSelected = true
-//        UIView.animate(withDuration: 0.2, delay: 0.1, options: .curveLinear, animations: {
-//                sender.isSelected = sender.isSelected
-//                sender.transform = .identity
-//           })
+            API.disSelectFav(token: Helper.getUserToken(),id:ID) {( error:Error?, success: Bool?) in
+                if success == true {
+                    self.getFavotites(token: Helper.getUserToken(), id: self.currentPage)
+                }
+            }
         }
     }
     
@@ -104,7 +131,26 @@ extension FavoriteVC: UITableViewDelegate , UITableViewDataSource {
         return 100.0
     }
     
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        
+        if indexPath.row ==  myFav.count - 1 {
+            totalPages = myFav[indexPath.row].lastPage
+            currentPage += 1
+             getFavotites(token: Helper.getUserToken(), id:currentPage )
+            
+            
+        }
+      }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        
+        
+        
+        
+    }
     
     
+   
     
 }
