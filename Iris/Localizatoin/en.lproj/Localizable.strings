@@ -20,7 +20,7 @@
 "market"="Market";
 "offers"="Offers";
 "orders"="Orders";
-"fav"="Favourite";
+"fav"="favourite";
 "more"="More";
 "type"="Type here what you are looking for";
 "profile"="profile";
@@ -38,3 +38,8 @@
 "sginup"="Sgin up";
 "sendorder"="send order";
 "more"="more";
+"details"="product detail";
+"iris"="Eyeris";
+"notAll"="service not allowed";
+"this"="this service is allowed for users only ";
+"sa"="saved successfully";

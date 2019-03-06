@@ -65,7 +65,7 @@ import SwiftyJSON
 
 class Ads: NSObject {
     
-    
+    var imaage: String = ""
     var images:[String] = []
     var id:Int = 0
     var name_ar:String = ""
@@ -75,8 +75,12 @@ class Ads: NSObject {
     var discount_percentage:Int = 0
     var is_favorite:Int = 0
     var description_ar:String = ""
+    var description_en:String = ""
     var featured:Int = 0
     var favorite_id:Int = 0
+    var brandNameAr:String = ""
+    var brandNameEn:String = ""
+    var has_sizes:Int = 0
     
    // var currentPage:Int = 1
     var lastPage:Int = 1
@@ -91,14 +95,19 @@ class Ads: NSObject {
             self.images.append(photo)
             print("gooo")
         }   
-        
+        for ig in photos! {
+            guard let photo = ig.imagePath, !photo.isEmpty else {return nil}
+            //self.images.append(photo)
+            self.imaage = photo
+            print("goooffff")
+        }
         
         self.id = (dic["id"]?.int)!
         self.name_ar = (dic["name_ar"]?.string)!
         self.name_en = (dic["name_en"]?.string)!
         self.price = (dic["price"]?.int)!
         self.description_ar = (dic["description_ar"]?.string)!
-        
+        self.description_en = (dic["description_en"]?.string)!
         
         // for favorite
         self.is_favorite = (dic["is_favorite"]?.int)!
@@ -115,27 +124,9 @@ class Ads: NSObject {
         self.discount_percentage = (dic["discount_percentage"]?.int)!
         self.featured = (dic["featured"]?.int)!
 
-        
-        
-//        if dic["meta"]?["current_page"].int != nil {
-//            print("error1")
-          //  self.currentPage = (dic["current_page"]?.int)!
-//        }else{
-//            print("error2")
-        
-//        }
-        
-        
-//        if dic["meta"]?["last_page"].int != nil {
-//            self.lastPage = dic["meta"]!["last_page"].intValue
-//        }
-//        if dic["last_page"]?.int != nil {
-//            self.lastPage = (dic["last_page"]?.int)!
-//           print("goooood")
-//        } else {
-//            print("baaaaaaaad")
-//        }
-        
+        self.brandNameAr = dic["brand"]!["name_ar"].string!
+        self.brandNameEn = dic["brand"]!["name_en"].string!
+        self.has_sizes = (dic["has_sizes"]?.int)!
         
         
         

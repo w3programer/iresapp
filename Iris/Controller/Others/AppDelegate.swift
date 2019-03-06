@@ -15,7 +15,8 @@ import IQKeyboardManagerSwift
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    
+    //var coreData = CoreDataStack()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
@@ -66,13 +67,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
          creates and returns a container, having loaded the store for the
          application to it. This property is optional since there are legitimate
          error conditions that could cause the creation of the store to fail.
-        */
+         */
         let container = NSPersistentContainer(name: "Iris")
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
                 // Replace this implementation with code to handle the error appropriately.
                 // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                 
+                
                 /*
                  Typical reasons for an error here include:
                  * The parent directory does not exist, cannot be created, or disallows writing.
@@ -86,9 +87,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         })
         return container
     }()
-
+    
     // MARK: - Core Data Saving support
-
+    
     func saveContext () {
         let context = persistentContainer.viewContext
         if context.hasChanges {
@@ -102,6 +103,60 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
+    
+//    let ad = (UIApplication.shared.delegate) as! AppDelegate
+//    let context =  ad.presistentContainer.viewContext
+    
+    
+//    func checkDataSorage() {
+//
+//        let request : NSFetchRequest<Product> = Product.fetchRequest()
+//        let context = coreData.persistentContainer.viewContext
+//        do {
+//            let productCou = try context.count(for: request)
+//            if productCou == 0 {
+//                uploadData()
+//            }
+//        }catch {
+//            print("error contxt")
+//        }
+//
+//    }
+//
+//
+//
+//    func uploadData() {
+//        let context = coreData.persistentContainer.viewContext
+//        let url = Bundle.main.url(forResource: "product", withExtension: "json")
+//        let data = try? Data(contentsOf: url!)
+//        do {
+//            let jsonRes = try JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSDictionary
+//            let jsonArr = jsonRes.value(forKey: "product") as! NSArray
+//
+//            for jsn in jsonArr {
+//                let proData = jsn as! [String:AnyObject]
+//                guard let token = proData["token"] else {return}
+//                guard let name = proData["name"]   else {return}
+//                guard let email = proData["email"] else {return}
+//                guard let phone = proData["phone"] else {return}
+//                guard let total = proData["total"] else {return}
+//                if let itemList = proData["itemList"]  {
+//                   // let proId =
+//
+//
+//                }
+//
+//
+//
+//
+//            }
+//        }catch {
+//
+//        }
+//
+//
+//
+//    }
 
 }
 

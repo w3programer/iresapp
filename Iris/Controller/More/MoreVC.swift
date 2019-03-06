@@ -18,6 +18,7 @@ class MoreVC: UIViewController {
     
     var titles = ["login","profile","contact us","ruls & condtions","logout"]
     
+     
     
     
     override func viewDidLoad() {

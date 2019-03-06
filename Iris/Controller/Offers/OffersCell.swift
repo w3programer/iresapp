@@ -24,7 +24,7 @@ class OffersCell: UITableViewCell {
         super.awakeFromNib()
         
         
-        view.layer.borderWidth = 2
+        view.layer.borderWidth = 1
         view.layer.borderColor = UIColor.gray.cgColor
         self.img.layer.cornerRadius = 10.0
         self.img.clipsToBounds = true
@@ -38,11 +38,11 @@ class OffersCell: UITableViewCell {
         didSet {
             guard let imgs = pics else { return }
             self.img.kf.indicatorType = .activity
-            for phots in imgs.images {
-                if let url = URL(string:(phots)) {
+           // for phots in imgs.images {
+                if let url = URL(string:(imgs.imaage)) {
                     self.img.kf.setImage(with: url, placeholder: nil, options:[.transition(ImageTransition.fade(0.5))])
                 }
-            }
+           // }
             
         }
     }

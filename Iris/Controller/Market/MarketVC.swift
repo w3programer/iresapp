@@ -7,16 +7,14 @@
 //
 
 import UIKit
-import ImageSlideshow
+import Alamofire
+import SwiftyJSON
 
-
-// favroite button
 
 class MarketVC: UIViewController {
 
     
    
-    @IBOutlet weak var slider: ImageSlideshow!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var recAdded: CornerButtons!
     @IBOutlet weak var bestSeller: CornerButtons!
@@ -39,19 +37,20 @@ class MarketVC: UIViewController {
     // Move Selected data
     var selectedImgs = [String]()
     var selectedTitle = ""
-    var selectedContent = ""
+    var selectedContent_en = ""
+    var selectedContent_ar = ""
+    var selectedId = 0
+    var selectedHasSize = 0
+    var selectedPrice = 0
+    var selectedName_ar = ""
+    var selectedName_en = ""
     
-    
-    // sliderShow
-    var imgSource = [InputSource]()
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setLoca()
-        slideShow()
-        configSliderShow()
         getCategory(pageNO: currentPage, id: 1)
          confrimProtocls()
           displayElementsDesgin()
@@ -124,7 +123,6 @@ class MarketVC: UIViewController {
         access.alignText()
         recAdded.alignText()
         bestSeller.alignText()
-        slider.roundView()
         
     }
     
@@ -139,65 +137,12 @@ class MarketVC: UIViewController {
     
     
     
-    func configSliderShow() {
-
-        slider.slideshowInterval = 5.0
-        slider.pageIndicatorPosition = .init(horizontal: .center, vertical: .bottom)
-        slider.contentScaleMode = UIView.ContentMode.scaleAspectFill
-
-        let pageControl = UIPageControl()
-        pageControl.currentPageIndicatorTintColor = UIColor.black
-        pageControl.pageIndicatorTintColor = UIColor.white
-        slider.pageIndicator = pageControl
-
-        slider.activityIndicator = DefaultActivityIndicator()
-        slider.activityIndicator = DefaultActivityIndicator(style: .gray , color: nil )
-
-        slider.currentPageChanged = { page in
-            print("current page:", page)
-        }
-
-        slider.addSubview(pageControl)
-        
-    }
-    
-    
-    func slideShow() {
-        API.sliderData { (error: Error?, data:[Slider]?) in
-            if data != nil {
-                for da in data! {
-                    self.imgSource.append(KingfisherSource(urlString: da.image)!)
-                }
-                self.slider.setImageInputs(self.imgSource)
-            } else {
-                print("Slider have no data")
-            }
-        }
-        
-        
-    }
-    
-    
-//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//
-//        if scrollView.contentOffset.y >= 100 {
-//            UIView.animate(withDuration: 2.5) {
-//                self.navigationController?.setNavigationBarHidden(true, animated: true)
-//            }
-//        } else {
-//            UIView.animate(withDuration: 2.5) {
-//                self.navigationController?.setNavigationBarHidden(false, animated: true)
-//            }
-//        }
-//    }
-    
-    
-    
-
+   
     
     
     
     func getCategory(pageNO: Int, id: Int) {
+        setPagination(id:id)
         if id == 1  {
             transLoad = true
             colorLoad = false
@@ -212,6 +157,7 @@ class MarketVC: UIViewController {
             accessLoad = true
         }
         if Helper.checkToken() == false {
+            
             API.Categories(pageNo: pageNO , Id: id ) { (error: Error?, data:[Ads]?) in
                 if data != nil {
                     print("MarketVC data",data!)
@@ -239,6 +185,7 @@ class MarketVC: UIViewController {
         }
     
     func sortData(id:Int,pageNo:Int,typ:Int) {
+        setPagination(id:id)
         if Helper.checkToken() == false {
             API.sortData(pageNo: pageNo, Id: id, typ: typ) { (error:Error?, data:[Ads]?) in
                 if data != nil {
@@ -269,6 +216,7 @@ class MarketVC: UIViewController {
     
     
     fileprivate func setLoca() {
+        navigationItem.title = General.stringForKey(key: "iris")
         recAdded.setTitle(General.stringForKey(key: "rec"), for: .normal)
         bestSeller.setTitle(General.stringForKey(key: "best"), for: .normal)
         transp.setTitle(General.stringForKey(key: "Pellucid lenses"), for: .normal)
@@ -278,6 +226,26 @@ class MarketVC: UIViewController {
         
     }
     
+    func setPagination(id:Int) {
+        let url = URLs.categories+"/\(id)/"+"products"
+        Alamofire.request( url , method: .get ).responseJSON { (response) in
+            switch response.result {
+            case .failure(let error):
+                print("terms",error)
+                
+            case .success(let value):
+                let jsonData = JSON(value)
+                print(jsonData)
+                let json = jsonData["meta"]
+                print(json)
+                let last = json["last_page"].int
+                print(last!)
+                self.totalPages = last!
+            }
+        }
+        
+        
+    }
     
     
 }
@@ -293,32 +261,50 @@ extension MarketVC: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! marketCell
-            
-            cell.pics = menuPro[IndexPath(item: 0, section: 0).item]
+        
+        if General.CurrentLanguage() == "ar"
+        {
             cell.title.text = menuPro[indexPath.row].name_ar
-            cell.price.text = "\(menuPro[indexPath.row].price)"
-        if menuPro[indexPath.row].is_favorite == 0 {
-            cell.fav.setImage(UIImage(named: "li.png"), for: .normal)
-            cell.fav.setImage(UIImage(named: "lk.png"), for: .selected)
-        } else {
-            cell.fav.setImage(UIImage(named: "lk.png"), for: .normal)
-            cell.fav.setImage(UIImage(named: "li.png"), for: .selected)
+        }else
+        {
+            cell.title.text = menuPro[indexPath.row].name_en
         }
         
+        if Helper.checkToken() == true {
+            if menuPro[indexPath.row].is_favorite == 0 {
+                cell.fav.setImage(UIImage(named: "li.png"), for: .normal)
+                cell.fav.setImage(UIImage(named: "lk.png"), for: .selected)
+            } else {
+                cell.fav.setImage(UIImage(named: "lk.png"), for: .normal)
+                cell.fav.setImage(UIImage(named: "li.png"), for: .selected)
+            }
+            
             cell.fav.addTarget(self, action: #selector(favTapped(sender:)), for: .touchUpInside)
             cell.fav.isSelected = false
             cell.fav.tag = indexPath.row
+        } else {
+            cell.fav.isHidden = true
+        }
+        
+            //cell.pics = menuPro[IndexPath(item: 0, section: 0).item]
+              cell.pics = menuPro[indexPath.item]
+            cell.price.text = "\(menuPro[indexPath.row].price)"
+       
             return cell
         
         
     }
     
     @objc func favTapped(sender: UIButton) {
+        collectionView.reloadData()
         if (sender.isSelected) {
             let id = menuPro[sender.tag].favorite_id
+           // let favBtn = collectionView.cellForItem(at: sender.tag) as! marketCell
             API.disSelectFav(token:Helper.getUserToken(),id:id) { (error:Error?, success:Bool?) in
                 if success! {
                     sender.isSelected = false
+                    
+                  //  favBtn.
                 }
             }
         } else {
@@ -367,7 +353,12 @@ extension MarketVC: UICollectionViewDelegate, UICollectionViewDataSource {
         
         self.selectedTitle = menuPro[indexPath.row].name_ar
         self.selectedImgs = menuPro[indexPath.row].images
-        self.selectedContent = menuPro[indexPath.row].description_ar
+        self.selectedContent_en = menuPro[indexPath.row].description_ar
+        self.selectedId = menuPro[indexPath.row].id
+        self.selectedHasSize = menuPro[indexPath.row].has_sizes
+        self.selectedName_ar = menuPro[indexPath.row].name_ar
+        self.selectedName_en = menuPro[indexPath.row].name_en
+        
 
         performSegue(withIdentifier: "ContentSegue", sender: self)
         
@@ -379,10 +370,10 @@ extension MarketVC: UICollectionViewDelegate, UICollectionViewDataSource {
         if segue.identifier == "ContentSegue" {
             let conVC = segue.destination as? AdContentVC
             conVC?.recPage = "market"
-            conVC?.recContent = selectedContent
-            conVC?.recTitle = selectedTitle
+            conVC?.recContent = selectedContent_ar
+            conVC?.recTitle = selectedName_ar
             conVC?.recImgs = selectedImgs
-            
+            conVC?.recHasSize = selectedHasSize
         }
         
     }
@@ -395,6 +386,14 @@ extension MarketVC: UICollectionViewDelegate, UICollectionViewDataSource {
         return 10
     }
     
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        let screenWidth = UIScreen.main.bounds.width
+        let width = (screenWidth-30)/2
+        
+        return CGSize.init(width: width, height: width)
+    }
     
 }
 

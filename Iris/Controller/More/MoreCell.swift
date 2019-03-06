@@ -17,7 +17,7 @@ class MoreCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        view.layer.cornerRadius = self.frame.height/2
+        view.layer.cornerRadius = 10.0
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

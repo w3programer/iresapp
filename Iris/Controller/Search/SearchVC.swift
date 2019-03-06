@@ -7,10 +7,9 @@
 //
 
 import UIKit
+import Alamofire
+import SwiftyJSON
 
-
-
-// pagination
 class SearchVC: UIViewController {
 
     
@@ -18,9 +17,15 @@ class SearchVC: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     
     var filter = [Ads]()
-    
+    var txt = ""
     var currentPage = 1
     var totalPages = 1
+    
+    var selNameAr = ""
+    var selNameEn = ""
+    var selDesAr = ""
+    var selDesEn = ""
+    var selImgs:[String] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,6 +54,7 @@ class SearchVC: UIViewController {
     
     
     func startSearching(q: String,pageNO:Int) {
+        checkPagination(q:q)
         API.Search(q:q, pageNo: pageNO) { (error:Error?, data:[Ads]?) in
             if data != nil {
                 self.filter.removeAll()
@@ -59,7 +65,24 @@ class SearchVC: UIViewController {
     }
     
     
-    
+    func checkPagination(q:String){
+        let url = URLs.search+q
+        Alamofire.request( url , method: .get ).responseJSON { (response) in
+            switch response.result {
+            case .failure(let error):
+                print("terms",error)
+                
+            case .success(let value):
+                let jsonData = JSON(value)
+                print(jsonData)
+                let json = jsonData["meta"]
+                print(json)
+                let last = json["last_page"].int
+                print(last!)
+                self.totalPages = last!
+            }
+        }
+    }
     
 
 }
@@ -72,11 +95,16 @@ extension SearchVC: UICollectionViewDelegate, UICollectionViewDataSource {
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! SearchCell
         
-       cell.pics = filter[IndexPath(item: 0, section: 0).item]
+        
+        if General.CurrentLanguage() == "ar"
+        {
+            cell.titleLab.text = filter[indexPath.row].name_ar
+        }else
+        {
+            cell.titleLab.text = filter[indexPath.row].name_en
+        }
+       cell.pics = filter[indexPath.item]
        cell.priceLab.text = "\(filter[indexPath.row].price)"
-       cell.titleLab.text = filter[indexPath.row].name_ar
-        
-        
         
         cell.favBtn.addTarget(self, action: #selector(favTapped(sender:)), for: .touchUpInside)
         cell.favBtn.setImage(UIImage(named: "li.png"), for: .normal)
@@ -107,6 +135,17 @@ extension SearchVC: UICollectionViewDelegate, UICollectionViewDataSource {
         
     }
     
+     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        
+        if indexPath.row == filter.count - 1 {
+            if currentPage < totalPages {
+                currentPage += 1
+                print("nuuum",currentPage)
+                    self.startSearching(q:txt,pageNO:currentPage)
+                }
+             }
+    }
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         let screenWidth = UIScreen.main.bounds.width
@@ -116,6 +155,15 @@ extension SearchVC: UICollectionViewDelegate, UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        
+        selNameAr = filter[indexPath.row].name_ar
+        selNameEn = filter[indexPath.row].name_en
+        selDesAr = filter[indexPath.row].description_ar
+        selDesEn = filter[indexPath.row].description_en
+        selImgs = filter[indexPath.row].images
+        print(filter[indexPath.row].brandNameAr)
+        
         performSegue(withIdentifier: "SearchContent", sender: self)
         
     }
@@ -125,6 +173,13 @@ extension SearchVC: UICollectionViewDelegate, UICollectionViewDataSource {
         if segue.identifier == "SearchContent" {
           let contnt = segue.destination as? AdContentVC
             contnt?.recPage = "search"
+            contnt?.recImgs = selImgs
+            contnt?.recContent = selDesAr
+            
+            
+            
+            
+            
         }
         
     }
@@ -141,7 +196,7 @@ extension SearchVC: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         print("good", self.searchTxt.text!)
         startSearching(q: self.searchTxt.text!, pageNO: currentPage)
-        
+        txt = self.searchTxt.text!
         self.searchTxt.resignFirstResponder()
         
         return true

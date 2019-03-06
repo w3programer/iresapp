@@ -41,10 +41,10 @@ class marketCell: UICollectionViewCell {
         didSet {
             guard let imgs = pics else { return }
             self.img.kf.indicatorType = .activity
-            for phots in imgs.images {
-                if let url = URL(string:(phots)) {
+           // for phots in imgs.imaage {
+                if let url = URL(string:(imgs.imaage)) {
                     self.img.kf.setImage(with: url, placeholder: nil, options:[.transition(ImageTransition.fade(0.5))])
-                }
+              //  }
             }
             
         }

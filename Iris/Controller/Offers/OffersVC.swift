@@ -9,11 +9,14 @@
 import UIKit
 import Alamofire
 import SwiftyJSON
+import ImageSlideshow
+
 
 class OffersVC: UIViewController {
     
     
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var slider: ImageSlideshow!
     
     
     fileprivate var rowHeight: CGFloat = 130.0
@@ -30,34 +33,27 @@ class OffersVC: UIViewController {
     var selectedTitle = ""
     var selectedContent = ""
     
-    
+    var imgSource = [InputSource]()
+
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
+        slideShow()
+        slider.roundView()
+        configSliderShow()
         confirmTableViewProtocls()
         tableView.tableFooterView = UIView()
         callData(pageNo: curentPage)
         self.tabBarController?.tabBar.items?[1].title = General.stringForKey(key: "offers")
 
         
+        
+        
     }
     
-//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//
-//        if scrollView.contentOffset.y >= 100 {
-//        UIView.animate(withDuration: 2.5) {
-//            self.navigationController?.setNavigationBarHidden(true, animated: true)
-//           }
-//        } else {
-//            UIView.animate(withDuration: 2.5) {
-//                self.navigationController?.setNavigationBarHidden(false, animated: true)
-//            }
-//        }
-//
-//    }
+
     
     
     func confirmTableViewProtocls() {
@@ -83,23 +79,7 @@ class OffersVC: UIViewController {
     @IBAction func unwindToFav(segue: UIStoryboardSegue) {}
 
 
-//    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-//
-//    print("scrollViewWillBeginDragging")
-//    //isDataLoading = false
-//    }
-//
-//
-//
-//    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-//        print("scrollViewDidEndDecelerating")
-//    }
-//
-//    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-//
-//        print("scrollViewDidEndDragging")
-//
-//        }
+
     
     func checkPagination(){
         let url = URLs.offers
@@ -120,7 +100,42 @@ class OffersVC: UIViewController {
          }
        }
     
+    func configSliderShow() {
+        
+        slider.slideshowInterval = 5.0
+        slider.pageIndicatorPosition = .init(horizontal: .center, vertical: .bottom)
+        slider.contentScaleMode = UIView.ContentMode.scaleAspectFill
+        
+        let pageControl = UIPageControl()
+        pageControl.currentPageIndicatorTintColor = UIColor.black
+        pageControl.pageIndicatorTintColor = UIColor.white
+        slider.pageIndicator = pageControl
+        
+        slider.activityIndicator = DefaultActivityIndicator()
+        slider.activityIndicator = DefaultActivityIndicator(style: .gray , color: nil )
+        
+        slider.currentPageChanged = { page in
+            print("current page:", page)
+        }
+        
+        slider.addSubview(pageControl)
+        
+    }
     
+    
+    func slideShow() {
+        
+        API.sliderData { (error: Error?, data:[Slider]?) in
+            if data != nil {
+                for da in data! {
+                    self.imgSource.append(KingfisherSource(urlString: da.image)!)
+                }
+                self.slider.setImageInputs(self.imgSource)
+            } else {
+                print("Slider have no data")
+            }
+        }
+    }
     
     
 }
@@ -135,8 +150,14 @@ extension OffersVC: UITableViewDelegate, UITableViewDataSource {
         cell.selectionStyle = UITableViewCell.SelectionStyle.none
         
         
+        if General.CurrentLanguage() == "ar"
+        {
             cell.title.text = offers[indexPath.row].name_ar
-            cell.pics = offers[IndexPath(item: 0, section: 0).item]
+        }else
+        {
+            cell.title.text = offers[indexPath.row].name_en
+        }
+            cell.pics = offers[indexPath.item]
             cell.price.text = "\(offers[indexPath.row].price)"
             cell.offerLab.text = "\(offers[indexPath.row].price_after_discount)"
             
@@ -155,7 +176,6 @@ extension OffersVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         
         if indexPath.row == offers.count - 1 {
-            //totalPages = pagi[indexPath.row].lastPage
               if curentPage < totalPages {
                     curentPage += 1
                   print("nuuum",curentPage)

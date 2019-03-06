@@ -8,6 +8,10 @@
 
 import UIKit
 import SVProgressHUD
+import Alamofire
+import SwiftyJSON
+
+
 
 class FavoriteVC: UIViewController {
 
@@ -27,12 +31,14 @@ class FavoriteVC: UIViewController {
         super.viewDidLoad()
 
         Helper.hudStart()
-        
-        getFavotites(token:Helper.getUserToken(),id:currentPage)
+        navigationItem.title = General.stringForKey(key: "fav")
+        if Helper.checkToken() == true  {
+            getFavotites(token:Helper.getUserToken(),id:currentPage)
+        } else {
+        Alert.alertPopUp(title: General.stringForKey(key: "notAll"), msg: General.stringForKey(key: "this"), vc: self)
+        }
         confirmProtocls()
         tableView.tableFooterView = UIView()
-  //      OffersVC.shared.hideNavigation()
-//     tableView.topAnchor.constraint(equalTo: topLayoutGuide.bottomAnchor).isActive = true
         self.tabBarController?.tabBar.items?[3].title = General.stringForKey(key: "fav")
 
         
@@ -40,6 +46,7 @@ class FavoriteVC: UIViewController {
     
     
     
+    @IBAction func unwindTofavv(segue: UIStoryboardSegue) {}
 
     
     func confirmProtocls() {
@@ -64,6 +71,7 @@ class FavoriteVC: UIViewController {
         }
     
     func getFavotites(token:String,id: Int) {
+        checkPagination()
         API.getFavourites(token: token, pageNo: id) { (error:Error?, data:[Ads]?) in
             if data != nil {
                 self.myFav.append(contentsOf: data!)
@@ -73,9 +81,25 @@ class FavoriteVC: UIViewController {
                 Helper.showError(title: "No products found")
             }
         }
-        
     }
    
+    func checkPagination(){
+        let url = URLs.favorites
+        Alamofire.request( url , method: .get ).responseJSON { (response) in
+            switch response.result {
+            case .failure(let error):
+                print("terms",error)
+                
+            case .success(let value):
+                let jsonData = JSON(value)
+                let json = jsonData["meta"]
+                print(json)
+                let last = json["last_page"].int
+                print(last!)
+                self.totalPages = last!
+            }
+        }
+    }
 
 }
 extension FavoriteVC: UITableViewDelegate , UITableViewDataSource {
@@ -93,7 +117,8 @@ extension FavoriteVC: UITableViewDelegate , UITableViewDataSource {
         cell.selectionStyle = UITableViewCell.SelectionStyle.none
         
         cell.price.text = "\(myFav[indexPath.row].price)"
-        cell.pics = myFav[IndexPath(item: 0, section: 0).item]
+        //cell.pics = myFav[IndexPath(item: 0, section: 0).item]
+        cell.pics = myFav[indexPath.item]
         cell.title.text = myFav[indexPath.row].name_ar
         
         cell.favBtn.setImage(UIImage(named: "lk.png"), for: .normal)
@@ -137,23 +162,28 @@ extension FavoriteVC: UITableViewDelegate , UITableViewDataSource {
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         
         if indexPath.row ==  myFav.count - 1 {
-            //totalPages = myFav[indexPath.row].lastPage
-            currentPage += 1
-             getFavotites(token: Helper.getUserToken(), id:currentPage )
-            
-            
+            if currentPage < totalPages {
+               currentPage += 1
+                getFavotites(token: Helper.getUserToken(), id:currentPage )
+            }
         }
       }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         
-        
+        performSegue(withIdentifier: "FavSegue", sender: self)
         
         
     }
     
-    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "FavSegue" {
+            let des = segue.destination as? AdContentVC
+                des?.recPage = "fav"
+            
+        }
+    }
    
     
 }

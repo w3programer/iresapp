@@ -286,38 +286,5 @@ class API: NSObject {
     }
     
     
-//    class func package(completion: @escaping( _ error:Error? , _ data:[Package]?)->Void) {
-//
-//        let url =  URLs.package
-//
-//        Alamofire.request(url, method: .get).responseJSON { (response) in
-//            switch response.result {
-//            case.failure(let error):
-//                completion(error,nil)
-//                print(error)
-//            case.success(let value):
-//                let jsonData = JSON(value)
-//                print("filter data",jsonData)
-//
-//                guard let dataArr = jsonData["sizes"].array else{
-//                    completion(nil , nil)
-//                    return
-//                }
-//                var Data = [Package]()
-//                     let res = package.init(dic: dataArr)
-//                        Data.append(res)
-//                        print("good")
-//                completion(nil, Data)
-//            }
-//           }
-//        }
-    
-    
-    
-    
-    
-    
-    
-    
     
 }

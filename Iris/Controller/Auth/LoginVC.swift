@@ -26,6 +26,13 @@ class LoginVC: UIViewController {
         
         numberTF.attributedPlaceholder = NSAttributedString(string: "Mobile Number", attributes: [NSAttributedString.Key.foregroundColor: #colorLiteral(red: 0.115710564, green: 0.5438727736, blue: 0.5560589433, alpha: 1) ])
 
+        
+//        if General.CurrentLanguage() == "ar"
+//        {
+//         numberTF.transform = CGAffineTransform.init(scaleX: -1.0, y: 1.0)
+//            numberTF.placeholder = General.stringForKey(key: "n")
+//
+//        }
         setLoca()
         
         

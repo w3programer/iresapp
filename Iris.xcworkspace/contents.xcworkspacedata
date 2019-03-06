@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Workspace
    version = "1.0">
+   <Group
+      location = "container:"
+      name = "CoreData">
+      <FileRef
+         location = "group:Product+CoreDataProperties.swift">
+      </FileRef>
+      <FileRef
+         location = "group:Product+CoreDataClass.swift">
+      </FileRef>
+      <FileRef
+         location = "group:ItemsList+CoreDataClass.swift">
+      </FileRef>
+      <FileRef
+         location = "group:ItemsList+CoreDataProperties.swift">
+      </FileRef>
+   </Group>
    <FileRef
       location = "group:Iris.xcodeproj">
    </FileRef>
