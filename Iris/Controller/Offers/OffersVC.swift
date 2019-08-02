@@ -9,52 +9,64 @@
 import UIKit
 import Alamofire
 import SwiftyJSON
-import ImageSlideshow
+//import ImageSlideshow
+
 
 
 class OffersVC: UIViewController {
     
     
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var slider: ImageSlideshow!
+   // @IBOutlet weak var sliderShow: ImageSlideshow!
+    
     
     
     fileprivate var rowHeight: CGFloat = 130.0
     
     var offers = [Ads]()
-    var pagi = [pagination]()
+    //var pagi = [pagination]()
     
     var curentPage = 1
     var totalPages = 1
     
     
+
+    
+    
     // sendData
     var selectedImgs = [String]()
-    var selectedTitle = ""
-    var selectedContent = ""
-    
-    var imgSource = [InputSource]()
-
+     var selectedTitle = ""
+      var selectedContent = ""
+       var selectedHasSize = 0
+        var selectedId = 0
+         var selectedDesAr = ""
+          var selectedDesEn = ""
+           var selectedBarndAr = ""
+            var selectedBrandEn = ""
+             var selectedTitle_en = ""
+              var selectedImaage = ""
+               var selectedPrice:Double = 0.0
+                var selectedDev:[String] = []
+                 var selectedAx:[String] = []
+                  var selectedMypo:[String] = []
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        slideShow()
-        slider.roundView()
-        configSliderShow()
+     
         confirmTableViewProtocls()
         tableView.tableFooterView = UIView()
         callData(pageNo: curentPage)
-        self.tabBarController?.tabBar.items?[1].title = General.stringForKey(key: "offers")
 
+       
         
-        
-        
+        self.navigationItem.title = General.stringForKey(key: "offers")
     }
     
 
     
+   
     
     func confirmTableViewProtocls() {
         
@@ -100,42 +112,7 @@ class OffersVC: UIViewController {
          }
        }
     
-    func configSliderShow() {
-        
-        slider.slideshowInterval = 5.0
-        slider.pageIndicatorPosition = .init(horizontal: .center, vertical: .bottom)
-        slider.contentScaleMode = UIView.ContentMode.scaleAspectFill
-        
-        let pageControl = UIPageControl()
-        pageControl.currentPageIndicatorTintColor = UIColor.black
-        pageControl.pageIndicatorTintColor = UIColor.white
-        slider.pageIndicator = pageControl
-        
-        slider.activityIndicator = DefaultActivityIndicator()
-        slider.activityIndicator = DefaultActivityIndicator(style: .gray , color: nil )
-        
-        slider.currentPageChanged = { page in
-            print("current page:", page)
-        }
-        
-        slider.addSubview(pageControl)
-        
-    }
-    
-    
-    func slideShow() {
-        
-        API.sliderData { (error: Error?, data:[Slider]?) in
-            if data != nil {
-                for da in data! {
-                    self.imgSource.append(KingfisherSource(urlString: da.image)!)
-                }
-                self.slider.setImageInputs(self.imgSource)
-            } else {
-                print("Slider have no data")
-            }
-        }
-    }
+   
     
     
 }
@@ -189,21 +166,65 @@ extension OffersVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         selectedImgs = offers[indexPath.row].images
-        selectedTitle = offers[indexPath.row].name_ar
-        selectedContent = offers[indexPath.row].description_ar
+         selectedTitle = offers[indexPath.row].name_ar
+          selectedContent = offers[indexPath.row].description_ar
+           selectedHasSize = offers[indexPath.row].has_sizes
+            selectedDesAr = offers[indexPath.row].description_ar
+             selectedDesEn = offers[indexPath.row].description_en
+              selectedId = offers[indexPath.row].id
+               selectedBarndAr = offers[indexPath.row].brandNameAr
+               selectedBrandEn = offers[indexPath.row].brandNameEn
+              selectedImaage = offers[indexPath.row].imaage
+             selectedTitle_en = offers[indexPath.row].name_en
+            selectedPrice = offers[indexPath.row].price
+           selectedDev = offers[indexPath.row].dev
+          selectedAx = offers[indexPath.row].ax
+         selectedMypo = offers[indexPath.row].myopia
         
-        performSegue(withIdentifier: "OfferContent", sender: self)
+        
+        
+        if selectedHasSize == 0 {
+            performSegue(withIdentifier: "OfferAccSegue", sender: self)
+        } else {
+            performSegue(withIdentifier: "OfferContent", sender: self)
+        }
 
-        print(offers[indexPath.row].lastPage)
+        
+        //print(offers[indexPath.row].lastPage)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "OfferContent" {
             let seg = segue.destination as? AdContentVC
             seg?.recPage = "offer"
-            seg?.recImgs = selectedImgs
-            seg?.recTitle = selectedTitle
-            seg?.recContent = selectedContent
+             seg?.recImgs = selectedImgs
+              seg?.recTitle = selectedTitle
+               seg?.recContent = selectedContent
+                seg?.recProdId = selectedId
+                 seg?.recContentEn = selectedDesEn
+                  seg?.recTitle_en = selectedTitle_en
+                   seg?.recImaage = selectedImaage
+                    seg?.recPrice = selectedPrice
+                     seg?.recDev = selectedDev
+                      seg?.recMyop = selectedMypo
+                       seg?.recAx = selectedAx
+                         seg?.recBrandAr = selectedBarndAr
+                          seg?.recBrandEn = selectedBrandEn
+            
+        } else if segue.identifier == "OfferAccSegue" {
+            let access = segue.destination as? AccessoriesContentVC
+             access?.recTitle = selectedTitle
+              access?.recProdId = selectedId
+               access?.recBrand_ar = selectedBarndAr
+                access?.recBarnd_en = selectedBrandEn
+                 access?.recImgs = selectedImgs
+                  access?.recContent = selectedDesAr
+                   access?.recContent_en = selectedDesEn
+                    access?.recImaage = selectedImaage
+                     access?.recTitle_en = selectedTitle_en
+                      access?.recPrice = selectedPrice
+                       access?.recBarnd_en = selectedBrandEn
+                        access?.recBrand_ar = selectedBarndAr
             
         }
     }

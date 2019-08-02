@@ -20,13 +20,19 @@ class ContactUsVC: UIViewController {
     @IBOutlet weak var send: CornerButtons!
     
     
+    @IBOutlet weak var namViw: UIView!
+    
+    @IBOutlet weak var emaViw: UIView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         
       self.msgTF.layer.cornerRadius = 10.0
-        
-        
+      self.nameTF.placeholder = General.stringForKey(key: "name")
+      self.nameTF.placeholder = General.stringForKey(key: "email")
+      self.send.setTitle(General.stringForKey(key: "send"), for: .normal)
+
         
     }
     
@@ -40,7 +46,14 @@ class ContactUsVC: UIViewController {
             return Alert.alertPopUp(title: "empty fields", msg: "please fill out all fields", vc: self)
         }
         
-                   print(name)
+        API.ContactUS(name: name, phone: Int(number)!, message: msg) { (error:Error?, success:Bool?) in
+            if success == true {
+                
+            } else {
+                Helper.showError(title: General.stringForKey(key: "er"))
+            }
+        }
+                   
        
     
 

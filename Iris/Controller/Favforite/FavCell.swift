@@ -17,14 +17,26 @@ class FavCell: UITableViewCell {
     @IBOutlet weak var title: UILabel!
     @IBOutlet weak var price: UILabel!
     @IBOutlet weak var favBtn: UIButton!
+    @IBOutlet weak var rsLab: UILabel!
     
-    
+    var isFavorite: Bool = false {
+        didSet {
+            favBtn.isSelected = isFavorite
+        }
+    }
     
     override func awakeFromNib() {
         super.awakeFromNib()
         
         img.layer.cornerRadius = 10.0
         img.clipsToBounds = true
+        
+         _ = self.isFavorite ? (self.isFavorite = false, self.favBtn.setImage(UIImage(named: "lk"), for: .normal)) : (self.isFavorite = true, self.favBtn.setImage(UIImage(named: "li"), for: .selected))
+    }
+    
+  @IBAction  func favoBn(_ sender: Any) {
+        
+        favBtn.isSelected = !favBtn.isSelected
         
     }
     
@@ -42,7 +54,10 @@ class FavCell: UITableViewCell {
     }
 
     
-    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        isFavorite = false
+    }
     
     
 

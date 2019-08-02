@@ -8,6 +8,7 @@
 
 import UIKit
 import SVProgressHUD
+import CoreData
 
 class Helper: NSObject {
 
@@ -100,5 +101,28 @@ class Helper: NSObject {
         SVProgressHUD.setFont(UIFont.systemFont(ofSize: 20.0))
         SVProgressHUD.dismiss(withDelay: 2.5)
     }
+    
+    
+    class func deleteAllData(_ entity:String) {
+        
+        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: entity)
+        fetchRequest.returnsObjectsAsFaults = false
+        do {
+            let results = try context.fetch(fetchRequest)
+            for object in results {
+                guard let objectData = object as? NSManagedObject else {continue}
+                context.delete(objectData)
+                try context.save()
+            }
+        } catch let error {
+            print("Detele all data in \(entity) error :", error)
+        }
+    }
+    
+    
+    
+    
+    
     
 }

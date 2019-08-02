@@ -2,7 +2,7 @@
 //  ItemsList+CoreDataClass.swift
 //  
 //
-//  Created by mahmoudhajar on 2/25/19.
+//  Created by Ghoost on 5/23/19.
 //
 //
 

@@ -9,31 +9,60 @@
 import UIKit
 import Kingfisher
 import SVProgressHUD
+import Alamofire
+import SwiftyJSON
 
 class ProfileVC: UIViewController {
 
     
     @IBOutlet weak var img: CircleImage!
-    @IBOutlet weak var nameTF: ImageInsideTextField!
-    @IBOutlet weak var numberTF: ImageInsideTextField!
-    @IBOutlet weak var emailTF: ImageInsideTextField!
+    @IBOutlet weak var tblView: UITableView!
+    @IBOutlet weak var vis: UIVisualEffectView!
+    @IBOutlet weak var updateViw: UIView!
+    @IBOutlet weak var titLabel: UILabel!
+    @IBOutlet weak var updateTxt: UITextField!
     @IBOutlet weak var update: CornerButtons!
+    @IBOutlet weak var cancel: CornerButtons!
     
     
-    var imge = UIImage()
     
+    
+   fileprivate var title_en = ["User name","Email","Mobile number"]
+   fileprivate var title_ar = ["اسم المستخدم","البريد الألكتروني","رقم الجوال"]
+    
+    
+   fileprivate var newName = ""
+   fileprivate var newEmail = ""
+   fileprivate var newNum = ""
+   fileprivate var imge = UIImage()
+    
+  fileprivate var recName = ""
+  fileprivate var recNum = ""
+  fileprivate var recEmail = ""
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        
+        self.navigationController?.navigationBar.setValue(true, forKey: "hidesShadow")
+
+        
+        self.vis.alpha = 0.0
+        self.updateViw.alpha = 0.0
+        
+        setUpTableView()
+        
+        if Helper.checkToken() == true {
+            Helper.hudStart()
+            dislayUserInfo()
+            getUserData()
+            SVProgressHUD.dismiss(withDelay: 1.5)
+        } else {
+            
+        }
+        
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(ProfileVC.imageTapped(gesture:)))
         img.addGestureRecognizer(tapGesture)
-       
-        Helper.hudStart()
-        SVProgressHUD.dismiss(withDelay: 1.5)
-        dislayUserInfo()
-        
-        setLoca()
-        
     }
     
     @objc func imageTapped(gesture: UIGestureRecognizer) {
@@ -42,88 +71,80 @@ class ProfileVC: UIViewController {
             getImage()
         }
     }
-
-
     
     
-    @IBAction func updateBtn(_ sender: Any){
-        Helper.hudStart()
-        if Helper.checkToken() == false {
-        guard let name = nameTF.text, !name.isEmpty,
-              let number = numberTF.text, !number.isEmpty,
-              let email = emailTF.text, !email.isEmpty else {
-                SVProgressHUD.dismiss()
-                return Alert.alertPopUp(title: "fields empty", msg: "please fill al fields", vc: self)
-        }
-        if (email.isValidEmail()) {
-            API.register(email: email, phone: number, name: name, avatar: imge) { (error:Error?, success:Bool?) in
-                if success == true {
-                  print("cscs")
-                    SVProgressHUD.dismiss()
-                } else {
-                    SVProgressHUD.dismiss()
-                    print("errorrrr")
-                }
-            }
-        }else {
-            Alert.alertPopUp(title: "not vaild format", msg: "please check your mail format", vc: self)
-            SVProgressHUD.dismiss()
-
-        }
-        } else {
-            
-            API.updateProfile(token: Helper.getUserToken(), email: emailTF.text!, phone: nameTF.text!, name: nameTF.text!, avatar: img.image!) { (error:Error?, success:Bool?) in
-                if success == true {
-                    SVProgressHUD.dismiss()
-                } else {
-                    Helper.showError(title: "Error!!.please try again later")
-                    SVProgressHUD.dismiss()
-                }
+    @IBAction func updateBtn(_ sender: Any) {
+        API.updateProfile(token: Helper.getUserToken(), email: newEmail, phone: newNum, name: newName, avatar: imge ) { (error: Error?, success:Bool?) in
+            if success == true {
+               self.getUserData()
+            } else {
+                
             }
         }
     }
     
+    @IBAction func cancelBtn(_ sender: Any) {
+        
+        self.vis.alpha = 0.0
+        self.updateViw.alpha = 0.0
+        
+    }
     
     
-   fileprivate func dislayUserInfo() {
-        if Helper.checkToken() == true {
-            //self.navigationController?.navigationItem.title = "Update profile"
-            navigationItem.title = General.stringForKey(key: "profile")
-            update.setTitle(General.stringForKey(key: "update"), for: .normal)
-            self.nameTF.text = (UserDefaults.standard.object(forKey: "name") as! String)
-            self.numberTF.text = (UserDefaults.standard.object(forKey: "phone") as! String)
-            self.emailTF.text = (UserDefaults.standard.object(forKey: "email") as! String)
-            let phto = (UserDefaults.standard.object(forKey: "photo") as! String)
+    func dislayUserInfo() {
+        let phto = (UserDefaults.standard.object(forKey: "photo") as! String)
             let urlStr = URLs.image+phto
             let url = URL(string: urlStr)
             img.kf.indicatorType = .activity
             img.kf.setImage(with: url)
-        } else {
-              navigationItem.title = General.stringForKey(key: "sginup")
-            self.nameTF.text = General.stringForKey(key: "name")
-            self.numberTF.text = General.stringForKey(key: "n")
-            self.emailTF.text = General.stringForKey(key: "email")
-            self.update.setTitle(General.stringForKey(key: "sginup"), for: .normal)
-            self.img.image = UIImage(named: "profileImage.png")
-       }
     }
     
+    func getUserData() {
+     
+        let url = URLs.main+"api/me"
+        let para =
+            [
+                "token":Helper.getUserToken()
+             ]
+        Alamofire.request(url, method: .post, parameters: para).responseJSON { (response) in
+            switch response.result {
+            case.failure(let error):
+                print(error)
+            case.success(let value):
+                let json = JSON(value)
+                    print(json)
+                let da = json["data"]
+                let nam = da["name"].string
+                print(nam!)
+                self.recName = nam!
+                let nm = da["phone"].string
+                print(nm!)
+                self.recNum = nm!
+                let ema = da["email"].string
+                   print(ema!)
+                self.recEmail = ema!
+              self.tblView.reloadData()
+            }
+        }
+        
+        
+    }
  
    
     
     func getImage() {
         let picker = UIImagePickerController()
         picker.allowsEditing = true
-        let pickAlert = UIAlertController(title: "Add Picture", message: "please select", preferredStyle: .alert)
-        pickAlert.addAction(UIAlertAction(title: "take a photo", style: .default, handler: { (action) in
+        let pickAlert = UIAlertController(title: General.stringForKey(key: "Add Picture"), message: General.stringForKey(key: "Select image"), preferredStyle: .alert)
+        pickAlert.addAction(UIAlertAction(title: General.stringForKey(key: "take a photo"), style: .default, handler: { (action) in
             picker.sourceType = .camera
             self.present(picker, animated: true, completion: nil)
         }))
-        pickAlert.addAction(UIAlertAction(title: "choose from camera roll", style: .default, handler: { (action) in
+        pickAlert.addAction(UIAlertAction(title:General.stringForKey(key: "choose from camera roll"), style: .default, handler: { (action) in
             picker.sourceType = .photoLibrary
             self.present(picker , animated: true, completion: nil)
         }))
-        pickAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) in
+        pickAlert.addAction(UIAlertAction(title: General.stringForKey(key: "Cancel"), style: .cancel, handler: { (action) in
             pickAlert.dismiss(animated: true, completion: nil)
         }))
         self.present(pickAlert, animated: true, completion: nil)
@@ -136,21 +157,24 @@ class ProfileVC: UIViewController {
     var pickedImg: UIImage? {
         didSet {
             guard let image = pickedImg else {return}
-            img.image = image
             self.imge = image
+            API.updateProfile(token: Helper.getUserToken(), email: newEmail, phone: newNum, name: newName, avatar: imge) { (error:Error?, success:Bool?) in
+                if success == true {
+                 //  dislayUserInfo()
+                } else {
+                    
+                }
+            }
+            //img.image = image
         }
     }
     
    
-    func setLoca() {
-       nameTF.placeholder = General.stringForKey(key: "name")
-       emailTF.placeholder = General.stringForKey(key: "email")
-       numberTF.placeholder = General.stringForKey(key: "n")
-        if Helper.checkToken() == true {
-            update.setTitle(General.stringForKey(key: "update"), for: .normal)
-        } else {
-            update.setTitle(General.stringForKey(key: "send"), for: .normal)
-        }
+    func setUpTableView() {
+        
+        tblView.delegate = self
+        tblView.dataSource = self
+        tblView.tableFooterView = UIView()
         
         
     }
@@ -172,6 +196,85 @@ extension ProfileVC: UIImagePickerControllerDelegate, UINavigationControllerDele
         picker.dismiss(animated: true, completion: nil)
     }
     
+}
+extension ProfileVC: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 3
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let cell = tblView.dequeueReusableCell(withIdentifier: "ProfileCell", for: indexPath) as! ProfileCell
+        
+        cell.selectionStyle = UITableViewCell.SelectionStyle.none
+        
+        if General.CurrentLanguage() == "en" {
+            
+            cell.titLab.text = title_en[indexPath.row]
+            
+        } else {
+            
+        cell.titLab.text = title_ar[indexPath.row]
+            
+        }
+        
+        cell.imge.image = UIImage(named: "m.png")
+        
+        
+        
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        
+        return 44.0
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        
+        let animation = AnimationFactory.makeFade(duration: 0.5, delayFactor: 0.05)
+        let animator = Animator(animation: animation)
+        animator.animate(cell: cell, at: indexPath, in: tableView)
+        
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+          if indexPath.row == 0 {
+            self.vis.alpha = 1.0
+            self.updateViw.alpha = 1.0
+            if General.CurrentLanguage() == "ar" {
+                self.titLabel.text = title_ar[indexPath.row]
+            } else {
+                self.titLabel.text = title_ar[indexPath.row]
+            }
+            
+            
+        } else if indexPath.row == 1 {
+            self.vis.alpha = 1.0
+            self.updateViw.alpha = 1.0
+            if General.CurrentLanguage() == "ar" {
+                self.titLabel.text = title_ar[indexPath.row]
+            } else {
+                self.titLabel.text = title_ar[indexPath.row]
+            }
+            
+            
+        } else if indexPath.row == 2 {
+            self.vis.alpha = 1.0
+            self.updateViw.alpha = 1.0
+            if General.CurrentLanguage() == "ar" {
+                self.titLabel.text = title_ar[indexPath.row]
+            } else {
+                self.titLabel.text = title_ar[indexPath.row]
+            }
+            
+            
+        }
+        
+    }
+    
+
+    
     
 }
-

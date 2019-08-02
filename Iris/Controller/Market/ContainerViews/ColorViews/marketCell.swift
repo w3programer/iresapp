@@ -1,0 +1,76 @@
+//
+//  marketCell.swift
+//  Iris
+//
+//  Created by mahmoudhajar on 2/3/19.
+//  Copyright © 2019 CreativeShare. All rights reserved.
+//
+
+import UIKit
+import Kingfisher
+
+
+
+
+class marketCell: UICollectionViewCell {
+    
+    
+    @IBOutlet weak var title: UILabel!
+    @IBOutlet weak var img: UIImageView!
+    @IBOutlet weak var price: UILabel!
+    @IBOutlet weak var fav: CornerButtons!
+    @IBOutlet weak var view: UIView!
+    
+    
+    var isFavorite: Bool = false {
+        didSet {
+            fav.isSelected = isFavorite
+        }
+    }
+    
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+        self.view.layer.cornerRadius = 10.0
+        self.view.clipsToBounds = true
+        
+        
+        _ = self.isFavorite ? (self.isFavorite = false, self.fav.setImage(UIImage(named: "li"), for: .normal)) : (self.isFavorite = true, self.fav.setImage(UIImage(named: "lk"), for: .selected))
+
+        
+    }
+    
+    
+    @IBAction func favoBtn(_ sender: Any) {
+        
+        fav.isSelected = !fav.isSelected
+
+    }
+    
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        isFavorite = false
+    }
+    
+    
+    var pics: Ads? {
+        didSet {
+            guard let imgs = pics else { return }
+            self.img.kf.indicatorType = .activity
+                if let url = URL(string:(imgs.imaage)) {
+                    self.img.kf.setImage(with: url, placeholder: nil, options:[.transition(ImageTransition.fade(0.5))])
+               }
+            }
+         }
+    
+    
+    
+
+    
+    
+    
+    
+    
+}

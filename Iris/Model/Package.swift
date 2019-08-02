@@ -11,20 +11,32 @@ import SwiftyJSON
 
 class Package: NSObject {
    
-    var sizes:[Int] = []
+    var axis:[String] = []
+     var deviation:[String] = []
+      var myopia:[String] = []
+    
     
     init?(dic:[String:JSON]) {
       
-        let siz = dic["sizes"]?.array
+        let ax = dic["axis"]?.array
         
-        for sz in siz! {
+        for sz in ax! {
             
-            self.sizes.append(sz.int!)
-            
+            self.axis.append(sz.string!)
+        }
+        
+        let de = dic["deviation"]?.array
+        
+        for dev in de! {
+            self.deviation.append(dev.string!)
         }
         
         
+        let mo = dic[""]?.array
         
+        for mop in mo! {
+            self.myopia.append(mop.string!)
+        }
         
     }
     

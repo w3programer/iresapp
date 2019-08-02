@@ -66,25 +66,26 @@ import SwiftyJSON
 class Ads: NSObject {
     
     var imaage: String = ""
-    var images:[String] = []
-    var id:Int = 0
-    var name_ar:String = ""
-    var name_en:String = ""
-    var price:Int = 0
-    var price_after_discount:Int = 0
-    var discount_percentage:Int = 0
-    var is_favorite:Int = 0
+     var images:[String] = []
+      var id:Int = 0
+       var name_ar:String = ""
+        var name_en:String = ""
+        var price:Double = 0.0
+       var price_after_discount:Int = 0
+      var discount_percentage:Int = 0
+     var is_favorite:Int = 0
     var description_ar:String = ""
-    var description_en:String = ""
-    var featured:Int = 0
-    var favorite_id:Int = 0
-    var brandNameAr:String = ""
-    var brandNameEn:String = ""
+     var description_en:String = ""
+      var featured:Int = 0
+       var favorite_id:Int = 0
+      var brandNameAr:String = ""
+     var brandNameEn:String = ""
     var has_sizes:Int = 0
     
-   // var currentPage:Int = 1
-    var lastPage:Int = 1
-    
+    var dev:[String] = []
+     var ax:[String] = []
+      var myopia:[String] = []
+   
     
     init?(dic:[String:JSON]) {
         
@@ -97,17 +98,16 @@ class Ads: NSObject {
         }   
         for ig in photos! {
             guard let photo = ig.imagePath, !photo.isEmpty else {return nil}
-            //self.images.append(photo)
             self.imaage = photo
             print("goooffff")
         }
         
         self.id = (dic["id"]?.int)!
-        self.name_ar = (dic["name_ar"]?.string)!
-        self.name_en = (dic["name_en"]?.string)!
-        self.price = (dic["price"]?.int)!
-        self.description_ar = (dic["description_ar"]?.string)!
-        self.description_en = (dic["description_en"]?.string)!
+         self.name_ar = (dic["name_ar"]?.string)!
+          self.name_en = (dic["name_en"]?.string)!
+           self.price = (dic["price"]?.double)!
+            self.description_ar = (dic["description_ar"]?.string)!
+             self.description_en = (dic["description_en"]?.string)!
         
         // for favorite
         self.is_favorite = (dic["is_favorite"]?.int)!
@@ -115,18 +115,48 @@ class Ads: NSObject {
             self.favorite_id = (dic["favorite_id"]?.int)!
         }
         
-        
-        
         // for offers + name_ar , name_en & description
        // if  featured = 0 no offer
        // if featured = 1 offer
+        
         self.price_after_discount = (dic["price_after_discount"]?.int)!
         self.discount_percentage = (dic["discount_percentage"]?.int)!
         self.featured = (dic["featured"]?.int)!
 
-        self.brandNameAr = dic["brand"]!["name_ar"].string!
-        self.brandNameEn = dic["brand"]!["name_en"].string!
+        if dic["brand"] != JSON.null {
+            self.brandNameAr = dic["brand"]!["name_ar"].string!
+            self.brandNameEn = dic["brand"]!["name_en"].string!
+        } else {
+            
+        }
+        
+        
+        
         self.has_sizes = (dic["has_sizes"]?.int)!
+        
+        let degrees = dic["degrees"]!
+        
+        let dd = degrees["deviation"].array
+         let axi = degrees["axis"].array
+          let mp = degrees["myopia"].array
+        
+        if dd?.isEmpty == false{
+            for d in dd! {
+                self.dev.append(d.string!)
+            }
+        }
+        
+        if axi?.isEmpty == false{
+            for d in axi! {
+                self.ax.append(d.string!)
+            }
+        }
+        
+        if mp?.isEmpty == false{
+            for d in mp! {
+                self.myopia.append(d.string!)
+            }
+        }
         
         
         

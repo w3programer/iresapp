@@ -4,7 +4,7 @@
 //
 //  Created by Wei Wang on 15/4/23.
 //
-//  Copyright (c) 2018 Wei Wang <onevcat@gmail.com>
+//  Copyright (c) 2019 Wei Wang <onevcat@gmail.com>
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -133,6 +133,13 @@ public enum KingfisherOptionsInfoItem {
     /// The original request will be sent without any modification by default.
     case requestModifier(ImageDownloadRequestModifier)
     
+    /// The `ImageDownloadRedirectHandler` contained will be used to change the request before redirection.
+    /// This is the posibility you can modify the image download request during redirect. You can modify the request for
+    /// some customizing purpose, such as adding auth token to the header, do basic HTTP auth or something like url
+    /// mapping.
+    /// The original redirection request will be sent without any modification by default.
+    case redirectHandler(ImageDownloadRedirectHandler)
+    
     /// Processor for processing when the downloading finishes, a processor will convert the downloaded data to an image
     /// and/or apply some filter on it. If a cache is connected to the downloader (it happens when you are using
     /// KingfisherManager or any of the view extension methods), the converted image will also be sent to cache as well.
@@ -206,6 +213,9 @@ public enum KingfisherOptionsInfoItem {
     /// to let the image be processed in main queue to prevent a possible flickering (but with a possibility of
     /// blocking the UI, especially if the processor needs a lot of time to run).
     case processingQueue(CallbackQueue)
+    
+    /// Enable progressive image loading, Kingfisher will use the `ImageProgressive` of
+    case progressiveJPEG(ImageProgressive)
 }
 
 // Improve performance by parsing the input `KingfisherOptionsInfo` (self) first.
@@ -230,9 +240,10 @@ public struct KingfisherParsedOptionsInfo {
     public var preloadAllAnimationData = false
     public var callbackQueue: CallbackQueue = .mainCurrentOrAsync
     public var scaleFactor: CGFloat = 1.0
-    public var requestModifier: ImageDownloadRequestModifier = NoModifier.default
+    public var requestModifier: ImageDownloadRequestModifier? = nil
+    public var redirectHandler: ImageDownloadRedirectHandler? = nil
     public var processor: ImageProcessor = DefaultImageProcessor.default
-    public var imageModifier: ImageModifier = DefaultImageModifier.default
+    public var imageModifier: ImageModifier? = nil
     public var cacheSerializer: CacheSerializer = DefaultCacheSerializer.default
     public var keepCurrentImageWhileLoading = false
     public var onlyLoadFirstFrame = false
@@ -243,7 +254,10 @@ public struct KingfisherParsedOptionsInfo {
     public var memoryCacheExpiration: StorageExpiration? = nil
     public var diskCacheExpiration: StorageExpiration? = nil
     public var processingQueue: CallbackQueue? = nil
+    public var progressiveJPEG: ImageProgressive? = nil
 
+    var onDataReceived: [DataReceivingSideEffect]? = nil
+    
     public init(_ info: KingfisherOptionsInfo?) {
         guard let info = info else { return }
         for option in info {
@@ -264,6 +278,7 @@ public struct KingfisherParsedOptionsInfo {
             case .callbackQueue(let value): callbackQueue = value
             case .scaleFactor(let value): scaleFactor = value
             case .requestModifier(let value): requestModifier = value
+            case .redirectHandler(let value): redirectHandler = value
             case .processor(let value): processor = value
             case .imageModifier(let value): imageModifier = value
             case .cacheSerializer(let value): cacheSerializer = value
@@ -277,6 +292,7 @@ public struct KingfisherParsedOptionsInfo {
             case .memoryCacheExpiration(let expiration): memoryCacheExpiration = expiration
             case .diskCacheExpiration(let expiration): diskCacheExpiration = expiration
             case .processingQueue(let queue): processingQueue = queue
+            case .progressiveJPEG(let value): progressiveJPEG = value
             }
         }
 
@@ -293,5 +309,35 @@ extension KingfisherParsedOptionsInfo {
             duration: 0.0,
             preloadAll: preloadAllAnimationData,
             onlyFirstFrame: onlyLoadFirstFrame)
+    }
+}
+
+protocol DataReceivingSideEffect: AnyObject {
+    var onShouldApply: () -> Bool { get set }
+    func onDataReceived(_ session: URLSession, task: SessionDataTask, data: Data)
+}
+
+class ImageLoadingProgressSideEffect: DataReceivingSideEffect {
+
+    var onShouldApply: () -> Bool = { return true }
+    
+    let block: DownloadProgressBlock
+
+    init(_ block: @escaping DownloadProgressBlock) {
+        self.block = block
+    }
+
+    func onDataReceived(_ session: URLSession, task: SessionDataTask, data: Data) {
+        guard onShouldApply() else { return }
+        guard
+            let expectedContentLength = task.task.response?.expectedContentLength,
+            expectedContentLength != -1 else {
+            return
+        }
+
+        let dataLength = Int64(task.mutableData.count)
+        DispatchQueue.main.async {
+            self.block(dataLength, expectedContentLength)
+        }
     }
 }

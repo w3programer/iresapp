@@ -17,15 +17,33 @@ class SearchCell: UICollectionViewCell {
     @IBOutlet weak var favBtn: UIButton!
     @IBOutlet weak var view: UIView!
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        
-        self.view.layer.cornerRadius = 10.0
-        self.view.layer.borderColor = UIColor.gray.cgColor
-        self.view.layer.borderWidth = 2
+    
+    var isFavorite: Bool = false {
+        didSet {
+            favBtn.isSelected = isFavorite
+        }
     }
     
     
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+      _ = self.isFavorite ? (self.isFavorite = false, self.favBtn.setImage(UIImage(named: "li"), for: .normal)) : (self.isFavorite = true, self.favBtn.setImage(UIImage(named: "lk"), for: .selected))
+        
+    }
+    
+    @IBAction func favBt(_ sender: Any) {
+        
+        favBtn.isSelected = !favBtn.isSelected
+        
+        
+        
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        isFavorite = false
+    }
     
     var pics: Ads? {
         didSet {

@@ -27,8 +27,8 @@ class TermsVC: UIViewController {
         self.txtView.clipsToBounds = true
     }
     
-    func terms(){
-        let url = URLs.terms
+   private func terms(){
+        let url = URLs.terms+"\(1)"
         Alamofire.request( url , method: .get ).responseJSON { (response) in
             switch response.result {
             case .failure(let error):
@@ -41,7 +41,13 @@ class TermsVC: UIViewController {
                 print(json)
                 let ar = json["ar"].string
                 print(ar!)
-                self.txtView.text = ar!
+                let en = json["en"].string
+                print(en!)
+                if General.CurrentLanguage() == "ar" {
+                    self.txtView.text = ar!
+                } else {
+                    self.txtView.text = en!
+                  }
                }
             }
           }

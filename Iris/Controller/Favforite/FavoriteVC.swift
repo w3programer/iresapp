@@ -24,22 +24,39 @@ class FavoriteVC: UIViewController {
     var currentPage = 1
     var totalPages = 1
     
-    
-    
+    var selNameAr = ""
+     var selNameEn = ""
+      var selDesAr = ""
+       var selDesEn = ""
+        var selImgs:[String] = []
+         var selPrice:Double = 0.0
+         var selId = 0
+        var selBrandAr = ""
+       var selBrandEn = ""
+      var selHas_size = 0
+     var selImaage = ""
+    var selProId = 0
+     var selDev:[String] = []
+      var selAx:[String] = []
+       var selMyo:[String] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         Helper.hudStart()
         navigationItem.title = General.stringForKey(key: "fav")
-        if Helper.checkToken() == true  {
-            getFavotites(token:Helper.getUserToken(),id:currentPage)
+         if API.isConnectedToInternet() {
+            if Helper.checkToken() == true  {
+                getFavotites(token:Helper.getUserToken(),id:currentPage)
+            } else {
+                Alert.alertPopUp(title: General.stringForKey(key: "notAv"), msg: General.stringForKey(key: "plsRe"), vc: self)
+            }
         } else {
-        Alert.alertPopUp(title: General.stringForKey(key: "notAll"), msg: General.stringForKey(key: "this"), vc: self)
+             Alert.alertPopUp(title: General.stringForKey(key: "con"), msg: General.stringForKey(key: "plsCh"), vc: self)
         }
+        
         confirmProtocls()
         tableView.tableFooterView = UIView()
-        self.tabBarController?.tabBar.items?[3].title = General.stringForKey(key: "fav")
 
         
     }
@@ -58,17 +75,17 @@ class FavoriteVC: UIViewController {
     }
     
     
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if scrollView.contentOffset.y >= 100 {
-            UIView.animate(withDuration: 2.5) {
-                self.navigationController?.setNavigationBarHidden(true, animated: true)
-            }
-        } else {
-                UIView.animate(withDuration: 2.5) {
-                    self.navigationController?.setNavigationBarHidden(false, animated: true)
-                }
-            }
-        }
+//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//        if scrollView.contentOffset.y >= 100 {
+//            UIView.animate(withDuration: 2.5) {
+//                self.navigationController?.setNavigationBarHidden(true, animated: true)
+//            }
+//        } else {
+//                UIView.animate(withDuration: 2.5) {
+//                    self.navigationController?.setNavigationBarHidden(false, animated: true)
+//                }
+//            }
+//        }
     
     func getFavotites(token:String,id: Int) {
         checkPagination()
@@ -117,39 +134,33 @@ extension FavoriteVC: UITableViewDelegate , UITableViewDataSource {
         cell.selectionStyle = UITableViewCell.SelectionStyle.none
         
         cell.price.text = "\(myFav[indexPath.row].price)"
-        //cell.pics = myFav[IndexPath(item: 0, section: 0).item]
         cell.pics = myFav[indexPath.item]
         cell.title.text = myFav[indexPath.row].name_ar
+        cell.rsLab.text = General.stringForKey(key:"rs")
         
         cell.favBtn.setImage(UIImage(named: "lk.png"), for: .normal)
         cell.favBtn.setImage(UIImage(named: "li.png"), for: .selected)
-        cell.favBtn.tag = indexPath.row
+        
         cell.favBtn.addTarget(self, action: #selector(favTapped(sender:)), for: .touchUpInside)
-        cell.favBtn.isSelected = false
-      
+        cell.favBtn.tag = indexPath.row
+
         
         return cell
         
     }
     
     @objc func favTapped(sender: UIButton) {
-        if (sender.isSelected)
-        {
-//            let No = myFav[sender.tag].id
-//            sender.isSelected = true
-//            API.selectFav(token: Helper.getUserToken(), proId: No) { (error:Error?, success:Bool?) in
-//                if success! {
-//                }
-//            }
-       // }else {
+
             let ID = myFav[sender.tag].favorite_id
-            sender.isSelected = false
             API.disSelectFav(token: Helper.getUserToken(),id:ID) {( error:Error?, success: Bool?) in
                 if success == true {
-                    self.getFavotites(token: Helper.getUserToken(), id: self.currentPage)
+
                 }
             }
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
         }
+
     }
     
     
@@ -171,8 +182,28 @@ extension FavoriteVC: UITableViewDelegate , UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
+         selNameAr = myFav[indexPath.row].name_ar
+         selNameEn = myFav[indexPath.row].name_en
+         selDesAr = myFav[indexPath.row].description_ar
+         selDesEn = myFav[indexPath.row].description_en
+         selImgs = myFav[indexPath.row].images
+         selPrice = myFav[indexPath.row].price
+         selId = myFav[indexPath.row].id
+         selBrandAr = myFav[indexPath.row].brandNameAr
+         selBrandEn = myFav[indexPath.row].brandNameEn
+         selHas_size = myFav[indexPath.row].has_sizes
+         selImaage = myFav[indexPath.row].imaage
+         selProId = myFav[indexPath.row].id
+          selDev = myFav[indexPath.row].dev
+           selAx = myFav[indexPath.row].ax
+            selMyo = myFav[indexPath.row].myopia
         
-        performSegue(withIdentifier: "FavSegue", sender: self)
+        if selHas_size == 0 {
+            performSegue(withIdentifier: "accSegue", sender: self)
+        } else {
+            performSegue(withIdentifier: "FavSegue", sender: self)
+            }
+        
         
         
     }
@@ -181,7 +212,31 @@ extension FavoriteVC: UITableViewDelegate , UITableViewDataSource {
         if segue.identifier == "FavSegue" {
             let des = segue.destination as? AdContentVC
                 des?.recPage = "fav"
+                des?.recContentEn = selDesEn
+                des?.recContent = selDesAr
+                des?.recProdId = selId
+                des?.recPrice = selPrice
+                des?.recImgs = selImgs
+                des?.recTitle_en = selNameEn
+                des?.recTitle = selNameAr
+                des?.recProdId = selProId
+                des?.recAx = selAx
+                des?.recDev = selDev
+                des?.recMyop = selMyo
             
+        } else if segue.identifier == "accSegue" {
+            let ac  = segue.destination as? AccessoriesContentVC
+               ac?.recContent = selDesAr
+               ac?.recContent_en = selDesEn
+               ac?.recImgs = selImgs
+               ac?.recProdId = selId
+               ac?.recBrand_ar = selBrandAr
+               ac?.recBarnd_en = selBrandEn
+               ac?.recTitle = selNameAr
+               ac?.recTitle_en = selNameEn
+               ac?.recProdId = selProId
+               ac?.recImaage = selImaage
+                ac?.recPrice = selPrice
         }
     }
    

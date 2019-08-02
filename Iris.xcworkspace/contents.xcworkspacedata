@@ -3,13 +3,7 @@
    version = "1.0">
    <Group
       location = "container:"
-      name = "CoreData">
-      <FileRef
-         location = "group:Product+CoreDataProperties.swift">
-      </FileRef>
-      <FileRef
-         location = "group:Product+CoreDataClass.swift">
-      </FileRef>
+      name = "CoreDataCalsses">
       <FileRef
          location = "group:ItemsList+CoreDataClass.swift">
       </FileRef>

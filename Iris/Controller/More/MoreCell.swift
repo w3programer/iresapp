@@ -11,13 +11,13 @@ import UIKit
 class MoreCell: UITableViewCell {
 
     @IBOutlet weak var titleLab: UILabel!
-    @IBOutlet weak var view: UIView!
+   // @IBOutlet weak var view: UIView!
     
     
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        view.layer.cornerRadius = 10.0
+      //  view.layer.cornerRadius = 10.0
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

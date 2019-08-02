@@ -10,6 +10,8 @@ import UIKit
 
 class CornerButtons: UIButton {
 
+    
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         
@@ -17,7 +19,7 @@ class CornerButtons: UIButton {
           layer.cornerRadius = 10.0
 //          layer.shadowColor = UIColor.darkGray.cgColor
 //          layer.shadowRadius = 4
-//          layer.shadowOpacity = 0.8
+//          layer.shadowOpacity = 0.7
 //          layer.shadowOffset = CGSize(width: 0, height: 0)
 
     }

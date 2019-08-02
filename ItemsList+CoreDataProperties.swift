@@ -2,7 +2,7 @@
 //  ItemsList+CoreDataProperties.swift
 //  
 //
-//  Created by mahmoudhajar on 2/25/19.
+//  Created by Ghoost on 5/23/19.
 //
 //
 
@@ -16,15 +16,28 @@ extension ItemsList {
         return NSFetchRequest<ItemsList>(entityName: "ItemsList")
     }
 
-    @NSManaged public var left_amount: Int16
-    @NSManaged public var left_degree: Int16
-    @NSManaged public var package: Int16
-    @NSManaged public var product_id: Int16
-    @NSManaged public var quantity: Int16
-    @NSManaged public var right_amount: Int16
-    @NSManaged public var right_degree: Int16
-    @NSManaged public var similar: Int16
-    @NSManaged public var total: Int16
-    @NSManaged public var product: Product?
+    @NSManaged public var img: String?
+    @NSManaged public var left_amount: Int32
+    @NSManaged public var left_axis: Double
+    @NSManaged public var left_degree: Double
+    @NSManaged public var left_deviation: Double
+    @NSManaged public var name_ar: String?
+    @NSManaged public var name_en: String?
+    @NSManaged public var orPrice: Double
+    @NSManaged public var product_id: Int32
+    @NSManaged public var quantity: Int32
+    @NSManaged public var right_amount: Int32
+    @NSManaged public var right_axis: Double
+    @NSManaged public var right_degree: Double
+    @NSManaged public var right_deviation: Double
+    @NSManaged public var similar: Int32
+    @NSManaged public var total: Double
+    @NSManaged public var type: Int32
+    @NSManaged public var hasSize: Int32
+    @NSManaged public var orAmount: Int32
+    @NSManaged public var orRightAmount: Int32
+    @NSManaged public var orLeftAmount: Int32
+    @NSManaged public var sameSize: Bool
+
 
 }

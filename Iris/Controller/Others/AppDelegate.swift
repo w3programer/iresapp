@@ -9,7 +9,13 @@
 import UIKit
 import CoreData
 import IQKeyboardManagerSwift
-
+import AppCenter
+import AppCenterCrashes
+import AppCenterAnalytics
+import Firebase
+import UserNotifications
+import FirebaseMessaging
+import FirebaseInstanceID
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -29,10 +35,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         if UserDefaults.standard.object(forKey: "keyLanguage")  == nil{
-            CheckLanguage.ChangeLanguage(NewLang: "en")// default language is english
+            CheckLanguage.ChangeLanguage(NewLang: "ar")
+            UITabBar.appearance().semanticContentAttribute = .forceLeftToRight
         }
         
+       MSAppCenter.start("061b7efb-8f7b-4009-bec6-a842221bd7c6", withServices:[ MSAnalytics.self, MSCrashes.self ])
+
+        statusBar()
+    
+       
+        
         return true
+    }
+    
+    
+    func statusBar() {
+        guard let statusBarView = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar") as? UIView else {return}
+        statusBarView.backgroundColor = #colorLiteral(red: 0.115710564, green: 0.5438727736, blue: 0.5560589433, alpha: 1)
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
@@ -68,7 +87,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
          application to it. This property is optional since there are legitimate
          error conditions that could cause the creation of the store to fail.
          */
-        let container = NSPersistentContainer(name: "Iris")
+        let container = NSPersistentContainer(name: "ItemsList")
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
                 // Replace this implementation with code to handle the error appropriately.
@@ -104,59 +123,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
-//    let ad = (UIApplication.shared.delegate) as! AppDelegate
-//    let context =  ad.presistentContainer.viewContext
+
     
     
-//    func checkDataSorage() {
-//
-//        let request : NSFetchRequest<Product> = Product.fetchRequest()
-//        let context = coreData.persistentContainer.viewContext
-//        do {
-//            let productCou = try context.count(for: request)
-//            if productCou == 0 {
-//                uploadData()
-//            }
-//        }catch {
-//            print("error contxt")
-//        }
-//
-//    }
-//
-//
-//
-//    func uploadData() {
-//        let context = coreData.persistentContainer.viewContext
-//        let url = Bundle.main.url(forResource: "product", withExtension: "json")
-//        let data = try? Data(contentsOf: url!)
-//        do {
-//            let jsonRes = try JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSDictionary
-//            let jsonArr = jsonRes.value(forKey: "product") as! NSArray
-//
-//            for jsn in jsonArr {
-//                let proData = jsn as! [String:AnyObject]
-//                guard let token = proData["token"] else {return}
-//                guard let name = proData["name"]   else {return}
-//                guard let email = proData["email"] else {return}
-//                guard let phone = proData["phone"] else {return}
-//                guard let total = proData["total"] else {return}
-//                if let itemList = proData["itemList"]  {
-//                   // let proId =
-//
-//
-//                }
-//
-//
-//
-//
-//            }
-//        }catch {
-//
-//        }
-//
-//
-//
-//    }
+    
+    
 
 }
 

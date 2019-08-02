@@ -7,6 +7,10 @@
 //
 
 import UIKit
+import SVProgressHUD
+import Alamofire
+import SwiftyJSON
+
 
 class MyOrders: UIViewController {
 
@@ -15,10 +19,11 @@ class MyOrders: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var colectionView: UICollectionView!
     
-   // var data = [["vvvvv","wwww","dddd","dddd","dddd","dddd","dddd","dddd"],["dwdwd","dwdw","dwd","dddd","dddd","dddd","dddd","dddd","dddd","dddd"],["dwdwd","dwdw","dwd","dddd","dddd","dddd","dddd","dddd","dddd","dddd"]]
+    @IBOutlet weak var heightConstrain: NSLayoutConstraint!
+    
 
-    var data = [[MyOrder](),[MyOrder](),[MyOrder]()]
     fileprivate let menuTitls = [ "old" ,"Current","New"]
+    let menuTitles_ar = ["السابقة","الحالي","الجديد"]
     var selectedArray = [MyOrder]()
     var selectedIndex = 0
     var selectedIndexPath = IndexPath(item: 0, section: 0)
@@ -26,28 +31,42 @@ class MyOrders: UIViewController {
     let indicatorHeight : CGFloat = 3
     
     
+    var selectedTotal:Double = 0.0
+    var selectedStatus:Int = 0
+    var selectedId:Int = 0
+    var selectedType = ""
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        confirmProtocls()
-         indicatorUIView()
-          createSwipGestures()
+        Helper.hudStart()
+         confirmProtocls()
         
         self.navigationController?.navigationBar.setValue(true, forKey: "hidesShadow")
 
-        colectionView.selectItem(at: selectedIndexPath, animated: false, scrollPosition: .centeredVertically)
-        selectedArray = data[selectedIndex]
-        //selectedArray[selectedIndex]
-        //tableView.tableFooterView = UIView()
+       
+        self.navigationItem.title = General.stringForKey(key:"orders")
         
-        self.tabBarController?.tabBar.items?[2].title = General.stringForKey(key: "myor")
+        if API.isConnectedToInternet() {
+            if Helper.checkToken() == true {
+                allOrders(type:"old")
+                createSwipGestures()
+                indicatorUIView()
 
-        if Helper.checkToken() == true {
-            allOrders(type:"old")
+                self.colectionView.isUserInteractionEnabled = true
+            } else {
+              SVProgressHUD.dismiss()
+                self.heightConstrain.constant = 0
+                 self.colectionView.layoutIfNeeded()
+                Alert.alertPopUp(title: General.stringForKey(key:"notAv"), msg: General.stringForKey(key:"plsRe"), vc: self)
+            }
         } else {
-            
+            SVProgressHUD.dismiss()
         }
+        
+        
+        SVProgressHUD.dismiss(withDelay: 2.0)
     }
     
 
@@ -72,13 +91,16 @@ class MyOrders: UIViewController {
     func refreshContent() {
         if selectedIndex == 0 {
             allOrders(type: "old")
+            selectedType = "old"
         } else if selectedIndex == 1 {
             allOrders(type: "current")
+            selectedType = "current"
         } else {
             allOrders(type: "new")
+            selectedType = "new"
+
         }
-//        selectedArray = data[selectedIndex]
-//        tableView.reloadData()
+
         let x = (colectionView.bounds.width / CGFloat(menuTitls.count)) * CGFloat(selectedIndex)
         UIView.animate(withDuration: 0.3) {
             self.indicatorView.frame = CGRect(x: x, y: self.colectionView.bounds.maxY - self.indicatorHeight, width: self.colectionView.bounds.width / CGFloat(self.menuTitls.count), height: self.indicatorHeight)
@@ -115,17 +137,17 @@ class MyOrders: UIViewController {
     
     
     
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if scrollView.contentOffset.y >= 100 {
-            UIView.animate(withDuration: 2.5) {
-        self.navigationController?.setNavigationBarHidden(true, animated: true)
-            }
-        } else {
-            UIView.animate(withDuration: 2.5) {
-                self.navigationController?.setNavigationBarHidden(false, animated: true)
-            }
-        }
-    }
+//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//        if scrollView.contentOffset.y >= 100 {
+//            UIView.animate(withDuration: 2.5) {
+//        self.navigationController?.setNavigationBarHidden(true, animated: true)
+//            }
+//        } else {
+//            UIView.animate(withDuration: 2.5) {
+//                self.navigationController?.setNavigationBarHidden(false, animated: true)
+//            }
+//        }
+//    }
     
     
     
@@ -133,12 +155,21 @@ class MyOrders: UIViewController {
     func allOrders(type:String) {
         API.getMyOrders(type:type) { (error:Error?, data:[MyOrder]?) in
             if data != nil {
-                print("my order data",data!)
+        
+                self.selectedArray.removeAll()
+                self.selectedArray.append(contentsOf: data!)
+                self.tableView.reloadData()
+                SVProgressHUD.dismiss()
             } else {
+                SVProgressHUD.dismiss()
                 print("empty data")
             }
+          }
         }
-    }
+    
+    
+   
+    
     
     
 }
@@ -146,19 +177,36 @@ extension MyOrders: UITableViewDataSource , UITableViewDelegate {
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return data.count
+        return selectedArray.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! MyOrderTableViewCell
         
-        if selectedIndex == 0 {
-            cell.img.image = UIImage(named: "dont.png")
-        } else {
-            cell.img.image = UIImage(named: "do.png")
-        }
+        cell.selectionStyle = UITableViewCell.SelectionStyle.none
         
-        //cell.title.text = "\(selectedArray[indexPath.row].total)"
+        
+        cell.numLabel.text = "#\(selectedArray[indexPath.row].id)"
+         cell.price.text = "\(selectedArray[indexPath.row].total)"
+          cell.orderNumLab.text = General.stringForKey(key: "on")
+           cell.orderStatusLab.text = General.stringForKey(key: "os")
+            cell.totalOrderLab.text = General.stringForKey(key: "ot")
+             cell.sarLab.text =  General.stringForKey(key: "rs")
+              cell.detailLabel.text = General.stringForKey(key: "md")
+        
+        let da = Double(selectedArray[indexPath.row].updated_at)
+        cell.date.text = "\(da.dateFormatted!)"
+        
+        if  selectedArray[indexPath.row].status == 0 {
+            cell.statusLab.text = General.stringForKey(key: "x")
+        } else if selectedArray[indexPath.row].status == 1 {
+            cell.statusLab.text = General.stringForKey(key: "y")
+        } else if selectedArray[indexPath.row].status == 2 {
+            cell.statusLab.text = General.stringForKey(key: "z")
+        } else if selectedArray[indexPath.row].status == 3 {
+            cell.statusLab.text = General.stringForKey(key: "a")
+        }
+       
         
         return cell
     }
@@ -166,11 +214,28 @@ extension MyOrders: UITableViewDataSource , UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         
         
-        return 44.0
+        return 150.0
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        selectedTotal = selectedArray[indexPath.row].total
+        selectedStatus = selectedArray[indexPath.row].status
+        selectedId = selectedArray[indexPath.row].id
+        
         tableView.deselectRow(at: indexPath, animated: true)
+        performSegue(withIdentifier: "statusSegue", sender: self)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "statusSegue" {
+         let su = segue.destination as? OrderStatusVC
+                su?.recTotal = selectedTotal
+                 su?.recStatus = selectedStatus
+                  su?.recId = selectedId
+                   su?.recType = selectedType
+            
+        }
     }
     
     
@@ -179,14 +244,21 @@ extension MyOrders: UICollectionViewDelegate , UICollectionViewDataSource , UICo
     
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return menuTitls.count
+        return 3
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cell = colectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! MyOrderCollectionViewCell
         
-        cell.setupCell(text: menuTitls[indexPath.item])
+        
+        if General.CurrentLanguage() == "en" {
+            cell.setupCell(text: menuTitls[indexPath.item])
+        } else {
+            cell.setupCell(text: menuTitles_ar[indexPath.item])
+
+        }
+        
         
         return cell
     }

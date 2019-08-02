@@ -21,7 +21,7 @@ class API: NSObject {
     
     class func login(num: String, completion: @escaping(_ error: Error?, _ success: Bool?)->Void) {
         
-        let url = "http://iris.creativeshare.co/api/login"
+        let url = URLs.main+"api/login"
         
         let header = [
         
@@ -33,14 +33,15 @@ class API: NSObject {
             "phone":num
         ]
         
-        Alamofire.request(url, method: .post, parameters: para, encoding: URLEncoding.default, headers: header).responseJSON { (response) in
+        Alamofire.request(url, method: .post, parameters: para, encoding: URLEncoding.default, headers: header).validate(statusCode: 200..<300).responseJSON { (response) in
             switch response.result {
             case.failure(let error):
                 print(error)
                 completion(error,false)
             case.success(let value):
-                print(value)
+               // print(value)
                 let data = JSON(value)
+                  // print(data)
                 if (data["login"].int == 1) {
                     let id = data["id"].int
                     let name = data["name"].string
@@ -63,8 +64,7 @@ class API: NSObject {
     
     class func register(email:String, phone: String, name: String, avatar: UIImage ,completion: @escaping(_ error: Error? , _ success: Bool? ) -> Void) {
 
-       // let url = URLs.sginUp
-        let url = "http://iris.creativeshare.co/api/sign-up"
+        let url = URLs.main+"api/sign-up"
         let parameters:[String:Any] = [
         "email": email,
         "phone": phone,
@@ -83,7 +83,7 @@ class API: NSObject {
         ]
 
 
-        print(headers ?? "no headers")
+       // print(headers ?? "no headers")
 
         Alamofire.upload(multipartFormData: { multipartFormData in
             for (key, value) in parameters {
@@ -109,18 +109,46 @@ class API: NSObject {
             switch result {
             case .success(let upload, _, _):
                 upload.uploadProgress(closure: { (progress) in
-                    print("Download Progress: \(progress.fractionCompleted)")
+                    //print("Download Progress: \(progress.fractionCompleted)")
                 })
 //                upload.responseString(completionHandler: { (response) in
 //                    print("successs " + response.result.value!)
 //                    })
-                upload.responseJSON { response in
-                    print (response.result.value!)
-                    //let json = response.result.value!
-                    //  print (json["name"].String)
+                upload.validate(statusCode: 200..<300).responseJSON { response in
+                   // print (response.result.value!)
+                    switch response.response?.statusCode {
+                      case 400?:
+                        print("cooode 400")
+                      case 422?:
+                        print("coooooode 422")
+                        switch response.result {
+                        case.failure(let error):
+                            print("coooooode 422",error)
+                        case.success(let value):
+                            let js = JSON(value)
+                            //  print(js)
+                        }
+                    case 200?:
+                        switch response.result {
+                        case.failure(let error):
+                            print(error)
+                            completion(error,false)
+                        case.success(let value):
+                           // print(value)
+                            let data = JSON(value)
+                            let id = data["id"].int
+                            let name = data["name"].string
+                            let phone = data["phone"].string
+                            let email = data["email"].string
+                            let photo = data["avatar"].string
+                            let token = data["token"].string
+                            
+                            Helper.setUserData(id: id!, email: email!, name: name!, phone: phone!, photo: photo!)
+                            Helper.saveUserToken(token: token!)
+                        }
+                    default: break
+                    }
                 }
-                break
-
             case .failure(let encodingError):
                 print("the error is  : \(encodingError.localizedDescription)")
 
@@ -132,7 +160,7 @@ class API: NSObject {
     }
     class func updateProfile(token:String,email:String, phone: String, name: String, avatar: UIImage ,completion: @escaping(_ error: Error? , _ success: Bool? ) -> Void) {
         
-        let url = "http://iris.creativeshare.co/api/edit-profile"
+        let url = URLs.main+"/api/edit-profile"
         let parameters:[String:Any] = [
             "token":token,
             "email": email,
@@ -152,13 +180,15 @@ class API: NSObject {
         ]
         
         
-        print(headers ?? "no headers")
+        //print(headers ?? "no headers")
         
         Alamofire.upload(multipartFormData: { multipartFormData in
             for (key, value) in parameters {
                 multipartFormData.append("\(value)".data(using: String.Encoding.utf8)!, withName: key as String)
             }
-            multipartFormData.append(avatar.jpegData(compressionQuality: 0.6)!, withName: "avatar", fileName: "avatar.jpeg", mimeType: "image/jpeg")
+            if avatar.size.width != 0 {
+                multipartFormData.append(avatar.jpegData(compressionQuality: 0.6)!, withName: "avatar", fileName: "avatar.jpeg", mimeType: "image/jpeg")
+            }
             
             //            if let data = avatar.jpegData(compressionQuality: 0.6)
             //               // UIImageJPEGRepresentation(avatar,0.6)
@@ -182,14 +212,28 @@ class API: NSObject {
                     //                    print("successs " + response.result.value!)
                     //                    })
                     upload.responseJSON { response in
-                        print (response.result.value!)
-                        //let json = response.result.value!
-                        //  print (json["name"].String)
+                        //print (response.result.value!)
+                        switch response.result {
+                        case.failure(let error):
+                            print(error)
+                            completion(error,false)
+                        case.success(let value):
+                           // print(value)
+                            let data = JSON(value)
+                            let id = data["id"].int
+                            let name = data["name"].string
+                            let phone = data["phone"].string
+                            let email = data["email"].string
+                            let photo = data["avatar"].string
+                            
+                            Helper.setUserData(id: id!, email: email!, name: name!, phone: phone!, photo: photo!)
+                            
+                        }
                     }
                     break
                     
                 case .failure(let encodingError):
-                    print("the error is  : \(encodingError.localizedDescription)")
+                   // print("the error is  : \(encodingError.localizedDescription)")
                     
                     completion(encodingError, false)
                     break
@@ -211,7 +255,7 @@ class API: NSObject {
                 print(err)
                 completion(err,false)
             case.success(let value):
-                print(value)
+               // print(value)
                 let json = JSON(value)
                 if let msg = json["message"].string {
                     Helper.showSuccess(title: msg)
@@ -239,14 +283,14 @@ class API: NSObject {
                         "Accept": "application/json"
                     ]
         
-        print(url)
+       // print(url)
         Alamofire.request(url, method: .post, parameters: para, encoding: URLEncoding.default, headers: headers).responseJSON { (response) in
                switch response.result {
                   case.failure(let err):
                     print(err)
                 completion(err,false)
-                   case.success(let value):
-                     print(value)
+               case.success(let value): break
+                    // print(value)
                 
               }
             }
@@ -259,8 +303,8 @@ class API: NSObject {
         
         let para =
         [
-            "token":token,
-            "_method": "delete"
+            "_method": "delete",
+            "token":token
             
         ]
         
@@ -272,19 +316,97 @@ class API: NSObject {
                 "Accept": "application/json"
         ]
         
-        print(url)
+        //print(url)
         Alamofire.request(url, method: .post, parameters: para, encoding: URLEncoding.default, headers: headers).responseJSON { (response) in
             switch response.result {
             case.failure(let err):
                 print(err)
                 completion(err,false)
-            case.success(let value):
-                print(value)
+            case.success(let value): break
+               // print(value)
                 
+            }
+        }
+    }
+  
+    
+    class func ContactUS(name:String,phone:Int,message:String,completion:@escaping(_ error:Error?,_ success:Bool?)->Void) {
+        
+        let url = URLs.contact+"?name="+name+"&phone=\(phone)"+"&message="+message
+        
+        Alamofire.request(url, method: .post).validate(statusCode: 200..<300).responseJSON { (response) in
+            switch response.result {
+            case.failure(let error):
+                print(error)
+                completion(error,nil)
+            case.success(let value):
+                //print(value)
+                Helper.showSuccess(title: General.stringForKey(key: "su"))
+            }
+        }
+    }
+    
+    class func fireBaseToken(token:String,fire_base_token:String,completion:@escaping(_ error:Error?,_ success:Bool?)->Void) {
+        
+        
+        let url =  URLs.fireBase
+        
+        let para:[String:Any] = [
+            "token":token,
+            "fire_base_token":fire_base_token
+               ]
+        
+        Alamofire.request(url, method: .post, parameters: para).responseJSON { (response) in
+            switch response.result {
+            case.failure(let error):
+                print(error)
+               completion(error,nil)
+            case.success(let value):
+                let json = JSON(value)
+                    //print(json)
             }
         }
     }
     
     
+    
+    
+    class func getCoupon(code:String, completion:@escaping(_ error: Error?, _ data:[Coupon]?)->Void) {
+        
+        let url = URLs.coupon+"\(code)"
+        //  print(url)
+        
+        Alamofire.request(url, method: .get).validate(statusCode: 200..<300).responseJSON { (response) in
+            
+            switch response.response?.statusCode {
+            case 500?:
+                print("coupon 500")
+            case 404?:
+                print("coupon 404")
+            case 422?:
+                print("coupon 422")
+            case 200?:
+                switch response.result {
+                case.failure(let error):
+                    print(error)
+                    completion(error, nil)
+                case.success(let value):
+                    let js = JSON(value)
+                      let dat = js["data"]
+                  //  print(dat)
+                    var cou = [Coupon]()
+                    if let dc = dat.dictionary , let res = Coupon.init(dic: dc) {
+                        cou.append(res)
+                    }
+                    Helper.showError(title: "تم تفعيل الكود بنجاح")
+                    completion(nil, cou)
+                }
+            default: break
+            }
+        }
+        
+        
+        
+    }
     
 }

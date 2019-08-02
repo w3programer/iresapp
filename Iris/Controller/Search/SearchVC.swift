@@ -9,23 +9,36 @@
 import UIKit
 import Alamofire
 import SwiftyJSON
+import SVProgressHUD
+
+
 
 class SearchVC: UIViewController {
 
     
-    @IBOutlet weak var searchTxt: ImageInsideTextField!
+    @IBOutlet weak var searchTxt: UITextField!
     @IBOutlet weak var collectionView: UICollectionView!
     
+    @IBOutlet weak var viw: UIView!
     var filter = [Ads]()
     var txt = ""
     var currentPage = 1
     var totalPages = 1
     
     var selNameAr = ""
-    var selNameEn = ""
-    var selDesAr = ""
-    var selDesEn = ""
-    var selImgs:[String] = []
+     var selNameEn = ""
+      var selDesAr = ""
+       var selDesEn = ""
+        var selImgs:[String] = []
+         var selPrice:Double = 0.0
+          var selId = 0
+           var selBrandAr = ""
+            var selBrandEn = ""
+             var imaage = ""
+              var selAx:[String] = []
+               var selMyo:[String] = []
+                var selDev:[String] = []
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,6 +49,7 @@ class SearchVC: UIViewController {
         
         searchTxt.placeholder = General.stringForKey(key: "type")
         
+        self.viw.floatView()
         
     }
     
@@ -59,8 +73,12 @@ class SearchVC: UIViewController {
             if data != nil {
                 self.filter.removeAll()
                 self.filter.append(contentsOf: data!)
-                self.collectionView.reloadData()
+                DispatchQueue.main.async {
+                    self.collectionView.reloadData()
+                }
+                SVProgressHUD.dismiss()
             }
+            SVProgressHUD.dismiss()
         }
     }
     
@@ -86,7 +104,7 @@ class SearchVC: UIViewController {
     
 
 }
-extension SearchVC: UICollectionViewDelegate, UICollectionViewDataSource {
+extension SearchVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return filter.count
     }
@@ -94,6 +112,21 @@ extension SearchVC: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! SearchCell
+        
+        cell.layer.cornerRadius = 3.0
+        cell.layer.masksToBounds = false
+        cell.layer.shadowColor = UIColor.lightGray.cgColor
+        cell.layer.shadowOffset = CGSize(width: 0, height: 0)
+        cell.layer.shadowOpacity = 0.6
+        
+        
+        let containerView = cell.view!
+        
+        containerView.layer.cornerRadius = 8
+        containerView.clipsToBounds = true
+        
+        
+        
         
         
         if General.CurrentLanguage() == "ar"
@@ -107,9 +140,6 @@ extension SearchVC: UICollectionViewDelegate, UICollectionViewDataSource {
        cell.priceLab.text = "\(filter[indexPath.row].price)"
         
         cell.favBtn.addTarget(self, action: #selector(favTapped(sender:)), for: .touchUpInside)
-        cell.favBtn.setImage(UIImage(named: "li.png"), for: .normal)
-        cell.favBtn.setImage(UIImage(named: "lk.png"), for: .selected)
-        cell.favBtn.isSelected = false
         cell.favBtn.tag = indexPath.row
         
         return cell
@@ -117,23 +147,28 @@ extension SearchVC: UICollectionViewDelegate, UICollectionViewDataSource {
     
     @objc func favTapped(sender: UIButton) {
         
-        if (sender.isSelected) {
-            let no = filter[sender.tag].favorite_id
-            API.disSelectFav(token: Helper.getUserToken(), id:no) {( error:Error?, success: Bool?) in
-                if success! {
-                    sender.isSelected = false
+        let id = filter[sender.tag].id
+        if filter[sender.tag].is_favorite == 0 {
+            // do like
+            API.selectFav(token: Helper.getUserToken(), proId: id) { (error:Error?, success:Bool?) in
+                if success == true {
+                    
+                } else {
+                    
                 }
             }
         } else {
-            let proID = filter[sender.tag].id
-            API.selectFav(token:Helper.getUserToken(), proId:proID) {( error:Error?, success: Bool?) in
-                if success! {
-                    sender.isSelected = true
+            // do dislike
+            API.disSelectFav(token: Helper.getUserToken(), id: id) { (error:Error?, success:Bool?) in
+                if success == true {
+                    
+                } else {
+                    
                 }
             }
         }
-        
     }
+    
     
      func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         
@@ -148,10 +183,30 @@ extension SearchVC: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        let screenWidth = UIScreen.main.bounds.width
-        let width = (screenWidth-30)/2
+       
+            let screenWidth = collectionView.bounds.width
+            let width = (screenWidth - 20) / 2.0
+            
+            
+            return CGSize.init(width: width, height: 230)
         
-        return CGSize.init(width: width, height: width)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+       
+            return  4
+        
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+       return 4
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+       
+            return UIEdgeInsets.zero
+            
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -162,9 +217,21 @@ extension SearchVC: UICollectionViewDelegate, UICollectionViewDataSource {
         selDesAr = filter[indexPath.row].description_ar
         selDesEn = filter[indexPath.row].description_en
         selImgs = filter[indexPath.row].images
-        print(filter[indexPath.row].brandNameAr)
+        selPrice = filter[indexPath.row].price
+        selId = filter[indexPath.row].id
+        selBrandAr = filter[indexPath.row].brandNameAr
+        selBrandEn = filter[indexPath.row].brandNameEn
+        imaage = filter[indexPath.row].imaage
+        selDev = filter[indexPath.row].dev
+        selAx = filter[indexPath.row].ax
+        selMyo = filter[indexPath.row].myopia
         
-        performSegue(withIdentifier: "SearchContent", sender: self)
+        print(filter[indexPath.row].brandNameAr)
+        if filter[indexPath.row].has_sizes == 1 {
+            performSegue(withIdentifier: "SearchContent", sender: self)
+        } else {
+            performSegue(withIdentifier: "AccSearchContentSegue", sender: self)
+        }
         
     }
     
@@ -172,17 +239,35 @@ extension SearchVC: UICollectionViewDelegate, UICollectionViewDataSource {
         
         if segue.identifier == "SearchContent" {
           let contnt = segue.destination as? AdContentVC
+            
             contnt?.recPage = "search"
             contnt?.recImgs = selImgs
             contnt?.recContent = selDesAr
+            contnt?.recPrice = selPrice
+            contnt?.recContent = selDesAr
+            contnt?.recContentEn = selDesEn
+            contnt?.recTitle = selNameAr
+            contnt?.recTitle_en = selNameEn
+            contnt?.recProdId = selId
+            contnt?.recImaage = imaage
+            contnt?.recDev = selDev
+            contnt?.recAx = selAx
+            contnt?.recMyop = selMyo
             
-            
-            
-            
-            
-        }
-        
-    }
+        } else if segue.identifier == "AccSearchContentSegue" {
+            let acc = segue.destination as? AccessoriesContentVC
+                acc?.recImgs = selImgs
+                acc?.recPrice = selPrice
+                acc?.recProdId = selId
+                acc?.recContent_en = selDesEn
+                acc?.recContent_ar = selDesAr
+                acc?.recBarnd_en = selBrandEn
+                acc?.recBrand_ar = selBrandAr
+                acc?.recTitle_en = selNameEn
+                acc?.recTitle = selNameAr
+                acc?.recImaage = imaage
+             }
+          }
     
 }
 extension SearchVC: UITextFieldDelegate {
@@ -195,6 +280,7 @@ extension SearchVC: UITextFieldDelegate {
     }
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         print("good", self.searchTxt.text!)
+        Helper.hudStart()
         startSearching(q: self.searchTxt.text!, pageNO: currentPage)
         txt = self.searchTxt.text!
         self.searchTxt.resignFirstResponder()

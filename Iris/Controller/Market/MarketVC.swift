@@ -9,57 +9,151 @@
 import UIKit
 import Alamofire
 import SwiftyJSON
-
+import ImageSlideshow
+import BBBadgeBarButtonItem
+import CoreData
 
 class MarketVC: UIViewController {
 
     
    
-    @IBOutlet weak var collectionView: UICollectionView!
-    @IBOutlet weak var recAdded: CornerButtons!
-    @IBOutlet weak var bestSeller: CornerButtons!
     @IBOutlet weak var transp: CornerButtons!
-    @IBOutlet weak var colorLen: CornerButtons!
-    @IBOutlet weak var access: CornerButtons!
+     @IBOutlet weak var colorLen: CornerButtons!
+      @IBOutlet weak var access: CornerButtons!
+       @IBOutlet weak var sliderShow: ImageSlideshow!
+    
+    @IBOutlet weak var mostSoldLabel: UILabel!
+     @IBOutlet weak var brandLabel: UILabel!
+    
+    @IBOutlet weak var bView: UIView!
+     @IBOutlet weak var bViw: UIView!
+      @IBOutlet weak var brView: UIView!
+       @IBOutlet weak var brViw: UIView!
     
     
-    var menuPro = [Ads]()
+    @IBOutlet weak var frView: UIView!
+     @IBOutlet weak var secView: UIView!
+      @IBOutlet weak var thView: UIView!
+    
+    
+    @IBOutlet weak var cartButon: UIBarButtonItem!
+   // @IBOutlet weak var cartButon: BBBadgeBarButtonItem!
+    
+    @IBOutlet weak var headerlogo: UIBarButtonItem!
+    
+     // Containers Views
+    @IBOutlet weak var transView: UIView!
+     @IBOutlet weak var colorView: UIView!
+      @IBOutlet weak var accessoryView: UIView!
+       @IBOutlet weak var brandView: UIView!
+    
+    
+    
+    
+    
+    @IBOutlet weak var buViewHeightConstant: NSLayoutConstraint!
+    
+    @IBOutlet weak var brandHeightConstant: NSLayoutConstraint!
+    
+    
     
     // for Pagination
     var currentPage = 1
-    var totalPages = 1
-    var id = 1
-    var transLoad = false
-    var colorLoad = false
-    var accessLoad = false
+     var totalPages = 1
+      var id = 2
+       var transLoad = false
+        var colorLoad = false
+         var accessLoad = false
    
     
-    // Move Selected data
-    var selectedImgs = [String]()
-    var selectedTitle = ""
-    var selectedContent_en = ""
-    var selectedContent_ar = ""
-    var selectedId = 0
-    var selectedHasSize = 0
-    var selectedPrice = 0
-    var selectedName_ar = ""
-    var selectedName_en = ""
+   
+     var brandsIdSel = 0
+    
+       var frSelected = false
+        var seSelected = false
+         var thSelected = false
     
     
+    var imgSource = [InputSource]()
+
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    
+    var prod: [ItemsList] = []
+  
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
+        let preferredLanguage = NSLocale.preferredLanguages[0]
+        if preferredLanguage.starts(with: "en"){
+            self.headerlogo.imageInsets.right = 140
+
+        } else{
+            self.headerlogo.imageInsets.left = 140
+
+        }
+        
+
         setLoca()
-        getCategory(pageNO: currentPage, id: 1)
-         confrimProtocls()
           displayElementsDesgin()
         
+        slideShow()
+         configSliderShow()
+        
         self.navigationController?.navigationBar.setValue(true, forKey: "hidesShadow")
+        
+        
+        self.colorView.alpha = 1.0
+          self.brandView.alpha = 1.0
+            self.transView.alpha = 0 
+             self.accessoryView.alpha = 0
+        
 
         
-    
+        NotificationCenter.default.addObserver(self, selector: #selector(self.update), name: NSNotification.Name(rawValue: "deletedCell"), object: nil)
+        
     }
+    
+    
+    @ objc func update(notif: NSNotification) {
+        getData()
+       // print("cell deleted")
+    }
+    
+    
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        if id == 1 {
+            transCorner()
+        } else if id == 2 {
+            colCorner()
+        } else {
+            accCorner()
+        }
+        
+        
+        if prod.count > 0 {
+            cartButon.setBadge(text: "\(prod.count)", withOffsetFromTopRight: .zero, andColor: .red, andFilled: true, andFontSize: 15)
+        }
+        
+
+    }
+    
+    
+    
+    
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        
+        getData()
+        
+        }
+    
+    
+    
 
 
     @IBAction func searchBtn(_ sender: Any) {
@@ -74,326 +168,206 @@ class MarketVC: UIViewController {
     }
     
     @IBAction func transparentBtn(_ sender: Any) {
+
+        self.transView.alpha = 1.0
         
-        getCategory(pageNO: 1, id: 1)
+        self.colorView.alpha = 0
+         self.brandView.alpha = 0
+          self.accessoryView.alpha = 0
+    
         self.id = 1
+        
+        transCorner()
+       
+        
     }
     
     @IBAction func colorBtn(_ sender: Any) {
-        
-        getCategory(pageNO: 1, id: 2)
+        self.colorView.alpha = 1.0
+         self.brandView.alpha = 1.0
+           self.transView.alpha = 0
+            self.accessoryView.alpha = 0
+      
         self.id = 2
+
+        colCorner()
     }
     
     @IBAction func accessBtn(_ sender: Any) {
+       
+        self.colorView.alpha = 0
+         self.brandView.alpha = 0
+          self.transView.alpha = 0
+            self.accessoryView.alpha = 1.0
         
-        getCategory(pageNO: 1, id: 3)
         self.id = 3
-    }
-    
-    
-    
-    
-    
-    @IBAction func recAddBtn(_ sender: Any) {
-        // type = 1
-        sortData(id: id, pageNo: currentPage, typ: 1)
-        
-        
-    }
-    
-    
-    @IBAction func bestSellerBtn(_ sender: Any) {
-        
-        // type = 2
 
-        sortData(id: id, pageNo: currentPage, typ: 2)
-
-        
+        accCorner()
     }
+    
+    
     
     
     @IBAction func unwindToMarket(segue: UIStoryboardSegue) {}
 
     
+    
+   
+    
+    
     func displayElementsDesgin() {
         
-        transp.alignText()
-        colorLen.alignText()
-        access.alignText()
-        recAdded.alignText()
-        bestSeller.alignText()
-        
-    }
-    
-    
-    func confrimProtocls() {
-        
-        self.collectionView.dataSource = self
-        self.collectionView.delegate = self
+            transp.alignText()
+          colorLen.alignText()
+         access.alignText()
+        bView.cornerView()
+         bViw.cornerView()
+          brViw.cornerView()
+           brView.cornerView()
        
         
     }
     
     
     
-   
     
     
-    
-    func getCategory(pageNO: Int, id: Int) {
-        setPagination(id:id)
-        if id == 1  {
-            transLoad = true
-            colorLoad = false
-            accessLoad = false
-        } else if id == 2 {
-            transLoad = false
-            colorLoad = true
-            accessLoad = false
-        } else {
-            transLoad = false
-            colorLoad = false
-            accessLoad = true
-        }
-        if Helper.checkToken() == false {
-            
-            API.Categories(pageNo: pageNO , Id: id ) { (error: Error?, data:[Ads]?) in
-                if data != nil {
-                    print("MarketVC data",data!)
-                    self.menuPro.removeAll()
-                    self.menuPro.append(contentsOf: data!)
-                    self.collectionView.reloadData()
-                } else {
-                    print("no ads found niiiil")
-                }
-            }
-        } else {
-            API.UserCategories(pageNo: pageNO, Id: id) { (error:Error?, data:[Ads]?) in
-                if data != nil {
-                    print("MarketVC data",data!)
-                    self.menuPro.removeAll()
-                    self.menuPro.append(contentsOf: data!)
-                    self.collectionView.reloadData()
-                } else {
-                    print("no ads found niiiil")
-                }
-            }
-        }
+    func transCorner() {
         
         
-        }
+        self.frView.backgroundColor = UIColor.white
+         self.transp.setTitleColor( .black , for: .normal)
+        
+        self.secView.backgroundColor = #colorLiteral(red: 0.115710564, green: 0.5438727736, blue: 0.5560589433, alpha: 0.8584150257)
+         self.thView.backgroundColor = #colorLiteral(red: 0.115710564, green: 0.5438727736, blue: 0.5560589433, alpha: 0.8584150257)
+        
+           self.colorLen.setTitleColor(.white, for: .normal)
+            self.access.setTitleColor(.white, for: .normal)
+        
+        self.frView.roundSingleConrner([.topLeft, .topRight], [.layerMaxXMinYCorner , .layerMinXMinYCorner], radius: 20.0)
+        
+       self.secView.roundSingleConrner([.bottomRight], [.layerMaxXMinYCorner], radius: 20.0)
+        
+        self.thView.roundSingleConrner(.bottomRight, .layerMaxXMaxYCorner, radius: 0)
+        self.transp.tintColor = UIColor.black
+    }
     
-    func sortData(id:Int,pageNo:Int,typ:Int) {
-        setPagination(id:id)
-        if Helper.checkToken() == false {
-            API.sortData(pageNo: pageNo, Id: id, typ: typ) { (error:Error?, data:[Ads]?) in
-                if data != nil {
-                    print("Sort Data", data!)
-                    self.menuPro.removeAll()
-                    self.menuPro.append(contentsOf: data!)
-                    self.collectionView.reloadData()
-                } else {
-                    print("no ads found niiiil")
-                    
-                }
-            }
-        } else {
-            API.UserSortData(pageNo:pageNo, Id:id, typ: typ) { (error:Error?, data:[Ads]?) in
-                if data != nil {
-                    print("Sort Data", data!)
-                    self.menuPro.removeAll()
-                    self.menuPro.append(contentsOf: data!)
-                    self.collectionView.reloadData()
-                } else {
-                    print("no ads found niiiil")
-                }
-            }
-        }
+    func colCorner() {
+        
+        self.secView.backgroundColor = UIColor.white
+         self.colorLen.setTitleColor(.black, for: .normal)
+        
+        self.frView.backgroundColor = #colorLiteral(red: 0.115710564, green: 0.5438727736, blue: 0.5560589433, alpha: 0.8584150257)
+         self.thView.backgroundColor = #colorLiteral(red: 0.115710564, green: 0.5438727736, blue: 0.5560589433, alpha: 0.8584150257)
+        
+        self.transp.setTitleColor(.white, for: .normal)
+         self.access.setTitleColor(.white, for: .normal)
+        
+        self.secView.roundSingleConrner([.topLeft, .topRight], [.layerMaxXMinYCorner , .layerMinXMinYCorner], radius: 20.0)
+
+                                          // layerMinXMinYCorner
+        
+        self.frView.roundSingleConrner(.bottomLeft, .layerMaxXMaxYCorner , radius: 20.0)
+                                           // layerMaxXMaxYCorner
+        
+        self.thView.roundSingleConrner(.bottomRight, [ .layerMinXMinYCorner ], radius: 20.0)
+
         
     }
     
-    
-    
+    func accCorner() {
+        self.thView.backgroundColor = UIColor.white
+         self.access.setTitleColor(.black, for: .normal)
+        self.frView.backgroundColor = #colorLiteral(red: 0.115710564, green: 0.5438727736, blue: 0.5560589433, alpha: 0.8584150257)
+         self.secView.backgroundColor = #colorLiteral(red: 0.115710564, green: 0.5438727736, blue: 0.5560589433, alpha: 0.8584150257)
+        self.colorLen.setTitleColor(.white, for: .normal)
+        self.transp.setTitleColor(.white, for: .normal)
+        self.thView.roundSingleConrner([.topLeft, .topRight], [.layerMaxXMinYCorner , .layerMinXMinYCorner], radius: 20.0)
+        self.secView.roundSingleConrner([.bottomLeft], [.layerMinXMaxYCorner], radius: 20.0)
+        self.frView.roundSingleConrner([.bottomRight], [.layerMaxXMaxYCorner], radius: 20.0)
+    }
     fileprivate func setLoca() {
-        navigationItem.title = General.stringForKey(key: "iris")
-        recAdded.setTitle(General.stringForKey(key: "rec"), for: .normal)
-        bestSeller.setTitle(General.stringForKey(key: "best"), for: .normal)
+       // navigationItem.title = General.stringForKey(key: "iris")
         transp.setTitle(General.stringForKey(key: "Pellucid lenses"), for: .normal)
         colorLen.setTitle(General.stringForKey(key: "colorLenses"), for: .normal)
         access.setTitle(General.stringForKey(key: "accessories"), for: .normal)
-        self.tabBarController?.tabBar.items?[0].title = General.stringForKey(key: "market")
+         brandLabel.text = General.stringForKey(key: "brand")
+          mostSoldLabel.text = General.stringForKey(key: "best")
+        
         
     }
-    
-    func setPagination(id:Int) {
-        let url = URLs.categories+"/\(id)/"+"products"
-        Alamofire.request( url , method: .get ).responseJSON { (response) in
-            switch response.result {
-            case .failure(let error):
-                print("terms",error)
-                
-            case .success(let value):
-                let jsonData = JSON(value)
-                print(jsonData)
-                let json = jsonData["meta"]
-                print(json)
-                let last = json["last_page"].int
-                print(last!)
-                self.totalPages = last!
-            }
+    func configSliderShow() {
+        sliderShow.slideshowInterval = 5.0
+        sliderShow.pageIndicatorPosition = .init(horizontal: .center, vertical: .bottom)
+        sliderShow.contentScaleMode = UIView.ContentMode.scaleAspectFill
+        let pageControl = UIPageControl()
+        pageControl.currentPageIndicatorTintColor = UIColor.black
+        pageControl.pageIndicatorTintColor = UIColor.white
+        sliderShow.pageIndicator = pageControl
+        sliderShow.activityIndicator = DefaultActivityIndicator()
+        sliderShow.activityIndicator = DefaultActivityIndicator(style: .gray , color: nil )
+        sliderShow.currentPageChanged = { page in
+           // print("current page:", page)
         }
-        
-        
+        sliderShow.addSubview(pageControl)
     }
-    
-    
-}
-extension MarketVC: UICollectionViewDelegate, UICollectionViewDataSource {
-    
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+
+    func slideShow() {
         
-        return menuPro.count
-        
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! marketCell
-        
-        if General.CurrentLanguage() == "ar"
-        {
-            cell.title.text = menuPro[indexPath.row].name_ar
-        }else
-        {
-            cell.title.text = menuPro[indexPath.row].name_en
-        }
-        
-        if Helper.checkToken() == true {
-            if menuPro[indexPath.row].is_favorite == 0 {
-                cell.fav.setImage(UIImage(named: "li.png"), for: .normal)
-                cell.fav.setImage(UIImage(named: "lk.png"), for: .selected)
+        API.sliderData { (error: Error?, data:[Slider]?) in
+            if data != nil {
+                for da in data! {
+                    self.imgSource.append(KingfisherSource(urlString: da.image)!)
+                }
+                self.sliderShow.setImageInputs(self.imgSource)
             } else {
-                cell.fav.setImage(UIImage(named: "lk.png"), for: .normal)
-                cell.fav.setImage(UIImage(named: "li.png"), for: .selected)
-            }
-            
-            cell.fav.addTarget(self, action: #selector(favTapped(sender:)), for: .touchUpInside)
-            cell.fav.isSelected = false
-            cell.fav.tag = indexPath.row
-        } else {
-            cell.fav.isHidden = true
-        }
-        
-            //cell.pics = menuPro[IndexPath(item: 0, section: 0).item]
-              cell.pics = menuPro[indexPath.item]
-            cell.price.text = "\(menuPro[indexPath.row].price)"
-       
-            return cell
-        
-        
-    }
-    
-    @objc func favTapped(sender: UIButton) {
-        collectionView.reloadData()
-        if (sender.isSelected) {
-            let id = menuPro[sender.tag].favorite_id
-           // let favBtn = collectionView.cellForItem(at: sender.tag) as! marketCell
-            API.disSelectFav(token:Helper.getUserToken(),id:id) { (error:Error?, success:Bool?) in
-                if success! {
-                    sender.isSelected = false
-                    
-                  //  favBtn.
-                }
-            }
-        } else {
-            let no = menuPro[sender.tag].id
-            print(no)
-            API.selectFav(token:Helper.getUserToken(), proId: no) { (error:Error?, success:Bool?) in
-                if success == true {
-                    sender.isSelected = true
-                }
+              //  print("Slider have no data")
             }
         }
-    
     }
     
-    
+    func getData() { //5
+        do {
+            prod = try context.fetch(ItemsList.fetchRequest())
+        }
+        catch {
+          //  print("Fetching Failed")
+        }
+    }
    
-    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        
+//    private func setBadge() {
+//
+//        let lblBadge = UILabel.init(frame: CGRect.init(x: 20, y: 0, width: 15, height: 15))
+//        self.lblBadge.backgroundColor = UIColor.red.cgColor
+//         self.lblBadge.clipsToBounds = true
+//          self.lblBadge.layer.cornerRadius = 7
+//           self.lblBadge.textColor = UIColor.white
+//            self.lblBadge.font = UIFont.labelFontSize
+//             self.lblBadge.textAlignment = .center
+//
+//
+//        }
 
-        if indexPath.row == menuPro.count - 1 { //
-            //totalPages = menuPro[indexPath.row].lastPage
-            if  currentPage < totalPages {
-                if colorLoad == false && accessLoad == false {
-                    currentPage += 1
-                    print("near call")
-                    getCategory(pageNO: currentPage, id: 1)
-                }
-                else if colorLoad == false && accessLoad == false {
-                    currentPage += 1
-                    print("fresh call")
-                    print("pageNo  \(currentPage)")
-                    getCategory(pageNO: currentPage, id: 2)
-                }
-                else{
-                    currentPage += 1
-                    print("get near call")
-                 getCategory(pageNO: currentPage, id: 3)
-                    
-                }
-            }
-        }
-        
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
-        self.selectedTitle = menuPro[indexPath.row].name_ar
-        self.selectedImgs = menuPro[indexPath.row].images
-        self.selectedContent_en = menuPro[indexPath.row].description_ar
-        self.selectedId = menuPro[indexPath.row].id
-        self.selectedHasSize = menuPro[indexPath.row].has_sizes
-        self.selectedName_ar = menuPro[indexPath.row].name_ar
-        self.selectedName_en = menuPro[indexPath.row].name_en
-        
-
-        performSegue(withIdentifier: "ContentSegue", sender: self)
-        
-    
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
-        if segue.identifier == "ContentSegue" {
-            let conVC = segue.destination as? AdContentVC
-            conVC?.recPage = "market"
-            conVC?.recContent = selectedContent_ar
-            conVC?.recTitle = selectedName_ar
-            conVC?.recImgs = selectedImgs
-            conVC?.recHasSize = selectedHasSize
-        }
-        
-    }
+//        func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//            if scrollView.contentOffset.y >= 70 {
+//                UIView.animate(withDuration: 2.5) {
+//           // self.navigationController?.setNavigationBarHidden(true, animated: true)
+//                    self.buViewHeightConstant.constant = 0
+//                    self.brandHeightConstant.constant = UIScreen.main.bounds.height
+//                    self.view.layoutIfNeeded()
+//                }
+//            } else  {
+//                UIView.animate(withDuration: 2.5) {
+//                   // self.navigationController?.setNavigationBarHidden(false, animated: true)
+//            self.buViewHeightConstant.constant = 90
+//                self.brandHeightConstant.constant =  200
+//                    self.view.layoutIfNeeded()
+//                }
+//            }
+//        }
     
     
-    
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        
-        return 10
-    }
-    
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
-        let screenWidth = UIScreen.main.bounds.width
-        let width = (screenWidth-30)/2
-        
-        return CGSize.init(width: width, height: width)
-    }
     
 }
+
 

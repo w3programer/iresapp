@@ -11,9 +11,9 @@ import Foundation
 class URLs {
     
     // main links
-    static let main = "http://iris.creativeshare.co/"
+    static let main = "http://iristoresa.com/"
     
-    static let image = "http://iris.creativeshare.co/storage/"
+    static let image =  main + "storage/"
     
     // Auth
     static let login = main + "api/login"
@@ -23,6 +23,7 @@ class URLs {
     static let sginOut = main + "api/logout"
     
     static let updateProfile = main + "api/edit-profile"
+    
     
     
     // products
@@ -47,9 +48,35 @@ class URLs {
     
     // other
     
-    static let terms = main + "api/get-terms-condition"
+    static let terms = main + "api/get-terms-condition?type="
     
     static let package = main + "api/packages"
+    
+    static let contact = main + "api/contacts"
+    
+    static let fireBase = main + "api/fire_base_token"
+    
+    static let ques = main + "api/q&a?page="
+    
+    static let barnds = main + "api/brands?page="
+    
+    static let brandModel = main + "api/brands/"
+    
+    static let treendsModel = main + "api/trends/"
+    
+    static let trend = main + "api/trends?page="
+    
+   // static let trendModel = main + "api/trends/"
+    
+    static let sp = main + "api/get-special-lenses"
+    
+    
+    static let dgree = main + "api/degrees"
+    
+    static let coupon = main + "api/get-coupon-value/"
+    
+    static let  mor = main + "api/"
+    
     
 }
 

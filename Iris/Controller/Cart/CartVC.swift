@@ -8,7 +8,7 @@
 
 import UIKit
 import CoreData
-
+import Kingfisher
 
 
 class CartVC: UIViewController,NSFetchedResultsControllerDelegate {
@@ -16,19 +16,29 @@ class CartVC: UIViewController,NSFetchedResultsControllerDelegate {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var sendOrder: CornerButtons!
  
+    @IBOutlet weak var totalLabel: UILabel!
+    
+    @IBOutlet weak var priceLabel: UILabel!
+    
+    
+    @IBOutlet weak var buView: UIView!
+    @IBOutlet weak var toView: UIView!
+    
+    @IBOutlet weak var visal: UIVisualEffectView!
+    @IBOutlet weak var emLabel: UILabel!
+    
+    
+    
+    
     
     static let shared = CartVC()
     var numberOfItems = 1
     
     
-    var test = ["cdvvdv","fvfvdf","vfvaf","cd"]
+    var prics:[Double] = []
+    var final:Double = 0.0
     
-    
-    var controller:NSFetchedResultsController<ItemsList>!
-    //var context:NSManagedObjectContext?
 
-    
-    // set coreData to tableView
     
     //1
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
@@ -39,7 +49,21 @@ class CartVC: UIViewController,NSFetchedResultsControllerDelegate {
     // 4
     override func viewWillAppear(_ animated: Bool) {
         getData()
-        tableView.reloadData()
+      //  getTotal()
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+            }
+        
+                if prod.isEmpty == true {
+//                    self.buView.alpha = 0
+//                     self.toView.alpha = 0
+                      self.visal.alpha = 1.0
+                } else if prod.isEmpty == false  {
+//                    self.buView.alpha = 1.0
+//                     self.toView.alpha = 1.0
+                      self.visal.alpha = 0
+                }
+        
     }
     
     
@@ -47,43 +71,36 @@ class CartVC: UIViewController,NSFetchedResultsControllerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        
+        //self.visal.alpha = 0
+        
+        toView.alpha = 0
+        
           confirmProtocols()
            desginTableView(tableview: tableView)
-        sendOrder.setTitle(General.stringForKey(key: "sendorder"), for: .normal)
+        sendOrder.setTitle(General.stringForKey(key: "com"), for: .normal)
+         self.emLabel.text = "🗑" + General.stringForKey(key: "ec")
+        self.totalLabel.text = General.stringForKey(key: "tp")
+        
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.update), name: NSNotification.Name(rawValue: "update"), object: nil)
+        
+        
+    }
+  
+    
+    @ objc func update(notif: NSNotification) {
+     //   getTotal()
+        print("cell updated")
     }
     
-
-  
     @IBAction func sendOrderBtn(_ sender: Any) {
-        do {
-            
-            let jsonData = try JSONSerialization.data(withJSONObject: prod, options: JSONSerialization.WritingOptions.prettyPrinted)
-            
-            if let JSONString = String(data: jsonData, encoding: String.Encoding.utf8) {
-                print(JSONString)
+        if prod.isEmpty == false {
+            if Helper.checkToken() == true {
+                performSegue(withIdentifier: "OrderSegue", sender: self)
             }
-            let json = try JSONSerialization.jsonObject(with: jsonData, options: JSONSerialization.ReadingOptions.mutableContainers) as? [String: [String:Any]]
-            print(json!)
-            
-        } catch {
-            print("err")
         }
-        //let json = try JSONSerialization.jsonObject(with: prod!, options: []) as? [String : AnyObject]
-        //let jsonDecoder = JSONEncoder()
-       // let jsonData = jsonDecoder.encode(prod)
-
-        //let  jsonData = try! JSONEncoder.encode(ItemsList) as? [String:[String:Any]]
-       // encode(ItemsList)
-        
-          //     print(jsonData)
-           // let jsonString = String(data: jsonData, encoding: .utf8)
-           //      print(jsonString)
-
-        
        
-        
-        
-        
     }
     
     
@@ -98,8 +115,8 @@ class CartVC: UIViewController,NSFetchedResultsControllerDelegate {
     
     func desginTableView(tableview: UITableView) {
         tableview.tableFooterView =  UIView()
-//        tableview.separatorInset = .zero
-//        tableview.contentInset = .zero
+          tableview.tableFooterView?.tintColor = UIColor.clear
+
     }
     
     
@@ -115,31 +132,17 @@ class CartVC: UIViewController,NSFetchedResultsControllerDelegate {
     
     
     
-    
-//    func setData() {
+//    fileprivate func getTotal() {
+//        for pr in prod {
+//            self.prics.append(Double(pr.total))
+//            final = self.prics.reduce(0, +)
+//            print("total price", final)
+//            self.priceLabel.text = General.stringForKey(key: "rs")+"\(self.prics.reduce(0, +))"
 //
-//        let fetchRequest:NSFetchRequest<ItemsList>=ItemsList.fetchRequest()
-//        controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context!, sectionNameKeyPath: nil , cacheName: nil)
-//        controller.delegate = self
-//        do {
-//             try controller.performFetch()
-//        }catch {
-//            print("error looad from dataBase")
 //        }
 //    }
-    
-//    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-//        tableView.beginUpdates()
-//
-//    }
-//
-//    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-//        tableView.endUpdates()
-//    }
-//
-//    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-//
-//    }
+
+
     
 }
 extension  CartVC: UITableViewDelegate, UITableViewDataSource {
@@ -156,62 +159,81 @@ extension  CartVC: UITableViewDelegate, UITableViewDataSource {
         
         
         cell.selectionStyle = UITableViewCell.SelectionStyle.none
-        cell.img.image = UIImage(named: "img.png")
-        cell.numLab.text = "\(numberOfItems)"
+        
         
         let dta = prod[indexPath.row]
         
-        let totl = "\(dta.total)"
-            cell.priceLab.text = totl
-        let s = dta.package
-        cell.title.text = "\(s)"
+        
+        cell.getOrignailPrice(price: dta.orPrice,
+                              selected_product_id: Int(dta.product_id),
+                              orRightAmount: Int(dta.orRightAmout),
+                              orLeftAmount: Int(dta.orLeftAmount),
+                              totalPrice: Double(dta.total),
+                             sameSize: dta.sameSize)
         
         
-        cell.plusBtn.addTarget(self, action: #selector(plusTapped(sender:)), for: .touchUpInside)
-        cell.minBtn.addTarget(self, action: #selector(minTapped(sender:)), for: .touchUpInside)
-        cell.plusBtn.tag = indexPath.row
-        cell.minBtn.tag = indexPath.row
+        if dta.hasSize == 0 || dta.similar == 0 {
+            cell.rightAmount.alpha = 0
+            cell.leftAmount.alpha = 0
+            cell.rightLab.alpha = 0
+            cell.leftLab.alpha = 0
+        } else  {
+            cell.rightAmount.alpha = 1.0
+            cell.leftAmount.alpha = 1.0
+            cell.rightLab.alpha = 1.0
+            cell.leftLab.alpha = 1.0
+        }
         
         
+        
+        
+        if dta.left_amount == 0  {
+            cell.rightAmount.alpha = 0
+            cell.leftAmount.alpha = 0
+            cell.rightLab.alpha = 0
+            cell.leftLab.alpha = 0
+        } else if dta.right_amount == 0 {
+            cell.rightAmount.alpha = 0
+            cell.leftAmount.alpha = 0
+            cell.rightLab.alpha = 0
+            cell.leftLab.alpha = 0
+        } else {
+            cell.rightAmount.alpha = 1.0
+            cell.leftAmount.alpha = 1.0
+            cell.rightLab.alpha = 1.0
+            cell.leftLab.alpha = 1.0
+        }
+        
+        cell.numLab.text = "\(dta.quantity)"
+                              
+        if General.CurrentLanguage() == "ar" {
+            cell.title.text = dta.name_ar
+        } else {
+            cell.title.text = dta.name_en
+        }
+        
+        if dta.img?.isEmptyStr == false {
+            cell.img.kf.indicatorType = .activity
+            let url = URL(string: dta.img!)
+            cell.img.kf.setImage(with: url )
+        }
+        cell.priceLab.text = "\(dta.total)"
+        
+        
+        cell.leftAmount.text = "\(dta.left_amount)"
+        cell.rightAmount.text =  "\(dta.right_amount)"
+        
+      cell.rightLab.text = General.stringForKey(key: "rii")
+        cell.leftLab.text = General.stringForKey(key: "lee")
         
         return cell
     }
     
-    @objc func plusTapped (sender: UIButton) {
-        let selectedIndex = IndexPath(row: sender.tag, section: 0)
-         let selectedRow = tableView.cellForRow(at: selectedIndex) as! CartCell 
-            print(selectedRow)
-            selectedRow.numLab.text = "\(numberOfItems += 1)"
-            print("numberOfItems",numberOfItems)
-        
-       
-        
-        
-    }
-    
-    @objc func minTapped(sender: UIButton) {
-        if numberOfItems == 1 {
-            let selectedIndex = IndexPath(row: sender.tag, section: 0)
-               print(selectedIndex)
-           let selectedRow = tableView.cellForRow(at: selectedIndex) as! CartCell
-            selectedRow.minBtn.isUserInteractionEnabled = false
-            selectedRow.minBtn.alpha = 0.5
-        } else if numberOfItems > 1 {
-            let selectedIndex = IndexPath(row: sender.tag, section: 0)
-            print(selectedIndex)
-            let selectedRow = tableView.cellForRow(at: selectedIndex) as! CartCell
-            selectedRow.minBtn.isUserInteractionEnabled = true
-            selectedRow.minBtn.alpha = 1
-            numberOfItems -= 1
-            print(numberOfItems)
-        }
-        
-    }
-    
+
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         
         
-        return 125.0
+        return 161.0
     }
     
     
@@ -220,17 +242,35 @@ extension  CartVC: UITableViewDelegate, UITableViewDataSource {
         if editingStyle == .delete {
             let ord = prod[indexPath.row]
             context.delete(ord)
+            prod.remove(at: indexPath.row)
+             tableView.deleteRows(at: [indexPath], with: .automatic)
             (UIApplication.shared.delegate as! AppDelegate).saveContext()
-            
             do {
                 _ = try context.fetch(ItemsList.fetchRequest())
+                try context.save()
+                // add notification to update badge value at main screen
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "deletedCell"), object: nil)
             }
             catch {
                 print("Fetching Failed")
             }
+            if prod.count == 0 {
+                self.visal.alpha = 1.0
+            }
         }
-        tableView.reloadData()
+        
     }
+    
+    
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        let deleteButton = UITableViewRowAction(style: .default, title: General.stringForKey(key: "delet")) { (action, indexPath) in
+            self.tableView.dataSource?.tableView!(self.tableView, commit: .delete, forRowAt: indexPath)
+            return
+        }
+        return [deleteButton]
+        
+    }
+    
     
     
 }
