@@ -128,6 +128,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5424176B22F8E333000E7B72 /* Iris.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Iris.entitlements; sourceTree = "<group>"; };
 		672A9F7949B2DA3F5E63F720 /* Pods-Iris.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Iris.release.xcconfig"; path = "Pods/Target Support Files/Pods-Iris/Pods-Iris.release.xcconfig"; sourceTree = "<group>"; };
 		755E99928AF75D2392BB8A00 /* Pods_Iris.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Iris.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7DBEA2430973606534090F8A /* Pods-Iris.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Iris.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Iris/Pods-Iris.debug.xcconfig"; sourceTree = "<group>"; };
@@ -476,6 +477,7 @@
 		8F7C77152206E51A00AA2CB7 /* Iris */ = {
 			isa = PBXGroup;
 			children = (
+				5424176B22F8E333000E7B72 /* Iris.entitlements */,
 				8F3AD49322209B9600E4836D /* Localizatoin */,
 				8F7C772E2206EE6300AA2CB7 /* Services */,
 				8F6B0BBC22BFB61500C9F58E /* Supporting files */,
@@ -739,6 +741,11 @@
 					8F7C77122206E51A00AA2CB7 = {
 						CreatedOnToolsVersion = 10.1;
 						LastSwiftMigration = 1020;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -1100,9 +1107,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Iris/Iris.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = ZYXWKAWWZ4;
+				DEVELOPMENT_TEAM = 8HT9Y82A85;
 				INFOPLIST_FILE = "$(SRCROOT)/Iris/Services/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1125,9 +1133,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Iris/Iris.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = ZYXWKAWWZ4;
+				DEVELOPMENT_TEAM = 8HT9Y82A85;
 				INFOPLIST_FILE = "$(SRCROOT)/Iris/Services/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (

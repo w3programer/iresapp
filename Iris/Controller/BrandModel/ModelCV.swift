@@ -11,9 +11,6 @@ import Kingfisher
 import SVProgressHUD
 import Alamofire
 import SwiftyJSON
-
-
-
 class ModelCV: UIViewController {
 
     @IBOutlet weak var trendCollectionView: UICollectionView!
@@ -97,14 +94,15 @@ class ModelCV: UIViewController {
         Helper.hudStart()
         API.getBrandModels(id: id, pageNo: nu) { (error:Error?, data:[Ads]?) in
             if data != nil {
+                self.da.removeAll()
                     self.da.append(contentsOf: data!)
                     DispatchQueue.main.async {
                     self.collectionViw.reloadData()
                     }
                 SVProgressHUD.dismiss()
-                print(data!)
+                //print(data!)
             } else {
-                print("data is empty of brandModel")
+                //print("data is empty of brandModel")
                 SVProgressHUD.dismiss()
             }
         }
@@ -119,11 +117,11 @@ class ModelCV: UIViewController {
                 print(error)
             case.success(let value):
                 let js = JSON(value)
-                  print(js)
+                 // print(js)
                 let json = js["meta"]
-                print(json)
+                //print(json)
                 let last = json["last_page"].int
-                print(last!)
+               // print(last!)
                 self.totalPages = last!
             }
         }
@@ -140,7 +138,7 @@ class ModelCV: UIViewController {
                     self.collectionViw.reloadData()
                 }
                 SVProgressHUD.dismiss()
-                print(data!)
+              //  print(data!)
             } else {
                 print("data is empty of brandModel")
                 SVProgressHUD.dismiss()
@@ -160,11 +158,11 @@ class ModelCV: UIViewController {
                 print(error)
             case.success(let value):
                 let js = JSON(value)
-                print(js)
+               // print(js)
                 let json = js["meta"]
-                print(json)
+                //print(json)
                 let last = json["last_page"].int
-                print(last!)
+                //print(last!)
                 self.treTotalPages = last!
             }
         }
@@ -189,18 +187,18 @@ class ModelCV: UIViewController {
                 case .success(let value):
                     self.da.removeAll()
                     let json = JSON(value)
-                    print(json)
-                    print("daaaaaa \(id)")
+                  //  print(json)
+                  //  print("daaaaaa \(id)")
                     
                     if let dataArr = json["data"].array
                     {
                 for dataArr in dataArr {
                      let mainId=dataArr["id"].int
-                      print("main \(String(describing: mainId))")
+                     // print("main \(String(describing: mainId))")
                     if  id == mainId  {
-                          print("ss id \(id)")
+                       //   print("ss id \(id)")
                         if let dataArr = dataArr["trends"].array {
-                                print("inside")
+                               // print("inside")
                             for dataArr in dataArr {
                                 let name_ar = dataArr ["name_ar"].string
                                  let name_en = dataArr ["name_en"].string
@@ -212,7 +210,7 @@ class ModelCV: UIViewController {
                                     DispatchQueue.main.async {
                                         self.trendCollectionView.reloadData()
                                     }
-                                    print("items count", self.tre.count)
+                                 //   print("items count", self.tre.count)
                                     
                                 }
                                 
@@ -336,7 +334,7 @@ extension ModelCV: UICollectionViewDelegate, UICollectionViewDataSource, UIColle
                 if indexPath.row == da.count - 1 {
                     if currentPage < totalPages {
                         currentPage += 1
-                        print("pagiation num", currentPage)
+                       // print("pagiation num", currentPage)
                         self.getModelData(id: recModelId, nu: currentPage)
                     }
                 }
@@ -344,7 +342,7 @@ extension ModelCV: UICollectionViewDelegate, UICollectionViewDataSource, UIColle
                 if indexPath.row == tre.count - 1 {
                     if treCurrentPage < treTotalPages {
                         treCurrentPage += 1
-                        print("pagiation num", treCurrentPage)
+                       // print("pagiation num", treCurrentPage)
                    self.getTree(id: self.i, page: treCurrentPage)
                         
                     }
@@ -385,7 +383,7 @@ extension ModelCV: UICollectionViewDelegate, UICollectionViewDataSource, UIColle
             
         } else {
              self.i = Int(tre[indexPath.row].id)
-            print(i)
+           // print(i)
             self.da.removeAll()
             getTree(id: i, page: self.currentPage)
             treePagination(ID: i, pag: self.treCurrentPage)

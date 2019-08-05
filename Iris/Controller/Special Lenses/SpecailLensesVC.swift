@@ -1,28 +1,11 @@
-//
-//  SpecailLensesVC.swift
-//  Iris
-//
-//  Created by mahmoudhajar on 4/17/19.
-//  Copyright © 2019 CreativeShare. All rights reserved.
-//
-
 import UIKit
 import Alamofire
 import SwiftyJSON
 import SVProgressHUD
-
-
-
-
 class SpecailLensesVC: UIViewController {
-    
     @IBOutlet weak var txtView: UITextView!
     @IBOutlet weak var com: CornerButtons!
-    
-    
         var ph = ""
-
-    
     @IBOutlet weak var headerlogo: UIBarButtonItem!
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,14 +13,11 @@ class SpecailLensesVC: UIViewController {
         let preferredLanguage = NSLocale.preferredLanguages[0]
         if preferredLanguage.starts(with: "en"){
             self.headerlogo.imageInsets.right = 120
-            
         } else{
             self.headerlogo.imageInsets.left = 220
             
         }
-        
-        
-        
+
 //        DispatchQueue.main.async {
 //            self.getData()
 //        }
