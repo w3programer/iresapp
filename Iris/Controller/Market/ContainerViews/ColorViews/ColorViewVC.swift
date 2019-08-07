@@ -11,20 +11,12 @@ import Alamofire
 import SwiftyJSON
 
 class ColorViewVC: UIViewController {
-
-    
     @IBOutlet weak var collectionView: UICollectionView!
 
     var url = ""
-
-    
     var menuPro = [Ads]()
-
     var currentPage = 1
     var totalPages = 1
-    
-    
-    
     var recImgs = [String]()
      var recTitle = ""
       var recTitle_en = ""
@@ -40,63 +32,44 @@ class ColorViewVC: UIViewController {
                 var recDev:[String] = []
                 var recMyop:[String] = []
 
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        
         setupCollectionView()
-        
         getData(pageNu: currentPage)
           brandPagination(numP: 1)
-        
-        
     }
-    
-    
-    
-    
-    
+
     fileprivate func setupCollectionView() {
         self.collectionView.delegate = self
          self.collectionView.dataSource = self
     }
 
-    
-    
+
     fileprivate func getData(pageNu: Int) {
         if API.isConnectedToInternet() {
             if Helper.checkToken() == false {
                 API.sortData(pageNo: pageNu, Id: 2, typ: 2) { (error:Error?, data:[Ads]?) in
                     if data != nil {
-                        print("Sort Data", data!)
+                       // print("Sort Data", data!)
+                        self.menuPro.removeAll()
                             self.menuPro.append(contentsOf: data!)
                         DispatchQueue.main.async {
                             self.collectionView.reloadData()
-                        }
-                    } else {
-                        print("no ads found niiiil")
-                        
-                    }
-                }
-            } else {
+                        }} else {
+                      //  print("no ads found niiiil")
+                        }}} else {
                 API.UserSortData(pageNo:pageNu, Id:2, typ: 2) { (error:Error?, data:[Ads]?) in
                     if data != nil {
-                        print("Sort Data", data!)
+                       // print("Sort Data", data!)
+                        self.menuPro.removeAll()
                         self.menuPro.append(contentsOf: data!)
                         DispatchQueue.main.async {
                             self.collectionView.reloadData()
-                        }
-                    } else {
-                        print("no ads found niiiil")
-                    }
-                }
-            }
-        } else {
-            print("color no internet")
-        }
-    }
+                        }} else {
+                      //  print("no ads found niiiil")
+                    }}}} else {
+            //print("color no internet")
+        }}
     
     
     func brandPagination(numP: Int) {
@@ -121,16 +94,7 @@ class ColorViewVC: UIViewController {
                 let last = json["last_page"].int
                 print(last!)
                 self.totalPages = last!
-            }
-        }
-    }
-    
-    
-    
-    
-    
-    
-    
+            }}}
     
 }
 extension ColorViewVC: UICollectionViewDelegate, UICollectionViewDataSource , UICollectionViewDelegateFlowLayout {

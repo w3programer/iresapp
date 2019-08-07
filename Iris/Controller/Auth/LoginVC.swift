@@ -97,7 +97,7 @@ class LoginVC: UIViewController {
     
     func setLoca() {
         
-        numberTF.placeholder = General.stringForKey(key: "n")
+       // numberTF.placeholder = General.stringForKey(key: "n")
         signinBtn.setTitle(General.stringForKey(key: "sginin"), for: .normal)
         skip.setTitle(General.stringForKey(key: "skip"), for: .normal)
         signUP.setTitle(General.stringForKey(key:"sginup"), for: .normal)
@@ -109,7 +109,7 @@ class LoginVC: UIViewController {
     
     func setDes() {
         
-        numberTF.attributedPlaceholder = NSAttributedString(string: NSLocalizedString("mobile number", comment: "mobile number"), attributes: [NSAttributedString.Key.foregroundColor: #colorLiteral(red: 0.115710564, green: 0.5438727736, blue: 0.5560589433, alpha: 1) ])
+     //   numberTF.attributedPlaceholder = NSAttributedString(string: NSLocalizedString("mobile number", comment: "mobile number"), attributes: [NSAttributedString.Key.foregroundColor: #colorLiteral(red: 0.115710564, green: 0.5438727736, blue: 0.5560589433, alpha: 1) ])
         
         self.skip.layer.borderColor = #colorLiteral(red: 0.115710564, green: 0.5438727736, blue: 0.5560589433, alpha: 1)
          self.skip.layer.borderWidth = 2

@@ -11,12 +11,10 @@ import Kingfisher
 import SVProgressHUD
 import Alamofire
 import SwiftyJSON
-class ModelCV: UIViewController {
 
+class ModelCV: UIViewController {
     @IBOutlet weak var trendCollectionView: UICollectionView!
     @IBOutlet weak var collectionViw: UICollectionView!
-    
-
     // pagination
     var currentPage:Int = 1
      var totalPages:Int = 1
@@ -24,20 +22,12 @@ class ModelCV: UIViewController {
     var treCurrentPage:Int = 1
     var treTotalPages:Int = 1
     
-    
-    
     var da = [Ads]()
      var tre = [BrandTrends]()
-    
-    
     var recModelId = 1
     var i:Int = 0
-    
-    
-    var treSelected:Bool = false 
-    
+    var treSelected:Bool = false
     /// moving data
-    
     var selectedImgs = [String]()
      var selectedTitle = ""
       var selectedTitle_en = ""
@@ -58,10 +48,9 @@ class ModelCV: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
           setUpCollection()
         if API.isConnectedToInternet() {
-               self.da.removeAll()
+              // self.da.removeAll()
                 self.getModelData(id: self.recModelId, nu: self.currentPage)
             //getTree(id: self.recModelId, page: self.currentPage)
             modelPagination(ID: self.recModelId, pag: 1)
@@ -69,26 +58,14 @@ class ModelCV: UIViewController {
         } else {
             Alert.alertPopUp(title: General.stringForKey(key: "con"), msg: General.stringForKey(key: "plsCh"), vc: self)
             SVProgressHUD.dismiss()
-        }
-       
-
-    }
-    
-    
-    
-    
+        }}
     
     fileprivate func setUpCollection() {
-
         self.collectionViw.delegate = self
          self.collectionViw.dataSource = self
           self.trendCollectionView.delegate  = self
            self.trendCollectionView.dataSource  = self
-
-    }
-    
-  
-
+      }
     
     fileprivate func getModelData(id:Int,nu: Int) {
         Helper.hudStart()
@@ -123,16 +100,13 @@ class ModelCV: UIViewController {
                 let last = json["last_page"].int
                // print(last!)
                 self.totalPages = last!
-            }
-        }
-    }
-    
-    
+            }}}
     
     fileprivate func getTree(id:Int, page:Int) {
         Helper.hudStart()
         API.getTrendsModels(id: id, pageNo: page) { (error:Error?, data:[Ads]?) in
             if data != nil {
+                self.da.removeAll()
                 self.da.append(contentsOf: data!)
                 DispatchQueue.main.async {
                     self.collectionViw.reloadData()
@@ -146,9 +120,6 @@ class ModelCV: UIViewController {
         }
         SVProgressHUD.dismiss(withDelay: 1.5)
         }
-    
-    
-    
     
     fileprivate func treePagination(ID:Int,pag:Int) {
         let url = URLs.treendsModel+"\(ID)"+"?page=\(pag)"
@@ -164,16 +135,9 @@ class ModelCV: UIViewController {
                 let last = json["last_page"].int
                 //print(last!)
                 self.treTotalPages = last!
-            }
-        }
-    }
-    
-    
+            }}}
     
     @IBAction func unwindToModel(segue: UIStoryboardSegue) {}
-
-    
-    
     
     private func treeends(id:Int) {
         
@@ -189,7 +153,6 @@ class ModelCV: UIViewController {
                     let json = JSON(value)
                   //  print(json)
                   //  print("daaaaaa \(id)")
-                    
                     if let dataArr = json["data"].array
                     {
                 for dataArr in dataArr {
@@ -199,6 +162,7 @@ class ModelCV: UIViewController {
                        //   print("ss id \(id)")
                         if let dataArr = dataArr["trends"].array {
                                // print("inside")
+                            self.tre.removeAll()
                             for dataArr in dataArr {
                                 let name_ar = dataArr ["name_ar"].string
                                  let name_en = dataArr ["name_en"].string
@@ -212,87 +176,53 @@ class ModelCV: UIViewController {
                                     }
                                  //   print("items count", self.tre.count)
                                     
-                                }
-                                
-                               }
-                             }
-                          }
-                        }
-                      }
-                    }
-    
-    
-    
+                                }}}}}}}
     
     
 }
 extension ModelCV: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-
-
-
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-
         if collectionView == self.collectionViw {
                  return da.count
         } else {
                return tre.count
-            
-        }
-
-    }
+        }}
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-
-
+        
         if collectionView == self.collectionViw {
-
-       let cell = collectionViw.dequeueReusableCell(withReuseIdentifier: "BrandCell", for: indexPath) as! ModelCell
-            
-            cell.pics = da[indexPath.item]
-            if General.CurrentLanguage() == "en" {
-                cell.titLab.text = da[indexPath.row].name_en
-            } else {
-                cell.titLab.text = da[indexPath.row].name_ar
-            }
-             cell.priceLab.text = "\(da[indexPath.row].price)"
-              cell.rsLab.text = General.stringForKey(key: "rs")
-            
-            if Helper.checkToken() == true {
-                if da[indexPath.row].is_favorite == 0 {
-                    cell.favoBtn.setImage(UIImage(named: "li.png"), for: .normal)
+          let cell = collectionViw.dequeueReusableCell(withReuseIdentifier: "BrandCell", for: indexPath) as! ModelCell
+            if da.count > indexPath.row {
+                cell.pics = da[indexPath.item]
+                if General.CurrentLanguage() == "en" {
+                    cell.titLab.text = da[indexPath.row].name_en
                 } else {
-                    cell.favoBtn.setImage(UIImage(named: "lk.png"), for: .selected)
+                    cell.titLab.text = da[indexPath.row].name_ar
                 }
+                cell.priceLab.text = "\(da[indexPath.row].price)"
+                cell.rsLab.text = General.stringForKey(key: "rs")
+                if Helper.checkToken() == true {
+                    if da[indexPath.row].is_favorite == 0 {
+                        cell.favoBtn.setImage(UIImage(named: "li.png"), for: .normal)
+                    } else {
+                        cell.favoBtn.setImage(UIImage(named: "lk.png"), for: .selected)
+                    }}
+                cell.floatCell()
+                let containerView = cell.bgViw!
+                containerView.layer.cornerRadius = 8
+                containerView.clipsToBounds = true
             }
-            
-            
-            cell.floatCell()
-            
-            let containerView = cell.bgViw!
-            containerView.layer.cornerRadius = 8
-            containerView.clipsToBounds = true
-         
-            
 //            cell.favoBtn.addTarget(self, action: #selector(favTapped(sender:)), for: .touchUpInside)
 //            cell.favoBtn.tag = indexPath.row
-            
-            
             return cell
         } else {
-
       let tCell = trendCollectionView.dequeueReusableCell(withReuseIdentifier: "trendCell", for: indexPath) as! TrendCell
-
-            
-
-            
             if General.CurrentLanguage() == "ar" {
                 tCell.trendName.text = tre[indexPath.row].name_ar
             } else {
                 tCell.trendName.text = tre[indexPath.row].name_en
             }
-            
-            
-            
             if tre[indexPath.row].images.isEmptyStr == false {
                 tCell.trenImg.kf.indicatorType = .activity
                 let url = URL(string: URLs.image+tre[indexPath.row].images)
@@ -328,7 +258,6 @@ extension ModelCV: UICollectionViewDelegate, UICollectionViewDataSource, UIColle
 
 
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-
         if collectionView == self.collectionViw {
             if treSelected == false {
                 if indexPath.row == da.count - 1 {
@@ -336,21 +265,15 @@ extension ModelCV: UICollectionViewDelegate, UICollectionViewDataSource, UIColle
                         currentPage += 1
                        // print("pagiation num", currentPage)
                         self.getModelData(id: recModelId, nu: currentPage)
-                    }
-                }
-            } else {
+                    }}} else {
                 if indexPath.row == tre.count - 1 {
                     if treCurrentPage < treTotalPages {
                         treCurrentPage += 1
                        // print("pagiation num", treCurrentPage)
                    self.getTree(id: self.i, page: treCurrentPage)
                         
-                    }
-                }
-            }
-            
-        }
-    }
+                    }}}}
+                 }
 
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

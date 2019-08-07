@@ -15,12 +15,9 @@ import SVProgressHUD
 
 extension API  {
     
-    
     class func getBrands(pageNo:Int,completion:@escaping(_ error:Error?, _ data:[Brand]?)->Void) {
-        
         let url = URLs.barnds+"\(pageNo)"
-        print("get brands",url)
-        
+       // print("get brands",url)
         Alamofire.request(url, method: .get).validate(statusCode: 200..<300).responseJSON { (response) in
             
             switch response.result {
@@ -33,21 +30,15 @@ extension API  {
                 
                 guard let dataArr = jsonData["data"].array else{
                     completion(nil , nil)
-                    return
-                }
+                    return }
                 var filterdData = [Brand]()
                 for dta in dataArr {
                     if let data = dta.dictionary , let res = Brand.init(dic: data) {
                         filterdData.append(res)
                        // print("Brand")
-                    }
-                }
+                    }}
                 completion(nil, filterdData)
-              }
-            }
-          }
-    
-    
+              }}}
     
     class func getBrandModels(id:Int,pageNo:Int,completion:@escaping(_ error:Error?, _ data:[Ads]?)->Void) {
         
@@ -63,25 +54,17 @@ extension API  {
             case.success(let value):
                 let jsonData = JSON(value)
                // print("Brand data",jsonData)
-                
                 guard let dataArr = jsonData["data"].array else{
                     completion(nil , nil)
-                    return
-                }
+                    return }
                 var filterdData = [Ads]()
                 for dta in dataArr {
                     if let data = dta.dictionary , let res = Ads.init(dic: data) {
                         filterdData.append(res)
                        // print("Brand")
-                    }
-                }
+                    }}
                 completion(nil, filterdData)
-            }
-        }
-    }
-    
-    
-    
+            }}}
     
     
     class func getTrends(barnId:Int,cuPage:Int,completion:@escaping(_ error:Error?, _ data:[Trend]?)->Void) {
@@ -95,28 +78,17 @@ extension API  {
             case.success(let value):
                  let js = JSON(value)
                   // print("trends datttta",js)
-                
                  guard let dataArr = js["data"].array else{
                     completion(nil , nil)
-                    return
-                 }
+                    return }
                  var filterdData = [Trend]()
                  for dta in dataArr {
                     if let data = dta.dictionary , let res = Trend.init(dic: data) {
                         filterdData.append(res)
                         //print("treeeeeeeends")
-                    }
-                 }
+                    }}
                  completion(nil, filterdData)
-                
-            }
-          }
-        }
-    
-    
-    
-    
-    
+            }}}
     
     class func trend(pg:Int,id:Int, compltion:@escaping(_ error:Error?, _ data:[Trend]?)->Void) {
         
@@ -125,12 +97,12 @@ extension API  {
           // print(url)
         Alamofire.request(url, method: .get).validate(statusCode: 200..<300).responseJSON { (response) in
             switch response.response?.statusCode {
-            case 400?:
-                print("trends 400")
-            case 422:
-                print("trends 422")
-            case 500?:
-                print("trends 500")
+//            case 400?:
+//                print("trends 400")
+//            case 422:
+//                print("trends 422")
+//            case 500?:
+//                print("trends 500")
             case 200?:
                 switch response.result {
                 case.failure(let error):
@@ -149,20 +121,9 @@ extension API  {
                                       if let dc = dd.dictionary,
                                         let res = Trend.init(dic: dc) {
                                         tn.append(res)
-                                        }
-                                    }
-                                }
-                            }
-
-                        }
-                    }
-                    
-                }
+                                        }}}}}}}
             default:break
-            }
-        }
-        
-    }
+            }}}
     
     
     
@@ -181,7 +142,6 @@ extension API  {
             case.success(let value):
                 let jsonData = JSON(value)
                // print("Brand data",jsonData)
-                
                 guard let dataArr = jsonData["data"].array else{
                     completion(nil , nil)
                     return
@@ -191,12 +151,9 @@ extension API  {
                     if let data = dta.dictionary , let res = Ads.init(dic: data) {
                         filterdData.append(res)
                        // print("Brand")
-                    }
-                }
+                    }}
                 completion(nil, filterdData)
-            }
-        }
-    }
+            }}}
     
     
 }

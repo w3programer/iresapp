@@ -10,8 +10,6 @@ import UIKit
 
 extension UIButton {
     
-    
-    
     func alignText(spacing: CGFloat = 8.0) {
         if let image = self.imageView?.image {
             let imageSize: CGSize = image.size

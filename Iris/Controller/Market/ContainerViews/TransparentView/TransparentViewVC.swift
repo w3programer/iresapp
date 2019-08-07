@@ -13,17 +13,11 @@ import SwiftyJSON
 
 class TransparentViewVC: UIViewController {
 
-    
     @IBOutlet weak var collectionView: UICollectionView!
-    
     var menuPro = [Ads]()
-    
     var currentPage = 1
     var totalPages = 1
-    
     var url = ""
-    
-    
     var recImgs = [String]()
     var recTitle = ""
     var recTitle_en = ""
@@ -43,9 +37,8 @@ class TransparentViewVC: UIViewController {
         super.viewDidLoad()
 
         setupCollectionView()
-        
-        getData(pageNu: currentPage)
-         brandPagination(numP: 1)
+         getData(pageNu: currentPage)
+          brandPagination(numP: 1)
 
     }
     
@@ -54,40 +47,32 @@ class TransparentViewVC: UIViewController {
         self.collectionView.dataSource = self
     }
     
-    
-    
     fileprivate func getData(pageNu: Int) {
         if API.isConnectedToInternet() {
             if Helper.checkToken() == false {
                 API.sortData(pageNo: pageNu, Id: 1, typ: 1) { (error:Error?, data:[Ads]?) in
                     if data != nil {
-                        print("Sort Data", data!)
+                      //  print("Sort Data", data!)
+                        self.menuPro.removeAll()
                         self.menuPro.append(contentsOf: data!)
                         DispatchQueue.main.async {
                             self.collectionView.reloadData()
-                        }
-                    } else {
-                        print("no ads found niiiil")
-                        
-                    }
-                }
-            } else {
+                        }} else {
+                 //        print("no ads found niiiil")
+                }}} else {
                 API.UserSortData(pageNo:pageNu, Id:1, typ: 1) { (error:Error?, data:[Ads]?) in
                     if data != nil {
-                        print("Sort Data", data!)
+                        //print("Sort Data", data!)
+                        self.menuPro.removeAll()
                         self.menuPro.append(contentsOf: data!)
                         DispatchQueue.main.async {
                             self.collectionView.reloadData()
                         }
                     } else {
-                        print("no ads found niiiil")
-                    }
-                }
-            }
-        } else {
-            print("color no internet")
-        }
-    }
+                     //   print("no ads found niiiil")
+                    }}}} else {
+       //     print("color no internet")
+        }}
     
     
     func brandPagination(numP: Int) {
@@ -97,7 +82,7 @@ class TransparentViewVC: UIViewController {
             } else {
                 url = URLs.categories+"/\(1)/"+"products"
             }
-            print("pagination",url)
+          //  print("pagination",url)
             Alamofire.request( url , method: .get ).responseJSON { (response) in
                 switch response.result {
                 case .failure(let error):
@@ -105,16 +90,13 @@ class TransparentViewVC: UIViewController {
                     
                 case .success(let value):
                     let jsonData = JSON(value)
-                    print(jsonData)
+                  //  print(jsonData)
                     let json = jsonData["meta"]
-                    print(json)
+                   // print(json)
                     let last = json["last_page"].int
-                    print(last!)
+                  //  print(last!)
                     self.totalPages = last!
-                }
-            }
-        }
-    }
+                }}}}
     
 
 }
@@ -158,7 +140,6 @@ extension TransparentViewVC: UICollectionViewDelegate, UICollectionViewDataSourc
         cell.priceLab.text = "\(menuPro[indexPath.row].price)"
         cell.rsLab.text = General.stringForKey(key: "rs")
         
-        
         cell.layer.cornerRadius = 3.0
         cell.layer.masksToBounds = false
         cell.layer.shadowColor = UIColor.lightGray.cgColor
@@ -166,11 +147,7 @@ extension TransparentViewVC: UICollectionViewDelegate, UICollectionViewDataSourc
         cell.layer.shadowOpacity = 0.6
         cell.clipsToBounds = true
 
-        
-        
         return cell
-        
-        
     }
     
     @objc func favTapped(sender: UIButton) {
@@ -180,22 +157,13 @@ extension TransparentViewVC: UICollectionViewDelegate, UICollectionViewDataSourc
             // do like
             API.selectFav(token: Helper.getUserToken(), proId: id) { (error:Error?, success:Bool?) in
                 if success == true {
-                    
                 } else {
-                    
-                }
-            }
-        } else {
+                    }}} else {
             // do dislike
             API.disSelectFav(token: Helper.getUserToken(), id: id) { (error:Error?, success:Bool?) in
                 if success == true {
-                    
                 } else {
-                    
-                }
-            }
-        }
-    }
+                }}}}
     
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
@@ -205,10 +173,7 @@ extension TransparentViewVC: UICollectionViewDelegate, UICollectionViewDataSourc
                 self.currentPage += 1
                    print("pagiation num", currentPage)
                 getData(pageNu: currentPage)
-            }
-        }
-        
-    }
+            }}}
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
@@ -254,34 +219,23 @@ extension TransparentViewVC: UICollectionViewDelegate, UICollectionViewDataSourc
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
         let screenWidth = collectionView.bounds.width
         let width = (screenWidth - 20) / 2.0
-        
-        
         return CGSize.init(width: width, height: 200)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        
-        
         return  10
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        
         return 10
     }
     
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        
         return UIEdgeInsets.zero
-        
-        
     }
-    
-    
     
     
 }

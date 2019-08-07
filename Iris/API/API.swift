@@ -206,7 +206,7 @@ class API: NSObject {
                 switch result {
                 case .success(let upload, _, _):
                     upload.uploadProgress(closure: { (progress) in
-                        print("Download Progress: \(progress.fractionCompleted)")
+                   //     print("Download Progress: \(progress.fractionCompleted)")
                     })
                     //                upload.responseString(completionHandler: { (response) in
                     //                    print("successs " + response.result.value!)

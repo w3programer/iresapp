@@ -43,14 +43,11 @@ class AdContentVC: UIViewController {
       @IBOutlet weak var amountLabel: UILabel!
      @IBOutlet weak var rsLabel: UILabel!
     
-    
-    
    // same sizes for eyes
     @IBOutlet weak var myoTF: ImageInsideTextField!
      @IBOutlet weak var devTF: ImageInsideTextField!
       @IBOutlet weak var axTF: ImageInsideTextField!
-    
-    
+
     @IBOutlet weak var sameView: SpringView!
     // not same size
     // Right
@@ -100,7 +97,6 @@ class AdContentVC: UIViewController {
        var totalPro = 1
         var sizes:[Int] = []
     
-    
     // MARK:- value for non medical care
         var mainMyoDegree = ""
          var mainDevDegree = ""
@@ -122,271 +118,41 @@ class AdContentVC: UIViewController {
     
     
     ///Mark Selected same size
-    
              var thirdBoxNum = 1
-    
-    
                 var mainNumb = 1
-    
-    
    static var selNotSameSize = true
-    
     
 //       var dd =  AccessoriesContentVC.arr
 //    let defaults = UserDefaults.standard
-
-    
     var selectedSameSize:Bool?
-
     var buttonSwitched : Bool = false
 
     var context:NSManagedObjectContext?
     let appDelegate  = UIApplication.shared.delegate as! AppDelegate
     
+    var txtOne:String?
+     var txtTwo:String?
+    var txtThree:String?
+     var txtFour:String?
+    var txtFive:String?
+     var txtSix:String?
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
+    
             secView.alpha = 0
              thirdView.alpha = 0
-        
         context = appDelegate.persistentContainer.viewContext
         navigationItem.title = General.stringForKey(key: "details")
-        
           setDesgin()
            displayData()
             confgPickerView()
            configSliderShow()
               setPrortcols()
         dynamicViewControllerHieght()
-        
-       
         setLoca()
-        
-    checkArrayData()
-      
-         NotificationCenter.default.addObserver(self, selector: #selector(self.sam), name: NSNotification.Name(rawValue: "sam"), object: nil)
-        
+          checkArrayData()
     }
-    @ objc func sam(notif: NSNotification) {
-//        if recAx.isEmpty && recDev.isEmpty && recMyop.isEmpty == false {
-//
-//        guard let axR = rightAxTF.text, !axR.isEmpty,
-//               let axL = leftAxTF.text, !axL.isEmpty,
-//                let devR = rightDevTF.text, !devR.isEmpty,
-//                 let devL = leftDevTF.text, !devL.isEmpty,
-//                   let ri = righMyotTF.text, !ri.isEmpty,
-//                     let le = leftMyoTF.text, !le.isEmpty else {return}
-//
-//
-//            if axR == axL && devR == devL && ri == le {
-//                self.selectedSameSize = true
-//                                self.numViiw.alpha = 0
-//                                 self.numViiw.alpha = 0
-//                                  self.numberLabel.alpha = 0
-//                                   self.thirdView.alpha = 1.0
-//            } else {
-//                self.selectedSameSize = false
-//                                 self.thirdView.alpha = 0
-//                                  self.numberLab.alpha = 1.0
-//                                   self.numViiw.alpha = 1.0
-//            }
-//
-//
-//        }
-        
-        
-        
-//        if recAx.isEmpty == false {
-//            guard let axR = rightAxTF.text, !axR.isEmpty,
-//               let axL = leftAxTF.text, !axL.isEmpty else {return}
-//            if axR == axL {
-//                if recDev.isEmpty == false {
-//                guard let devR = rightDevTF.text, !devR.isEmpty,
-//                  let devL = leftDevTF.text, !devL.isEmpty else {return}
-//                    if devR == devL {
-//                        if recMyop.isEmpty {
-//               guard let ri = righMyotTF.text, !ri.isEmpty,
-//                let le = leftMyoTF.text, !le.isEmpty else  {return}
-//                            if ri == le {
-//                                self.numViiw.alpha = 0
-//                                  self.numViiw.alpha = 0
-//                                    self.numberLabel.alpha = 0
-//                                      self.thirdView.alpha = 1.0
-//                            } else {
-//                                self.selectedSameSize = false
-//                                    self.thirdView.alpha = 0
-//                                     self.numberLab.alpha = 1.0
-//                                      self.numViiw.alpha = 1.0
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//
-//
-//        }
-//
-       
-        
-
-//        if recDev.isEmpty == false {
-//           guard let devR = rightDevTF.text, !devR.isEmpty,
-//            let devL = leftDevTF.text, !devL.isEmpty else {return}
-//             if rightDevTF.text! ==  leftDevTF.text!{
-//                self.selectedSameSize = true
-//                  self.numViiw.alpha = 0
-//                    self.numViiw.alpha = 0
-//                     self.numberLabel.alpha = 0
-//                      self.thirdView.alpha = 1.0
-//                       print("cooo 3")
-//            } else {
-//                self.selectedSameSize = false
-//                 self.thirdView.alpha = 0
-//                  self.numberLab.alpha = 1.0
-//                   self.numViiw.alpha = 1.0
-//                    print("cooo 33")
-//                }
-//             }
-//
-//        if recMyop.isEmpty == false {
-//           guard let ri = righMyotTF.text, !ri.isEmpty,
-//            let le = leftMyoTF.text, !le.isEmpty else { return}
-//
-//             if righMyotTF.text! == leftMyoTF.text!  {
-//                 self.selectedSameSize = true
-//                    self.numViiw.alpha = 0
-//                     self.numViiw.alpha = 0
-//                      self.numberLabel.alpha = 0
-//                       self.thirdView.alpha = 1.0
-//                         print("cooo 2")
-//            } else {
-//              self.selectedSameSize = false
-//               self.thirdView.alpha = 0
-//                self.numberLab.alpha = 1.0
-//                 self.numViiw.alpha = 1.0
-//                print("cooo 22")
-//            }
-//
-//        }
-//
-//        if recAx.isEmpty == false {
-//
-//           guard let axR = rightAxTF.text, !axR.isEmpty,
-//                   let axL = leftAxTF.text, !axL.isEmpty else { return }
-//
-//            if rightAxTF.text! == leftAxTF.text!  {
-//                self.selectedSameSize = true
-//                self.numViiw.alpha = 0
-//                self.numViiw.alpha = 0
-//                self.numberLabel.alpha = 0
-//                self.thirdView.alpha = 1.0
-//                print("cooo 1")
-//            } else {
-//                self.selectedSameSize = false
-//                self.thirdView.alpha = 0
-//                self.numberLab.alpha = 1.0
-//                self.numViiw.alpha = 1.0
-//                print("cooo 11")
-//            }
-//
-//
-//        }
-//
-        
-        
-        
-        if righMyotTF.text == leftMyoTF.text {
-            if rightDevTF.text == leftDevTF.text {
-                if rightAxTF.text ==  leftAxTF.text {
-                    self.selectedSameSize = true
-                                    self.numViiw.alpha = 0.0
-                                    self.numViiw.alpha = 0.0
-                                    self.numberLabel.alpha = 0
-                                    self.thirdView.alpha = 1.0
-                                    print("cooo 1")
-            }
-            }
-             } else {
-            self.selectedSameSize = false
-                            self.thirdView.alpha = 0.0
-                            self.numberLab.alpha = 1.0
-                            self.numViiw.alpha = 1.0
-                            print("cooo 11")
-        }
-            
-        
-        
-        
-        print("3",righMyotTF.text ?? "")
-        print("33",leftMyoTF.text ?? "")
-        print("1",rightDevTF.text ?? "")
-        print("11",leftDevTF.text ?? "")
-        print("2",rightAxTF.text ?? "")
-        print("22",leftAxTF.text ?? "")
-        
-
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-//
-//        guard let ri = righMyotTF.text, !ri.isEmpty,
-//                let le = leftMyoTF.text, !le.isEmpty,
-//                 let devR = rightDevTF.text, !devR.isEmpty,
-//                  let devL = leftDevTF.text, !devL.isEmpty,
-//                   let axR = rightAxTF.text, !axR.isEmpty,
-//                    let axL = leftAxTF.text, !axL.isEmpty
-//                          else { return }
-//        if rightAxTF.text! == leftAxTF.text! {
-//            //devR == devL {
-////            self.selectedSameSize = true
-////            self.numViiw.alpha = 0
-////            self.numViiw.alpha = 0
-////            self.numberLabel.alpha = 0
-////            self.thirdView.alpha = 1.0
-//            print("cooo3")
-//
-//        }  else if   rightDevTF.text! ==  leftDevTF.text! {
-//            //ri == le {
-//
-////            self.selectedSameSize = true
-////            self.numViiw.alpha = 0
-////            self.numViiw.alpha = 0
-////            self.numberLabel.alpha = 0
-////            self.thirdView.alpha = 1.0
-//               print("cooo 2")
-//        } else if righMyotTF.text! == leftMyoTF.text! {
-//            //rightAxTF.text == leftAxTF.text {
-//            //axR == axL  {
-//
-//                self.selectedSameSize = true
-//                self.numViiw.alpha = 0
-//                self.numViiw.alpha = 0
-//                self.numberLabel.alpha = 0
-//                self.thirdView.alpha = 1.0
-//                     print("cooo 1")
-//
-//           } else {
-//            self.selectedSameSize = false
-//            self.thirdView.alpha = 0
-//            self.numberLab.alpha = 1.0
-//            self.numViiw.alpha = 1.0
-//        }
-//
-    }
-    
-    
+  
     @IBAction func backBtn(_ sender: Any) {
         if recPage == "color" {
             performSegue(withIdentifier: "UnwindColor", sender: self)
@@ -419,6 +185,19 @@ class AdContentVC: UIViewController {
             self.sameView.alpha = 0.0
             self.sameView.animate()
             
+            self.righMyotTF.text = ""
+             self.rightAxTF.text = ""
+             self.rightDevTF.text = ""
+              self.leftMyoTF.text = ""
+               self.leftAxTF.text = ""
+                self.leftDevTF.text = ""
+                  self.txtOne = ""
+                   self.txtTwo = ""
+                    self.txtThree = ""
+                     self.txtFour = ""
+                      self.txtFive = ""
+                      self.txtSix = ""
+            
         self.checkB.setImage(UIImage(named: "chk"), for: .normal)
             self.similar = 1
 
@@ -448,58 +227,41 @@ class AdContentVC: UIViewController {
     @IBAction func mainPlusBtn(_ sender: Any) {
         if mainNumb >= 1 {
             self.mainNumb += 1
-            print(mainNumb)
+           // print(mainNumb)
             mainNumLabel.text = "\(mainNumb)"
             self.mainBoxNum = mainNumLabel.text!
           //  quantity = +1
-            print(quantity)
+            //print(quantity)
         }
        
     }
     
     @IBAction func mainMinBtn(_ sender: Any) {
         if mainNumb > 1 {
-
         self.mainNumb -= 1
             self.quantity = -1
-            
           mainNumLabel.text = "\(mainNumb)"
             self.mainBoxNum = mainNumLabel.text!
-
-        }
-    }
-    
-
+        }}
     
     @IBAction func thPlusBtn(_ sender: Any) {
-        
         if thirdBoxNum >= 1 {
             self.thirdBoxNum += 1
-            print(thirdBoxNum)
+           // print(thirdBoxNum)
             thNumLab.text = "\(thirdBoxNum)"
             self.thirdBoxNum = Int(thNumLab.text!)!
-            print("third  = \(thirdBoxNum)")
-        }
-        
-        
-    }
+           // print("third  = \(thirdBoxNum)")
+            }}
     
     
     @IBAction func thMinBtn(_ sender: Any) {
-        
         if thirdBoxNum > 1 {
-            
             self.thirdBoxNum -= 1
             self.quantity = -1
-            
             thNumLab.text = "\(thirdBoxNum)"
             self.thirdBoxNum = Int(thNumLab.text!)!
-            print("third  == \(thirdBoxNum)")
-
-        }
-        
-        
-    }
+           // print("third  == \(thirdBoxNum)")
+        }}
     
     
     
@@ -507,13 +269,8 @@ class AdContentVC: UIViewController {
     
     @IBAction func addBtn(_ sender: Any) {
         
-        
-
-        
-
         self.right_amount = Int(rightNumLabel.text!)!
          self.left_amount = Int(leftNumLab.text!)!
-        
         
         let items = ItemsList(context: context!)
          items.hasSize = 1
@@ -522,8 +279,6 @@ class AdContentVC: UIViewController {
           items.product_id = Int32(recProdId)
            items.type = Int32(0)
             items.similar = Int32(similar)
-             
-       
 
         if similar == 0 {
             if recDev.isEmpty == false {
@@ -550,20 +305,12 @@ class AdContentVC: UIViewController {
                 items.right_degree = Double(mainMyoDegree)!
             }
             
-            
-            
             items.left_amount = Int32(0)
             // same size
             items.right_amount = Int32(0)
-            
             items.quantity = Int32(mainBoxNum)!
-            
             itemTotalprice = Int(recPrice) * Int(mainBoxNum)!
-                     
-            
             items.total = Double(itemTotalprice)
-            
-            
             items.name_ar = recTitle
             items.name_en = recTitle_en
             items.img = recImaage
@@ -625,28 +372,28 @@ class AdContentVC: UIViewController {
             // Selected same size for both eyes
             if selectedSameSize  == true {
                 
-                if rightAxTF.text == leftAxTF.text {
-                    
+                if self.recMyop.isEmpty == false {
+                    items.right_degree = Double(self.txtOne!)!
+                    items.left_degree = Double(self.txtTwo!)!
                 }
                 
-                
-                if rightDevTF.text == leftDevTF.text {
-                    
+                if self.recAx.isEmpty == false {
+                    items.right_axis = Double(self.txtFive!)!
+                    items.left_axis = Double(self.txtSix!)!
                 }
                 
-                
+                if self.recDev.isEmpty == false {
+                    items.right_deviation = Double(self.txtThree!)!
+                    items.right_deviation = Double(self.txtFour!)!
+                }
                 
                items.right_amount = Int32(0)
                 items.left_amount = Int32(0)
                 
-                
-                
                 items.sameSize = true
                 items.quantity = Int32(self.thNumLab.text!)!
                       let dddd = Int(self.thNumLab.text!)!
-                     print("third label ===== \(Int(self.thNumLab.text!)!)")
                    items.total = Double(dddd*Int(recPrice))
-                     print("totaaaaaaaaaal ===\(dddd*Int(recPrice))")
             } else {
                 items.right_amount = Int32(rightBoxNum)!
                  items.left_amount = Int32(leftBoxNum)!
@@ -655,7 +402,7 @@ class AdContentVC: UIViewController {
                    items.orLeftAmount = Int32(leftBoxNum)!
                     items.sameSize = false
                // self.quantity = Int(rightBoxNum)!+Int(leftBoxNum)!
-                print("quantity", self.quantity)
+              //  print("quantity", self.quantity)
                 //items.quantity = Int32(quantity)
                 items.quantity = Int32(1)
                 let plu = Int32(rightBoxNum)! + Int32(leftBoxNum)!
@@ -676,28 +423,21 @@ class AdContentVC: UIViewController {
                 appDelegate.saveContext()
                 ActionSheet()
                 cartBut.isUserInteractionEnabled = false
-            }
-        }
-        
-       
-    }
+            }}}
     
     
     @IBAction func rightPlusBtn(_ sender: Any) {
         if right_amount >= 1 {
          self.right_amount += 1
-        print(mainNumb)
+       // print(mainNumb)
         rightNumLabel.text = "\(right_amount)"
             rightBoxNum = rightNumLabel.text!
-            
-        }
-    }
+            }}
     
     @IBAction func rightMinBtn(_ sender: Any) {
         if  right_amount > 1 {
-
         self.right_amount -= 1
-        print(mainNumb)
+       // print(mainNumb)
         rightNumLabel.text = "\(right_amount)"
             rightBoxNum = rightNumLabel.text!
         }
@@ -706,7 +446,7 @@ class AdContentVC: UIViewController {
     @IBAction func leftPlusBtn(_ sender: Any) {
         if left_amount >= 1 {
         self.left_amount += 1
-        print(mainNumb)
+       // print(mainNumb)
         leftNumLab.text = "\(left_amount)"
             leftBoxNum = leftNumLab.text!
         }
@@ -715,25 +455,16 @@ class AdContentVC: UIViewController {
     @IBAction func leftMinBtn(_ sender: Any) {
         if left_amount > 1 {
             self.left_amount -= 1
-            print(left_amount)
             leftNumLab.text = "\(left_amount)"
               leftBoxNum = leftNumLab.text!
-        }
-        
-
-    }
-    
-    
+        }}
     
     
     func configSliderShow() {
-        
         for da in self.recImgs {
             self.imgSource.append(KingfisherSource(urlString: da)!)
         }
-        
         self.slider.setImageInputs(imgSource)
-        
         slider.slideshowInterval = 5.0
         slider.pageIndicatorPosition = .init(horizontal: .center, vertical: .bottom)
         slider.contentScaleMode = UIView.ContentMode.scaleAspectFit
@@ -745,20 +476,14 @@ class AdContentVC: UIViewController {
         
         slider.activityIndicator = DefaultActivityIndicator()
         slider.activityIndicator = DefaultActivityIndicator(style: .gray , color: nil )
-        
         slider.currentPageChanged = { page in
-            print("current page:", page)
-            
         self.slider.addSubview(pageControl)
             
         }
         
         let recognizer = UITapGestureRecognizer(target: self, action: #selector(AdContentVC.didTap))
                 slider.addGestureRecognizer(recognizer)
-        
-        
-        slider.addSubview(pageControl)
-        
+                 slider.addSubview(pageControl)
         NotificationCenter.default.addObserver(self, selector: #selector(self.sameSize), name: NSNotification.Name(rawValue: "send"), object: nil)
     }
     
@@ -1058,54 +783,314 @@ extension AdContentVC: UIPickerViewDelegate, UIPickerViewDataSource {
          if pickerView.tag == 1 {
                 myoTF.text = recMyop[row]
                 self.mainMyoDegree = recMyop[row]
-           NotificationCenter.default.post(name: NSNotification.Name(rawValue: "sam"), object: nil)
         } else if pickerView.tag == 2 {
                 devTF.text = recDev[row]
                 self.mainDevDegree = recDev[row]
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "sam"), object: nil)
         } else if pickerView.tag == 3 {
                 axTF.text = recAx[row]
                 self.mainAxDegree = recAx[row]
-           NotificationCenter.default.post(name: NSNotification.Name(rawValue: "sam"), object: nil)
          }else if pickerView.tag == 4 {
-            
                 righMyotTF.text = recMyop[row]
                 self.rightMyoDegree = recMyop[row]
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "sam"), object: nil)
-           
-         }else if pickerView.tag == 5 {
+                 self.txtOne = recMyop[row]
+            if recMyop.isEmpty == false && recAx.isEmpty == false && recDev.isEmpty == false {
+                if self.txtOne == self.txtTwo && self.txtThree == self.txtFour && self.txtFive == self.txtSix {
             
-            
+                    self.selectedSameSize = true
+                    self.thirdView.alpha = 1.0
+                }else {
+                    self.selectedSameSize = false
+                    self.thirdView.alpha = 0
+                }
+            } else if recMyop.isEmpty == false && recAx.isEmpty == true && recDev.isEmpty == true {
+                  if self.txtOne == self.txtTwo {
+               // if righMyotTF.text == leftMyoTF.text {
+                   self.selectedSameSize = true
+                   // self.numViiw.alpha = 0
+                     self.thirdView.alpha = 1.0
+                  }else {
+                    self.selectedSameSize = false
+                   // self.numViiw.alpha = 1.0
+                    self.thirdView.alpha = 0
+                }} else if recMyop.isEmpty == false &&
+                           recAx.isEmpty == true &&
+                            recDev.isEmpty == false {
+                     if self.txtOne == txtTwo && self.txtThree == txtFour {
+                         // self.numViiw.alpha = 0
+                           self.thirdView.alpha = 1.0
+                     } else {
+                        self.selectedSameSize = false
+                       // self.numViiw.alpha = 1.0
+                        self.thirdView.alpha = 0
+                    }}  else if recMyop.isEmpty == false &&
+                    recAx.isEmpty == false &&
+                    recDev.isEmpty == true {
+                    if self.txtOne == txtTwo && self.txtFive == txtSix {
+                       // self.numViiw.alpha = 0
+                         self.thirdView.alpha = 1.0
+                    } else {
+                        self.selectedSameSize = false
+                       // self.numViiw.alpha = 1.0
+                        self.thirdView.alpha = 0
+                     }} else if recMyop.isEmpty == false &&
+                     recAx.isEmpty == false &&
+                      recDev.isEmpty == false {
+                     if self.txtOne == txtTwo && self.txtFive == txtSix && self.txtThree == txtFour {
+                           //self.numViiw.alpha = 0
+                            self.thirdView.alpha = 1.0
+                    } else {
+                        self.selectedSameSize = false
+                       // self.numViiw.alpha = 1.0
+                        self.thirdView.alpha = 0
+                        }}
+         } else if pickerView.tag == 5 {
                 rightDevTF.text = recDev[row]
                 self.rightDevDegree = recDev[row]
-                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "sam"), object: nil)
-            
+                self.txtThree = recDev[row]
+            if recMyop.isEmpty == false && recAx.isEmpty == false && recDev.isEmpty == false {
+                if self.txtOne == self.txtTwo && self.txtThree == self.txtFour && self.txtFive == self.txtSix {
+                    
+                    self.selectedSameSize = true
+                    self.thirdView.alpha = 1.0
+                }else {
+                    self.selectedSameSize = false
+                    self.thirdView.alpha = 0
+                }
+            } else if recMyop.isEmpty == true &&
+                recAx.isEmpty == true &&
+                recDev.isEmpty == false {
+                if self.txtThree == self.txtFour {
+                //if rightDevTF.text == leftDevTF.text {
+                    self.selectedSameSize = true
+                  //  self.numViiw.alpha = 0
+                    self.thirdView.alpha = 1.0
+                } else {
+                    self.selectedSameSize = false
+                 //   self.numViiw.alpha = 1.0
+                    self.thirdView.alpha = 0
+                }} else if recMyop.isEmpty == true &&
+                            recAx.isEmpty == false &&
+                             recDev.isEmpty == false {
+                if self.txtThree == self.txtFour && self.txtFive == self.txtSix{
+                    self.selectedSameSize = true
+                  //  self.numViiw.alpha = 0
+                    self.thirdView.alpha = 1.0
+                } else {
+                    self.selectedSameSize = false
+                    //self.numViiw.alpha = 1.0
+                    self.thirdView.alpha = 0
+                }} else if recMyop.isEmpty == false &&
+                            recAx.isEmpty == true &&
+                             recDev.isEmpty == false {
+                    if self.txtThree == self.txtFour && self.txtOne == self.txtTwo{
+                        self.selectedSameSize = true
+                    //    self.numViiw.alpha = 0
+                        self.thirdView.alpha = 1.0
+                    } else {
+                        self.selectedSameSize = false
+                   //     self.numViiw.alpha = 1.0
+                        self.thirdView.alpha = 0
+               }}
          }else if pickerView.tag == 6 {
-            
                 rightAxTF.text = recAx[row]
-                self.rightAxDegree = recAx[row]
-            // new
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "sam"), object: nil)
+                 self.rightAxDegree = recAx[row]
+                  self.txtFive = recAx[row]
+            if recMyop.isEmpty == false && recAx.isEmpty == false && recDev.isEmpty == false {
+                if self.txtOne == self.txtTwo && self.txtThree == self.txtFour && self.txtFive == self.txtSix {
+                    
+                    self.selectedSameSize = true
+                    self.thirdView.alpha = 1.0
+                }else {
+                    self.selectedSameSize = false
+                    self.thirdView.alpha = 0
+                }
+            } else if recMyop.isEmpty == true &&
+                recAx.isEmpty == false &&
+                recDev.isEmpty == true {
+                if self.txtFive == self.txtSix {
+                    self.selectedSameSize = true
+                  //  self.numViiw.alpha = 0
+                    self.thirdView.alpha = 1.0
+                } else {
+                    self.selectedSameSize = false
+                 //   self.numViiw.alpha = 1.0
+                    self.thirdView.alpha = 0
+                }
+            } else if recMyop.isEmpty == false &&
+                        recAx.isEmpty == false &&
+                         recDev.isEmpty == true {
+                if self.txtFive == self.txtSix && self.txtOne == self.txtTwo {
+                    self.selectedSameSize = true
+                   // self.numViiw.alpha = 0
+                    self.thirdView.alpha = 1.0
+                } else {
+                    self.selectedSameSize = false
+                 //   self.numViiw.alpha = 1.0
+                    self.thirdView.alpha = 0
+                }
+            } else if recMyop.isEmpty == true &&
+                       recAx.isEmpty == false &&
+                        recDev.isEmpty == false {
+                if self.txtFive == self.txtSix && self.txtThree == self.txtFour {
+                    self.selectedSameSize = true
+                  //  self.numViiw.alpha = 0
+                    self.thirdView.alpha = 1.0
+                 } else {
+                    self.selectedSameSize = false
+                   // self.numViiw.alpha = 1.0
+                    self.thirdView.alpha = 0
+                }}
          }else if pickerView.tag == 7 {
             
                 leftMyoTF.text = recMyop[row]
                 self.leftMyoDegree = recMyop[row]
-            // old update
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "sam"), object: nil)
-
-            
+                self.txtTwo = recMyop[row]
+            if recMyop.isEmpty == false && recAx.isEmpty == false && recDev.isEmpty == false {
+                if self.txtOne == self.txtTwo && self.txtThree == self.txtFour && self.txtFive == self.txtSix {
+                    
+                    self.selectedSameSize = true
+                    self.thirdView.alpha = 1.0
+                }else {
+                    self.selectedSameSize = false
+                    self.thirdView.alpha = 0
+                }
+            } else if recMyop.isEmpty == false && recAx.isEmpty == true && recDev.isEmpty == true {
+                if self.txtOne == self.txtTwo {
+                    // if righMyotTF.text == leftMyoTF.text {
+                    self.selectedSameSize = true
+                   // self.numViiw.alpha = 0
+                    self.thirdView.alpha = 1.0
+                }else {
+                    self.selectedSameSize = false
+                   // self.numViiw.alpha = 1.0
+                    self.thirdView.alpha = 0
+                }} else if recMyop.isEmpty == false &&
+                recAx.isEmpty == true &&
+                recDev.isEmpty == false {
+                    if self.txtOne == txtTwo && self.txtThree == txtFour {
+                     //   self.numViiw.alpha = 0
+                        self.thirdView.alpha = 1.0
+                    } else {
+                        self.selectedSameSize = false
+                    //    self.numViiw.alpha = 1.0
+                        self.thirdView.alpha = 0
+                    }}  else if recMyop.isEmpty == false &&
+                recAx.isEmpty == false &&
+                recDev.isEmpty == true {
+                        if self.txtOne == txtTwo && self.txtFive == txtSix {
+                      //      self.numViiw.alpha = 0
+                            self.thirdView.alpha = 1.0
+                        } else {
+                            self.selectedSameSize = false
+                        //    self.numViiw.alpha = 1.0
+                            self.thirdView.alpha = 0
+                        }} else if recMyop.isEmpty == false &&
+                recAx.isEmpty == false &&
+                recDev.isEmpty == false {
+                            if self.txtOne == txtTwo && self.txtFive == txtSix && self.txtThree == txtFour {
+                              //  self.numViiw.alpha = 0
+                                self.thirdView.alpha = 1.0
+                            } else {
+                                self.selectedSameSize = false
+                           //     self.numViiw.alpha = 1.0
+                                self.thirdView.alpha = 0
+                            }}
          }else if pickerView.tag == 8{
                 leftDevTF.text = recDev[row]
                 self.leftDevDegree = recDev[row]
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "sam"), object: nil)
+            self.txtFour = recDev[row]
+            if recMyop.isEmpty == false && recAx.isEmpty == false && recDev.isEmpty == false {
+                if self.txtOne == self.txtTwo && self.txtThree == self.txtFour && self.txtFive == self.txtSix {
+                    self.selectedSameSize = true
+                    self.thirdView.alpha = 1.0
+                }else {
+                    self.selectedSameSize = false
+                    self.thirdView.alpha = 0
+                }
+            } else if recMyop.isEmpty == true &&
+                recAx.isEmpty == true &&
+                recDev.isEmpty == false {
+                if self.txtThree == self.txtFour {
+                    //if rightDevTF.text == leftDevTF.text {
+                    self.selectedSameSize = true
+                  //  self.numViiw.alpha = 0
+                    self.thirdView.alpha = 1.0
+                } else {
+                    self.selectedSameSize = false
+                  //  self.numViiw.alpha = 1.0
+                    self.thirdView.alpha = 0
+                }} else if recMyop.isEmpty == true &&
+                recAx.isEmpty == false &&
+                recDev.isEmpty == false {
+                    if self.txtThree == self.txtFour && self.txtFive == self.txtSix{
+                        self.selectedSameSize = true
+                      //  self.numViiw.alpha = 0
+                        self.thirdView.alpha = 1.0
+                    } else {
+                        self.selectedSameSize = false
+                       // self.numViiw.alpha = 1.0
+                        self.thirdView.alpha = 0
+                    }} else if recMyop.isEmpty == false &&
+                recAx.isEmpty == true &&
+                recDev.isEmpty == false {
+                        if self.txtThree == self.txtFour && self.txtOne == self.txtTwo{
+                            self.selectedSameSize = true
+                        //    self.numViiw.alpha = 0
+                            self.thirdView.alpha = 1.0
+                        } else {
+                            self.selectedSameSize = false
+                          //  self.numViiw.alpha = 1.0
+                            self.thirdView.alpha = 0
+                        }}
          }else if pickerView.tag == 9 {
-            
                 leftAxTF.text = recAx[row]
                 self.leftAxDegree = recAx[row]
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "sam"), object: nil)
-            
-        }
-      }
+            self.txtSix = recAx[row]
+            if recMyop.isEmpty == false && recAx.isEmpty == false && recDev.isEmpty == false {
+                if self.txtOne == self.txtTwo && self.txtThree == self.txtFour && self.txtFive == self.txtSix {
+                    
+                    self.selectedSameSize = true
+                    self.thirdView.alpha = 1.0
+                }else {
+                    self.selectedSameSize = false
+                    self.thirdView.alpha = 0
+                }
+            } else if recMyop.isEmpty == true &&
+                recAx.isEmpty == false &&
+                recDev.isEmpty == true {
+                if self.txtFive == self.txtSix {
+                    self.selectedSameSize = true
+                   // self.numViiw.alpha = 0
+                    self.thirdView.alpha = 1.0
+                } else {
+                    self.selectedSameSize = false
+                  //  self.numViiw.alpha = 1.0
+                    self.thirdView.alpha = 0
+                }
+            } else if recMyop.isEmpty == false &&
+                recAx.isEmpty == false &&
+                recDev.isEmpty == true {
+                if self.txtFive == self.txtSix && self.txtOne == self.txtTwo {
+                    self.selectedSameSize = true
+                   // self.numViiw.alpha = 0
+                    self.thirdView.alpha = 1.0
+                } else {
+                    self.selectedSameSize = false
+                   // self.numViiw.alpha = 1.0
+                    self.thirdView.alpha = 0
+                }
+            } else if recMyop.isEmpty == true &&
+                recAx.isEmpty == false &&
+                recDev.isEmpty == false {
+                if self.txtFive == self.txtSix && self.txtThree == self.txtFour {
+                    self.selectedSameSize = true
+                  ///  self.numViiw.alpha = 0
+                    self.thirdView.alpha = 1.0
+                } else {
+                    self.selectedSameSize = false
+                   // self.numViiw.alpha = 1.0
+                    self.thirdView.alpha = 0
+                }}}}
     
 }
 extension UIView {

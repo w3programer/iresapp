@@ -12,16 +12,11 @@ import SwiftyJSON
 
 class AccessoryViewVC: UIViewController {
 
-    
     @IBOutlet weak var collectionView: UICollectionView!
-    
     var menuPro = [Ads]()
-    
     var currentPage = 1
     var totalPages = 1
-    
     var url = ""
-    
     var selectedImgs = [String]()
      var selectedTitle = ""
       var selectedTitle_en = ""
@@ -59,31 +54,27 @@ class AccessoryViewVC: UIViewController {
             if Helper.checkToken() == false {
                 API.sortData(pageNo: pageNu, Id: 3, typ: 3) { (error:Error?, data:[Ads]?) in
                     if data != nil {
-                        print("Sort Data", data!)
+                       // print("Sort Data", data!)
+                        self.menuPro.removeAll()
                         self.menuPro.append(contentsOf: data!)
                         DispatchQueue.main.async {
                             self.collectionView.reloadData()
                         }
                     } else {
-                        print("no ads found niiiil")
-                        
-                    }
-                }
-            } else {
+                        //print("no ads found niiiil")
+                        }}} else {
                 API.UserSortData(pageNo:pageNu, Id:3, typ: 3) { (error:Error?, data:[Ads]?) in
                     if data != nil {
-                        print("Sort Data", data!)
-                        self.menuPro.append(contentsOf: data!)
-                        DispatchQueue.main.async {
+                        //print("Sort Data", data!)
+                        self.menuPro.removeAll()
+                         self.menuPro.append(contentsOf: data!)
+                          DispatchQueue.main.async {
                             self.collectionView.reloadData()
                         }
                     } else {
-                        print("no ads found niiiil")
-                    }
-                }
-            }
-        } else {
-            print("color no internet")
+                     //   print("no ads found niiiil")
+                    }}}} else {
+          //  print("color no internet")
         }
     }
     
@@ -98,16 +89,15 @@ class AccessoryViewVC: UIViewController {
             print("pagination",url)
             Alamofire.request( url , method: .get ).responseJSON { (response) in
                 switch response.result {
-                case .failure(let error):
-                    print("terms",error)
-                    
+                case .failure(_): break
+                   //print("terms",error)
                 case .success(let value):
                     let jsonData = JSON(value)
-                    print(jsonData)
+                   // print(jsonData)
                     let json = jsonData["meta"]
-                    print(json)
+                   // print(json)
                     let last = json["last_page"].int
-                    print(last!)
+                    //print(last!)
                     self.totalPages = last!
                 }
             }
@@ -126,7 +116,6 @@ extension AccessoryViewVC: UICollectionViewDelegate, UICollectionViewDataSource 
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "accessCell", for: indexPath) as! AccessoryCell
         
@@ -180,22 +169,15 @@ extension AccessoryViewVC: UICollectionViewDelegate, UICollectionViewDataSource 
             // do like
             API.selectFav(token: Helper.getUserToken(), proId: id) { (error:Error?, success:Bool?) in
                 if success == true {
-                    
                 } else {
-                    
-                }
-            }
-        } else {
+                }}} else {
             // do dislike
             API.disSelectFav(token: Helper.getUserToken(), id: id) { (error:Error?, success:Bool?) in
                 if success == true {
                     
                 } else {
                     
-                }
-            }
-        }
-    }
+                }}}}
     
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
@@ -205,10 +187,7 @@ extension AccessoryViewVC: UICollectionViewDelegate, UICollectionViewDataSource 
                 self.currentPage += 1
                 print("pagiation num", currentPage)
                 getData(pageNu: currentPage)
-            }
-        }
-        
-    }
+            }}}
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         

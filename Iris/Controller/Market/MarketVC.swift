@@ -80,7 +80,10 @@ class MarketVC: UIViewController {
     
     var prod: [ItemsList] = []
   
-    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        updatecaret()
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -132,54 +135,42 @@ class MarketVC: UIViewController {
         } else {
             accCorner()
         }
-        
-        
         if prod.count > 0 {
             cartButon.setBadge(text: "\(prod.count)", withOffsetFromTopRight: .zero, andColor: .red, andFilled: true, andFontSize: 15)
-        }
-        
+        }else{
+            cartButon.setBadge(text: "0", withOffsetFromTopRight: .zero, andColor: .red, andFilled: true, andFontSize: 15)
 
+        }
     }
     
-    
-    
-    
-    
+    func updatecaret(){
+        if prod.count > 0 {
+            cartButon.setBadge(text: "\(prod.count)", withOffsetFromTopRight: .zero, andColor: .red, andFilled: true, andFontSize: 15)
+        }else{
+            cartButon.setBadge(text: "0", withOffsetFromTopRight: .zero, andColor: .red, andFilled: true, andFontSize: 15)
+            
+        }
+    }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        
         getData()
-        
         }
     
-    
-    
-
-
     @IBAction func searchBtn(_ sender: Any) {
-        
         performSegue(withIdentifier:"SearchSegue", sender: self)
        }
     
     @IBAction func myProBtn(_ sender: Any) {
-        
         performSegue(withIdentifier: "CartSegue", sender: self)
-        
     }
     
     @IBAction func transparentBtn(_ sender: Any) {
-
         self.transView.alpha = 1.0
-        
         self.colorView.alpha = 0
          self.brandView.alpha = 0
           self.accessoryView.alpha = 0
-    
         self.id = 1
-        
         transCorner()
-       
-        
     }
     
     @IBAction func colorBtn(_ sender: Any) {
@@ -194,14 +185,11 @@ class MarketVC: UIViewController {
     }
     
     @IBAction func accessBtn(_ sender: Any) {
-       
         self.colorView.alpha = 0
          self.brandView.alpha = 0
           self.transView.alpha = 0
             self.accessoryView.alpha = 1.0
-        
         self.id = 3
-
         accCorner()
     }
     
@@ -209,11 +197,6 @@ class MarketVC: UIViewController {
     
     
     @IBAction func unwindToMarket(segue: UIStoryboardSegue) {}
-
-    
-    
-   
-    
     
     func displayElementsDesgin() {
         
@@ -224,39 +207,24 @@ class MarketVC: UIViewController {
          bViw.cornerView()
           brViw.cornerView()
            brView.cornerView()
-       
-        
     }
-    
-    
-    
-    
-    
+
     func transCorner() {
-        
-        
         self.frView.backgroundColor = UIColor.white
          self.transp.setTitleColor( .black , for: .normal)
-        
         self.secView.backgroundColor = #colorLiteral(red: 0.115710564, green: 0.5438727736, blue: 0.5560589433, alpha: 0.8584150257)
          self.thView.backgroundColor = #colorLiteral(red: 0.115710564, green: 0.5438727736, blue: 0.5560589433, alpha: 0.8584150257)
-        
            self.colorLen.setTitleColor(.white, for: .normal)
             self.access.setTitleColor(.white, for: .normal)
-        
         self.frView.roundSingleConrner([.topLeft, .topRight], [.layerMaxXMinYCorner , .layerMinXMinYCorner], radius: 20.0)
-        
        self.secView.roundSingleConrner([.bottomRight], [.layerMaxXMinYCorner], radius: 20.0)
-        
         self.thView.roundSingleConrner(.bottomRight, .layerMaxXMaxYCorner, radius: 0)
         self.transp.tintColor = UIColor.black
     }
     
     func colCorner() {
-        
         self.secView.backgroundColor = UIColor.white
          self.colorLen.setTitleColor(.black, for: .normal)
-        
         self.frView.backgroundColor = #colorLiteral(red: 0.115710564, green: 0.5438727736, blue: 0.5560589433, alpha: 0.8584150257)
          self.thView.backgroundColor = #colorLiteral(red: 0.115710564, green: 0.5438727736, blue: 0.5560589433, alpha: 0.8584150257)
         
@@ -264,14 +232,10 @@ class MarketVC: UIViewController {
          self.access.setTitleColor(.white, for: .normal)
         
         self.secView.roundSingleConrner([.topLeft, .topRight], [.layerMaxXMinYCorner , .layerMinXMinYCorner], radius: 20.0)
-
                                           // layerMinXMinYCorner
-        
         self.frView.roundSingleConrner(.bottomLeft, .layerMaxXMaxYCorner , radius: 20.0)
                                            // layerMaxXMaxYCorner
-        
         self.thView.roundSingleConrner(.bottomRight, [ .layerMinXMinYCorner ], radius: 20.0)
-
         
     }
     
@@ -313,7 +277,6 @@ class MarketVC: UIViewController {
     }
 
     func slideShow() {
-        
         API.sliderData { (error: Error?, data:[Slider]?) in
             if data != nil {
                 for da in data! {

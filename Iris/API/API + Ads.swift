@@ -330,7 +330,7 @@ extension API {
                for ii in arr {
                 if let dec = ii.dictionary, let res = Package.init(dic: dec) {
                     dd.append(res)
-                    print("success request package")
+                    //print("success request package")
                       }
                    }
                 completion(nil,dd)
@@ -373,7 +373,7 @@ extension API {
                     for dd in dataArr {
                         if let di = dd.dictionary, let res = MyOrder.init(dic: di) {
                             mod.append(res)
-                            print("sccess fetch my orders")
+                            //print("sccess fetch my orders")
                         }
                     }
                     completion(nil,mod)
